@@ -15,6 +15,8 @@ html {
   --bf-tooltip-text: #dde4dd;
   --bf-tooltip-label: #bbcabf;
   --bf-tooltip-shadow: 0 18px 54px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.08);
+  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace;
 
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
@@ -25,7 +27,7 @@ html {
 body {
   background-color: #05090d;
   color: #dde4dd;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--font-body);
   line-height: 1.5;
   min-height: 100vh;
   overflow-x: hidden;
@@ -234,7 +236,7 @@ button:active {
 }
 
 .stat-bar-value {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 1.05rem;
   font-weight: 700;
   color: #dde4dd;
@@ -267,7 +269,7 @@ button:active {
   border: none;
   border-radius: 8px;
   padding: 0.42rem 0.8rem;
-  font: 700 0.78rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 700 0.78rem/1 var(--font-body);
   color: #86948a;
   background: transparent;
   cursor: pointer;
@@ -361,7 +363,7 @@ button:active {
 }
 
 .tx-mobile-card b {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.82rem;
   flex: 0 0 auto;
 }
@@ -390,7 +392,7 @@ button:active {
   padding: 0.32rem 0.58rem;
   background: rgba(255,255,255,0.035);
   color: #bbcabf;
-  font: 800 0.68rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 800 0.68rem/1 var(--font-body);
 }
 
 .tx-mobile-meta button,
@@ -611,7 +613,7 @@ button:active {
   border-radius: 999px;
   background: rgba(76,215,246,0.06);
   color: #4cd7f6;
-  font: 700 0.78rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 700 0.78rem/1 var(--font-body);
   cursor: pointer;
   white-space: nowrap;
   transition: background 0.15s, border-color 0.15s;
@@ -655,7 +657,7 @@ button:active {
   height: 28px;
   padding: 0 0.5rem;
   border-radius: 999px;
-  font: 900 0.75rem/1 'JetBrains Mono', monospace;
+  font: 900 0.75rem/1 var(--font-mono);
   background: rgba(245,158,11,0.12);
   color: #f59e0b;
   border: 1px solid rgba(245,158,11,0.22);
@@ -668,7 +670,7 @@ button:active {
   gap: 0.3rem;
   padding: 0.22rem 0.5rem;
   border-radius: 999px;
-  font: 800 0.68rem/1 'JetBrains Mono', monospace;
+  font: 800 0.68rem/1 var(--font-mono);
 }
 
 .next-payment-badge.is-soon {
@@ -763,7 +765,7 @@ button:active {
 .app-shell {
   min-height: 100vh;
   color: #dde4dd;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--font-body);
 }
 
 .app-main {
@@ -966,7 +968,7 @@ button:active {
   flex: 0 0 auto;
   background: rgba(78,222,163,0.13);
   color: #4edea3;
-  font: 900 0.8rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 900 0.8rem/1 var(--font-body);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
   overflow: hidden;
 }
@@ -1016,7 +1018,7 @@ button:active {
   background: rgba(255,255,255,0.045);
   color: #bbcabf;
   cursor: pointer;
-  font: 900 1rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 900 1rem/1 var(--font-body);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
 }
 
@@ -1061,7 +1063,7 @@ button:active {
   background: transparent;
   color: #86948a;
   cursor: pointer;
-  font: 700 0.875rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 700 0.875rem/1 var(--font-body);
   letter-spacing: 0;
   text-align: left;
 }
@@ -1213,7 +1215,7 @@ button:active {
   place-items: center;
   flex: 0 0 auto;
   color: #002113;
-  font: 900 1.45rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 900 1.45rem/1 var(--font-body);
   background: linear-gradient(135deg, #4edea3, #4cd7f6);
   box-shadow: 0 0 34px rgba(78,222,163,0.26), inset 0 1px 0 rgba(255,255,255,0.4);
   overflow: visible;
@@ -1531,7 +1533,7 @@ button:active {
   color: #bbcabf;
   background: rgba(255,255,255,0.04);
   cursor: pointer;
-  font: 800 0.86rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 800 0.86rem/1 var(--font-body);
 }
 
 .account-bottom-actions button:last-child {
@@ -1554,7 +1556,7 @@ button:active {
 }
 
 .finance-number {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   letter-spacing: 0;
   font-variant-numeric: tabular-nums;
 }
@@ -1572,13 +1574,13 @@ button:active {
   background: rgba(78,222,163,0.1);
   color: #4edea3;
   cursor: pointer;
-  font: 800 0.78rem/1.2 'Plus Jakarta Sans', sans-serif;
+  font: 800 0.78rem/1.2 var(--font-body);
   text-align: left;
 }
 
 .smart-category-suggestion b {
   color: #acedff;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.72rem;
 }
 
@@ -1628,7 +1630,7 @@ button:active {
   place-items: center;
   color: #4edea3;
   background: rgba(78,222,163,0.12);
-  font: 900 0.68rem/1 'JetBrains Mono', monospace;
+  font: 900 0.68rem/1 var(--font-mono);
 }
 
 .receipt-archive-copy {
@@ -1676,7 +1678,7 @@ button:active {
   background: rgba(255,255,255,0.04);
   color: #bbcabf;
   cursor: pointer;
-  font: 800 0.7rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 800 0.7rem/1 var(--font-body);
 }
 
 .receipt-archive-actions button {
@@ -1767,7 +1769,7 @@ button:active {
 .receipts-stat strong {
   display: block;
   margin-top: 0.3rem;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.95rem;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1805,7 +1807,7 @@ button:active {
   color: #bbcabf;
   background: rgba(255,255,255,0.04);
   cursor: pointer;
-  font: 800 0.75rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 800 0.75rem/1 var(--font-body);
 }
 
 .receipts-toolbar button.is-active {
@@ -1854,7 +1856,7 @@ button:active {
   display: grid;
   place-items: center;
   background: rgba(78,222,163,0.12);
-  font: 900 0.8rem/1 'JetBrains Mono', monospace;
+  font: 900 0.8rem/1 var(--font-mono);
 }
 
 .receipt-gallery-copy {
@@ -2071,7 +2073,7 @@ button:active {
   background: transparent;
   color: #bbcabf;
   cursor: pointer;
-  font: 900 0.75rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 900 0.75rem/1 var(--font-body);
 }
 
 .plans-billing-toggle button.is-active {
@@ -2173,7 +2175,7 @@ button:active {
 
 .plan-card-head strong {
   color: #dde4dd;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: clamp(2.45rem, 4vw, 3.5rem);
   line-height: 1;
   font-weight: 900;
@@ -2231,7 +2233,7 @@ button:active {
   margin-top: auto;
   border-radius: 8px;
   cursor: pointer;
-  font: 900 0.78rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 900 0.78rem/1 var(--font-body);
 }
 
 .plan-secondary-button {
@@ -2295,7 +2297,7 @@ button:active {
 
 .plans-summary-row b {
   color: #4edea3;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.85rem;
   white-space: nowrap;
 }
@@ -2361,7 +2363,7 @@ button:active {
 
 .plans-table-row span:not(:first-child) {
   color: #dde4dd;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-weight: 800;
 }
 
@@ -2440,7 +2442,7 @@ button:active {
 .budget-calendar-stat strong {
   display: block;
   margin-top: 0.3rem;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.95rem;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2502,7 +2504,7 @@ button:active {
   display: grid;
   place-items: center;
   color: #bbcabf;
-  font: 900 0.78rem/1 'JetBrains Mono', monospace;
+  font: 900 0.78rem/1 var(--font-mono);
 }
 
 .budget-calendar-day.is-today .budget-calendar-day-number {
@@ -2527,7 +2529,7 @@ button:active {
   color: #dde4dd;
   background: rgba(255,255,255,0.04);
   cursor: pointer;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--font-body);
 }
 
 .budget-calendar-event span {
@@ -2539,7 +2541,7 @@ button:active {
 }
 
 .budget-calendar-event b {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.66rem;
 }
 
@@ -2598,7 +2600,7 @@ button:active {
   border-radius: 8px;
   display: grid;
   place-items: center;
-  font: 900 0.82rem/1 'JetBrains Mono', monospace;
+  font: 900 0.82rem/1 var(--font-mono);
 }
 
 .budget-calendar-agenda strong,
@@ -2621,7 +2623,7 @@ button:active {
 .budget-calendar-agenda b {
   grid-row: 1 / span 2;
   grid-column: 3;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.76rem;
 }
 
@@ -2897,7 +2899,7 @@ button:active {
   border: 0;
   background: transparent;
   cursor: pointer;
-  font: 800 1.35rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 800 1.35rem/1 var(--font-body);
   letter-spacing: 0;
 }
 
@@ -2939,7 +2941,7 @@ button:active {
   background: transparent;
   text-decoration: none;
   font-size: 0.82rem;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--font-body);
   cursor: pointer;
 }
 
@@ -2958,7 +2960,7 @@ button:active {
   border: 0;
   background: transparent;
   cursor: pointer;
-  font: 700 0.86rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 700 0.86rem/1 var(--font-body);
   letter-spacing: 0;
 }
 
@@ -3008,7 +3010,7 @@ button:active {
   color: #bbcabf;
   font-size: 0.95rem;
   font-weight: 700;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--font-body);
   padding: 0.75rem 0;
   border: 0;
   border-bottom: 1px solid rgba(187,202,191,0.08);
@@ -3452,7 +3454,7 @@ button:active {
   cursor: pointer;
   font-size: 0.75rem;
   font-weight: 900;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--font-body);
 }
 
 .landing-billing-pill button.is-active {
@@ -3616,7 +3618,7 @@ button:active {
   margin-top: auto;
   border-radius: 8px;
   cursor: pointer;
-  font: 900 0.78rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 900 0.78rem/1 var(--font-body);
 }
 
 .landing-plan-secondary {
@@ -3796,7 +3798,7 @@ button:active {
   color: #bbcabf;
   background: rgba(255,255,255,0.045);
   cursor: pointer;
-  font: 800 0.78rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 800 0.78rem/1 var(--font-body);
 }
 
 .public-info-back:hover {
@@ -3841,7 +3843,7 @@ button:active {
 }
 
 .public-info-card > span {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.78rem;
   font-weight: 800;
 }
@@ -4043,7 +4045,7 @@ button:active {
   background: transparent;
   color: #4edea3;
   cursor: pointer;
-  font: 800 0.9rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 800 0.9rem/1 var(--font-body);
 }
 
 .auth-input-wrap {
@@ -4184,7 +4186,7 @@ button:active {
   display: grid;
   grid-template-columns: 1fr 1fr;
   background: #05090d;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--font-body);
 }
 
 /* ── Left panel ── */
@@ -4210,7 +4212,7 @@ button:active {
   border-radius: 8px;
   color: #bbcabf;
   cursor: pointer;
-  font: 600 0.82rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 600 0.82rem/1 var(--font-body);
   padding: 0.5rem 0.85rem;
   width: fit-content;
   transition: background 0.2s, border-color 0.2s, color 0.2s;
@@ -4247,14 +4249,14 @@ button:active {
   display: grid;
   place-items: center;
   background: #f8f9fa;
-  font: 800 0.78rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 800 0.78rem/1 var(--font-body);
   box-shadow: 0 0 32px rgba(34,181,115,0.28), inset 0 1px 0 rgba(255,255,255,0.35);
   letter-spacing: -1px;
 }
 
 .auth2-brand-name {
   color: #fff;
-  font: 800 1.25rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 800 1.25rem/1 var(--font-body);
 }
 
 .auth2-mobile-logo {
@@ -4474,7 +4476,7 @@ button:active {
   border: none;
   border-radius: 7px;
   cursor: pointer;
-  font: 700 0.88rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 700 0.88rem/1 var(--font-body);
   padding: 0.7rem;
   transition: background 0.22s ease, color 0.22s ease, box-shadow 0.22s ease;
   color: #86948a;
@@ -4548,7 +4550,7 @@ button:active {
   border-radius: 10px;
   padding: 1.3rem 3rem 0.55rem 3rem;
   color: #dde4dd;
-  font: 500 0.95rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 500 0.95rem/1 var(--font-body);
   outline: none;
   transition: border-color 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
   -webkit-appearance: none;
@@ -4580,7 +4582,7 @@ button:active {
   top: 50%;
   transform: translateY(-50%);
   color: #86948a;
-  font: 500 0.9rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 500 0.9rem/1 var(--font-body);
   pointer-events: none;
   transition: top 0.2s ease, font-size 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
@@ -4629,7 +4631,7 @@ button:active {
   border: none;
   color: #4edea3;
   cursor: pointer;
-  font: 700 0.8rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 700 0.8rem/1 var(--font-body);
   padding: 0;
   transition: opacity 0.2s;
 }
@@ -4659,7 +4661,7 @@ button:active {
 }
 
 .auth2-pw-label {
-  font: 700 0.72rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 700 0.72rem/1 var(--font-body);
   white-space: nowrap;
   min-width: 60px;
   text-align: right;
@@ -4713,7 +4715,7 @@ button:active {
   border-radius: 10px;
   background: linear-gradient(135deg, #4edea3, #10b981 58%, #4cd7f6);
   color: #002113;
-  font: 800 1rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 800 1rem/1 var(--font-body);
   cursor: pointer;
   transition: opacity 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
   box-shadow: 0 0 0 1px rgba(111,251,190,0.16), 0 8px 32px rgba(16,185,129,0.28);
@@ -4792,7 +4794,7 @@ button:active {
   border-radius: 10px;
   color: #dde4dd;
   cursor: pointer;
-  font: 700 0.88rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 700 0.88rem/1 var(--font-body);
   transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
 }
 
@@ -4815,7 +4817,7 @@ button:active {
   border: none;
   color: #4edea3;
   cursor: pointer;
-  font: 800 0.87rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 800 0.87rem/1 var(--font-body);
   padding: 0;
   transition: opacity 0.2s;
 }
@@ -5010,7 +5012,7 @@ button:active {
   color: #4edea3;
   background: rgba(78,222,163,0.08);
   cursor: pointer;
-  font: 900 0.72rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 900 0.72rem/1 var(--font-body);
   white-space: nowrap;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
 }
@@ -5168,7 +5170,7 @@ button:active {
   color: #bbcabf;
   background: rgba(255,255,255,0.045);
   cursor: pointer;
-  font: 800 0.78rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 800 0.78rem/1 var(--font-body);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
 }
 
@@ -5420,7 +5422,7 @@ button:active {
   gap: 0.7rem;
   margin-top: 0.45rem;
   color: #bbcabf;
-  font: 700 0.72rem/1 'JetBrains Mono', monospace;
+  font: 700 0.72rem/1 var(--font-mono);
 }
 
 .ai-mini-insight {
@@ -5525,7 +5527,7 @@ button:active {
 
 .ai-payment-row b {
   color: #dde4dd;
-  font: 800 0.8rem/1 'JetBrains Mono', monospace;
+  font: 800 0.8rem/1 var(--font-mono);
 }
 
 .ai-disclaimer {
@@ -5894,7 +5896,7 @@ button:active {
     place-items: center;
     flex: 0 0 auto;
     background: #f8f9fa;
-    font: 900 0.88rem/1 'Plus Jakarta Sans', sans-serif;
+    font: 900 0.88rem/1 var(--font-body);
     box-shadow: 0 0 22px rgba(34,181,115,0.24), inset 0 1px 0 rgba(255,255,255,0.35);
     letter-spacing: -1px;
   }
@@ -5985,7 +5987,7 @@ button:active {
     color: #bbcabf;
     background: rgba(255,255,255,0.045);
     cursor: pointer;
-    font: 800 1.4rem/1 'Plus Jakarta Sans', sans-serif;
+    font: 800 1.4rem/1 var(--font-body);
   }
 
   .sidebar-balance-card {
@@ -9200,9 +9202,17 @@ button:active {
   letter-spacing: 0.01em;
   margin-bottom: 2rem;
   max-width: 100%;
+  min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.lp2-kicker > span:not(.lp2-kicker-dot) {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .lp2-kicker-dot {
   width: 6px;
@@ -9877,6 +9887,8 @@ button:active {
   background:
     radial-gradient(circle at 18% 0%, rgba(78,222,163,0.12), transparent 38%),
     linear-gradient(180deg, rgba(22,29,25,0.78), rgba(9,16,12,0.74)) !important;
+  border: 1px solid transparent;
+  transition: transform 0.3s cubic-bezier(.2,.8,.3,1), box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .lp2-how-card::before {
@@ -9888,6 +9900,24 @@ button:active {
   border-radius: 50%;
   background: radial-gradient(circle, rgba(76,215,246,0.12), transparent 68%);
   pointer-events: none;
+}
+
+.lp2-how-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(78,222,163,0.22);
+  box-shadow: 0 28px 60px rgba(0,0,0,0.4), 0 0 32px rgba(78,222,163,0.1);
+}
+
+.lp2-how-card:hover .lp2-how-icon {
+  background: rgba(78,222,163,0.18);
+  border-color: rgba(78,222,163,0.32);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 0 22px rgba(78,222,163,0.2);
+  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.lp2-how-card:hover .lp2-how-step {
+  color: rgba(187,202,191,0.30);
+  transition: color 0.3s;
 }
 
 .lp2-how-step {
@@ -10015,6 +10045,11 @@ button:active {
   border-color: rgba(187,202,191,0.14);
 }
 
+.lp2-feat-item > div {
+  min-width: 0;
+  flex: 1;
+}
+
 .lp2-feat-icon {
   width: 40px;
   height: 40px;
@@ -10040,6 +10075,8 @@ button:active {
   display: flex;
   align-items: center;
   gap: 0.45rem;
+  flex-wrap: wrap;
+  row-gap: 0.2rem;
 }
 .lp2-feat-tag {
   color: #56635c;
@@ -10319,7 +10356,7 @@ button:active {
   border: 1px solid;
   border-radius: 8px;
   padding: 0.65rem 1.1rem;
-  font: 700 0.82rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 700 0.82rem/1 var(--font-body);
   cursor: pointer;
   transition: background 0.15s;
   align-self: flex-start;
@@ -10389,7 +10426,7 @@ button:active {
   color: #4edea3;
   background: rgba(78,222,163,0.06);
   cursor: pointer;
-  font: 900 0.78rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 900 0.78rem/1 var(--font-body);
 }
 
 .lp2-security-copy button:hover {
@@ -10532,7 +10569,7 @@ button:active {
   background: transparent;
   color: #86948a;
   cursor: pointer;
-  font: 800 0.74rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 800 0.74rem/1 var(--font-body);
 }
 .lp2-billing-toggle button.is-active {
   background: #2f3632;
@@ -10677,7 +10714,7 @@ button:active {
   border-radius: 10px;
   background: #4edea3;
   color: #002113;
-  font: 900 0.8rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 900 0.8rem/1 var(--font-body);
   cursor: pointer;
   box-shadow: 0 14px 40px rgba(78,222,163,0.22);
   transition: box-shadow 0.15s, transform 0.15s;
@@ -10693,7 +10730,7 @@ button:active {
   border-radius: 10px;
   background: transparent;
   color: #4edea3;
-  font: 900 0.8rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 900 0.8rem/1 var(--font-body);
   cursor: pointer;
   transition: background 0.15s;
 }
@@ -10803,20 +10840,140 @@ button:active {
 
 /* ── FOOTER ── */
 .lp2-footer {
+  display: block;
+  padding: 4rem clamp(1.25rem, 5vw, 4rem) 2.5rem;
+}
+.lp2-footer .lp2-footer-inner {
+  display: block;
+  width: 100%;
+}
+.lp2-footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1.4fr;
+  gap: 2.5rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid rgba(187,202,191,0.1);
+}
+.lp2-footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: flex-start;
+}
+.lp2-footer-brand p {
+  color: #86948a;
+  font-size: 0.84rem;
+  line-height: 1.65;
+  max-width: 280px;
+  margin: 0;
+}
+.lp2-footer-social {
+  display: flex;
+  gap: 0.55rem;
+}
+.lp2-footer-social-link {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid rgba(187,202,191,0.16);
+  background: rgba(255,255,255,0.035);
+  color: #86948a;
+  text-decoration: none;
+  transition: color 0.18s, border-color 0.18s, background 0.18s;
+}
+.lp2-footer-social-link:hover {
+  color: #4edea3;
+  border-color: rgba(78,222,163,0.35);
+  background: rgba(78,222,163,0.08);
+}
+.lp2-footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.lp2-footer-col > strong {
+  color: #dde4dd;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.3rem;
+}
+.lp2-footer-link {
+  color: #56635c;
+  font-size: 0.84rem;
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: color 0.15s;
+  width: fit-content;
+}
+.lp2-footer-link:hover {
+  color: #bbcabf;
+}
+.lp2-footer-app-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(187,202,191,0.18);
+  background: rgba(255,255,255,0.04);
+  text-decoration: none;
+  color: #dde4dd;
+  transition: border-color 0.18s, background 0.18s, color 0.18s;
+  width: fit-content;
+}
+.lp2-footer-app-btn:hover {
+  border-color: rgba(78,222,163,0.38);
+  background: rgba(78,222,163,0.07);
+  color: #fff;
+}
+.lp2-footer-app-logo {
+  height: 22px;
+  width: auto;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+.lp2-footer-app-logo-apple {
+  filter: brightness(6) saturate(0);
+  opacity: 0.82;
+}
+.lp2-footer-app-logo-play {
+  filter: invert(1);
+  opacity: 0.82;
+}
+.lp2-footer-app-btn small {
+  display: block;
+  color: #86948a;
+  font-size: 0.62rem;
+  line-height: 1.2;
+}
+.lp2-footer-app-btn b {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.lp2-footer-bottom {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 1rem;
+  padding-top: 2rem;
 }
-.lp2-footer-brand {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
+.lp2-footer-bottom small {
+  color: #3d4a42;
+  font-size: 0.78rem;
 }
-.lp2-footer-brand strong { display: block; color: #dde4dd; font-size: 0.9rem; }
-.lp2-footer-brand small  { display: block; color: #56635c; font-size: 0.72rem; }
-.lp2-footer-links {
+.lp2-footer-bottom-links {
   display: flex;
   gap: 1.5rem;
   flex-wrap: wrap;
@@ -10885,7 +11042,10 @@ button:active {
 
 @media (max-width: 680px) {
   .lp2-hero { padding: 6rem 1.25rem 4rem; }
-  .lp2-kicker { font-size: 0.65rem; }
+  .lp2-kicker {
+    font-size: 0.65rem;
+    max-width: calc(100vw - 2.5rem);
+  }
   .lp2-feat-list { grid-template-columns: 1fr 1fr; }
   .lp2-how {
     padding-bottom: 4rem;
@@ -10921,7 +11081,42 @@ button:active {
   .lp2-dash-modules { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .lp2-cta { border-radius: 16px; padding: 4rem 1.5rem; }
   .lp2-cta-features { gap: 1rem; }
-  .lp2-footer { flex-direction: column; align-items: flex-start; }
+  .lp2-footer-top { grid-template-columns: 1fr 1fr; gap: 2rem 2.5rem; }
+  .lp2-footer-brand { grid-column: 1 / -1; }
+  .lp2-feat-detail { padding: 1.25rem; }
+  .lp2-float-card { right: 0.5rem; width: 160px; }
+}
+
+@media (max-width: 420px) {
+  .lp2-feat-item {
+    padding: 0.6rem 0.65rem;
+    gap: 0.6rem;
+  }
+  .lp2-feat-icon {
+    width: 34px;
+    height: 34px;
+  }
+  .lp2-feat-title {
+    font-size: 0.78rem;
+  }
+  .lp2-feat-tag {
+    font-size: 0.58rem;
+  }
+  .lp2-footer-top {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem 1.25rem;
+  }
+  .lp2-footer-brand {
+    grid-column: 1 / -1;
+  }
+  .lp2-footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .lp2-footer { padding: 2.5rem 1.25rem 1.5rem; }
+  .lp2-footer-top { padding-bottom: 2rem; }
+  .lp2-footer-col { gap: 0.55rem; }
+  .lp2-footer-app-btn { padding: 0.6rem 0.8rem; }
 }
 
 /* ── Admin Panel ──────────────────────────────────────────────────── */
@@ -10930,7 +11125,7 @@ button:active {
   min-height: 100vh;
   background: #030508;
   color: #dde4dd;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--font-body);
   display: flex;
   flex-direction: column;
 }
@@ -10973,7 +11168,7 @@ button:active {
   border-radius: 6px;
   background: transparent;
   color: #86948a;
-  font: 700 0.8rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 700 0.8rem/1 var(--font-body);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -11024,7 +11219,7 @@ button:active {
 }
 
 .admin-stat-card-value {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 1.6rem;
   font-weight: 700;
   color: #4cd7f6;
@@ -11089,7 +11284,7 @@ button:active {
   border-bottom: 1px solid rgba(187, 202, 191, 0.06);
   color: #bbcabf;
   vertical-align: middle;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.78rem;
 }
 
@@ -11107,7 +11302,7 @@ button:active {
   align-items: center;
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
-  font: 900 0.62rem/1 'JetBrains Mono', monospace;
+  font: 900 0.62rem/1 var(--font-mono);
   background: rgba(76, 215, 246, 0.12);
   color: #4cd7f6;
   border: 1px solid rgba(76, 215, 246, 0.24);
@@ -11120,7 +11315,7 @@ button:active {
   align-items: center;
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
-  font: 900 0.62rem/1 'JetBrains Mono', monospace;
+  font: 900 0.62rem/1 var(--font-mono);
   background: rgba(187, 202, 191, 0.06);
   color: #86948a;
   border: 1px solid rgba(187, 202, 191, 0.12);
@@ -11143,7 +11338,7 @@ button:active {
   padding: 0.5rem 0.875rem;
   color: #dde4dd;
   font-size: 0.8125rem;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--font-body);
   outline: none;
   width: 280px;
 }
@@ -11162,7 +11357,7 @@ button:active {
   border-radius: 6px;
   background: rgba(244, 63, 94, 0.06);
   color: #f43f5e;
-  font: 700 0.78rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 700 0.78rem/1 var(--font-body);
   cursor: pointer;
   flex-shrink: 0;
   transition: background 0.15s, border-color 0.15s;
@@ -11179,7 +11374,7 @@ button:active {
   border-radius: 7px;
   background: rgba(76, 215, 246, 0.08);
   color: #4cd7f6;
-  font: 700 0.78rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 700 0.78rem/1 var(--font-body);
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
 }
@@ -11297,7 +11492,7 @@ button:active {
 }
 
 .admin-detail-value {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.8rem;
   color: #dde4dd;
   text-align: right;
@@ -11472,7 +11667,7 @@ button:active {
   border-radius: 8px;
   color: #dde4dd;
   font-size: 0.85rem;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--font-body);
   resize: vertical;
   min-height: 96px;
   transition: border-color 0.15s;
@@ -11568,7 +11763,7 @@ button:active {
   color: #4edea3;
   background: rgba(255,255,255,0.04);
   cursor: pointer;
-  font: 800 0.78rem/1 'Plus Jakarta Sans', sans-serif;
+  font: 800 0.78rem/1 var(--font-body);
   white-space: nowrap;
 }
 
@@ -11857,7 +12052,7 @@ button:active {
 }
 
 .dash-ticker-rate {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.82rem;
   font-weight: 700;
   color: #dde4dd;
@@ -12022,7 +12217,7 @@ button:active {
 
 .dash-mini-cal-upcoming-item span {
   flex-shrink: 0;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.67rem;
   font-weight: 700;
 }
@@ -12177,3 +12372,45 @@ button:active {
 /* ── /Dashboard Enhancement ───────────────────────────────────────── */
 
 /* ── /Admin Panel ─────────────────────────────────────────────────── */
+
+/* ── Landing performance ───────────────────────────────────────────── */
+/* Below-fold sections: skip layout/paint until near viewport */
+.lp2-logos,
+.lp2-how,
+.lp2-features,
+.lp2-security-strip,
+.lp2-stats,
+.lp2-testimonials,
+.lp2-pricing,
+.lp2-faq,
+.lp2-cta {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 600px;
+}
+
+/* Mobile: cut expensive GPU layers that block first paint */
+@media (max-width: 768px) {
+  .lp2-hero-orb {
+    animation: none !important;
+    filter: none !important;
+    opacity: 0.08;
+  }
+
+  .lp2-hero-3d-stage,
+  .lp2-coin-stack-3d,
+  .lp2-terminal-3d,
+  .lp2-card-stack-3d,
+  .lp2-data-ribbon-3d {
+    display: none !important;
+  }
+
+  .lp2-float {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .lp2-testi-track {
+    animation-play-state: paused;
+  }
+}
+/* ── /Landing performance ──────────────────────────────────────────── */

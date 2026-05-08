@@ -65,8 +65,8 @@ export const PALETTE = [
   "#bbcabf",
 ]
 
-export const FONT_BODY = "'Plus Jakarta Sans', sans-serif"
-export const FONT_MONO = "'JetBrains Mono', monospace"
+export const FONT_BODY = "-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif"
+export const FONT_MONO = "ui-monospace, 'Cascadia Code', 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace"
 
 export const inputStyle = {
   width: "100%",

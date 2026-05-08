@@ -67,14 +67,6 @@ const IconDebt = () => (
   </svg>
 )
 
-const IconAssets = () => (
-  <svg {...iconProps}>
-    <path d="M4 11 12 4l8 7" />
-    <path d="M6 10v9h12v-9" />
-    <path d="M10 19v-5h4v5" />
-  </svg>
-)
-
 const IconRecurring = () => (
   <svg {...iconProps}>
     <path d="M17 2v5h-5" />
@@ -190,14 +182,6 @@ const FEATURES = [
     color: S.green,
     title: "Borç Yönetimi",
     desc: "Verdiğiniz ve aldığınız borçları takip edin. Otomatik hatırlatmalar ve ödeme planlamasıyla hiçbir borcu kaçırmayın.",
-    tag: "Yeni",
-    new: true,
-  },
-  {
-    Icon: IconAssets,
-    color: S.cyan,
-    title: "Varlık Takibi",
-    desc: "Gayrimenkul, araç, yatırım ve diğer varlıklarınızı tek platformda izleyin. Net değerinizi her an bilin.",
     tag: "Yeni",
     new: true,
   },
@@ -395,6 +379,12 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
   const planPrice = (m) => `₺${yearly ? Math.round(m * 0.8) : m}`
 
   useEffect(() => {
+    // Skip animation on mobile — show final value immediately to avoid React re-render cost
+    if (window.matchMedia("(max-width: 768px)").matches) {
+      setHeroTotal(HERO_TOTAL_AMOUNT)
+      return
+    }
+
     let frame = 0
     const startTime = performance.now()
     const duration = 2200
@@ -745,7 +735,7 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
         {/* ══ FEATURES ══════════════════════════════════════════════════════ */}
         <section className="lp2-features" id="features">
           <div className="lp2-section-head lp-reveal">
-            <span className="lp2-label">9 Güçlü Özellik</span>
+            <span className="lp2-label">8 Güçlü Özellik</span>
             <h2>Her finansal ihtiyacınız için<br /><em>tek platform</em></h2>
             <p>Sıradan bir bütçe uygulaması değil — tam kapsamlı bir finansal kontrol merkezi.</p>
           </div>
@@ -879,24 +869,6 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
                   </div>
                 )}
                 {activeFeature === 5 && (
-                  <div className="lp2-preview-assets">
-                    {[
-                      { icon: "⌂", name: "Daire — Kadıköy", val: "₺4.200.000", change: "+%12" },
-                      { icon: "◈", name: "Araç — Toyota Corolla", val: "₺980.000", change: "-2%" },
-                      { icon: "◉", name: "Hisse Senedi", val: "₺124.500", change: "+%28" },
-                    ].map((a) => (
-                      <div key={a.name} className="lp2-prev-asset">
-                        <span>{a.icon}</span>
-                        <div>
-                          <b>{a.name}</b>
-                          <small style={{ fontFamily: FONT_MONO }}>{a.val}</small>
-                        </div>
-                        <em style={{ color: a.change.startsWith("+") ? S.green : "#ffb3af" }}>{a.change}</em>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {activeFeature === 6 && (
                   <div className="lp2-preview-recurring">
                     {[
                       { name: "Kira", period: "Her ay 1'i", amt: "₺4.200" },
@@ -914,7 +886,7 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
                     ))}
                   </div>
                 )}
-                {activeFeature === 7 && (
+                {activeFeature === 6 && (
                   <div className="lp2-preview-goals">
                     {[
                       { name: "Tatil Fonu", pct: 68, color: S.cyan },
@@ -933,7 +905,7 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
                     ))}
                   </div>
                 )}
-                {activeFeature === 8 && (
+                {activeFeature === 7 && (
                   <div className="lp2-preview-receipts">
                     {[
                       { store: "Migros", date: "3 May", amt: "₺420,50", tag: "Market" },
@@ -1121,17 +1093,71 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
 
       {/* ══ FOOTER ════════════════════════════════════════════════════════ */}
       <footer className="public-footer lp2-footer">
-        <div className="lp2-footer-brand">
-          <img className="public-brand-logo" src={brandLogoSrc} alt="BudgetAssist" />
-          <div>
-            <small>© 2026 BudgetAssist. Tüm hakları saklıdır.</small>
+        <div className="lp2-footer-inner">
+          <div className="lp2-footer-top">
+            <div className="lp2-footer-brand">
+              <img className="public-brand-logo" src={brandLogoSrc} alt="BudgetAssist" />
+              <p>Gelir, gider, borç ve varlıklarınızı tek platformda yönetin. Finansal özgürlüğünüze bugün başlayın.</p>
+              <div className="lp2-footer-social">
+                <a href="https://x.com" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)" className="lp2-footer-social-link">
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.254 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
+                </a>
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="lp2-footer-social-link">
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+                </a>
+                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="lp2-footer-social-link">
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                </a>
+              </div>
+            </div>
+            <div className="lp2-footer-col">
+              <strong>Ürün</strong>
+              <a href="#features" className="lp2-footer-link">Özellikler</a>
+              <a href="#plans" className="lp2-footer-link">Planlar</a>
+              <button type="button" className="lp2-footer-link" onClick={onSignup}>AI Finansal Koç</button>
+              <button type="button" className="lp2-footer-link" onClick={onSignup}>Kredi Kartı Takibi</button>
+              <button type="button" className="lp2-footer-link" onClick={onSignup}>Borç Yönetimi</button>
+            </div>
+            <div className="lp2-footer-col">
+              <strong>Şirket</strong>
+              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("contact")}>Hakkımızda</button>
+              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("contact")}>Blog</button>
+              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("contact")}>İletişim</button>
+              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("security")}>Güvenlik</button>
+            </div>
+            <div className="lp2-footer-col">
+              <strong>Yasal</strong>
+              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("privacy")}>Gizlilik Politikası</button>
+              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("terms")}>Kullanım Koşulları</button>
+              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("privacy")}>KVKK</button>
+              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("security")}>Güvenlik Merkezi</button>
+            </div>
+            <div className="lp2-footer-col">
+              <strong>Uygulamayı İndir</strong>
+              <a href="#" className="lp2-footer-app-btn" onClick={(e) => e.preventDefault()} aria-label="App Store'dan İndir">
+                <img src="/assets/Apple_logo_grey.svg" alt="" aria-hidden="true" className="lp2-footer-app-logo lp2-footer-app-logo-apple" />
+                <div>
+                  <small>App Store'da</small>
+                  <b>iOS için İndir</b>
+                </div>
+              </a>
+              <a href="#" className="lp2-footer-app-btn" onClick={(e) => e.preventDefault()} aria-label="Google Play'den İndir">
+                <img src="/assets/google_play.svg" alt="" aria-hidden="true" className="lp2-footer-app-logo lp2-footer-app-logo-play" />
+                <div>
+                  <small>Google Play'de</small>
+                  <b>Android için İndir</b>
+                </div>
+              </a>
+            </div>
           </div>
-        </div>
-        <div className="lp2-footer-links">
-          <a href="#privacy" onClick={(e) => { e.preventDefault(); onOpenPage("privacy") }}>Gizlilik</a>
-          <a href="#terms" onClick={(e) => { e.preventDefault(); onOpenPage("terms") }}>Kullanım Koşulları</a>
-          <a href="#security" onClick={(e) => { e.preventDefault(); onOpenPage("security") }}>Güvenlik</a>
-          <a href="#contact" onClick={(e) => { e.preventDefault(); onOpenPage("contact") }}>İletişim</a>
+          <div className="lp2-footer-bottom">
+            <small>© 2026 BudgetAssist. Tüm hakları saklıdır.</small>
+            <div className="lp2-footer-bottom-links">
+              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("privacy")}>Gizlilik</button>
+              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("terms")}>Kullanım Koşulları</button>
+              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("security")}>Güvenlik</button>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
