@@ -385,6 +385,7 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
   const [billing, setBilling] = useState("yearly")
   const [activeFeature, setActiveFeature] = useState(0)
   const [heroTotal, setHeroTotal] = useState(0)
+  const [menuOpen, setMenuOpen] = useState(false)
   const yearly = billing === "yearly"
   const navRef = useRef(null)
   const brandLogoSrc = theme === "light" ? BRAND_LOGO_LIGHT_SRC : BRAND_LOGO_DARK_SRC
@@ -460,7 +461,7 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
     <div className="public-page lp2-page" style={{ fontFamily: FONT_BODY }}>
 
       {/* ── NAV ── */}
-      <nav className="public-nav lp2-nav" ref={navRef}>
+      <nav className={`public-nav lp2-nav${menuOpen ? " is-menu-open" : ""}`} ref={navRef}>
         <button className="public-brand" onClick={onSignup} type="button" aria-label="BudgetAssist">
           <img className="public-brand-logo" src={brandLogoSrc} alt="BudgetAssist" />
         </button>
@@ -475,6 +476,27 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
           <button onClick={onSignup} type="button" style={{ ...btnPrimary, padding: "10px 22px" }}>
             Hemen Başla
           </button>
+        </div>
+        <button
+          type="button"
+          className="public-nav-hamburger"
+          onClick={() => setMenuOpen((v) => !v)}
+          aria-label={menuOpen ? "Menüyü kapat" : "Menüyü aç"}
+          aria-expanded={menuOpen}
+        >
+          {menuOpen ? "✕" : "≡"}
+        </button>
+        <div className="public-nav-dropdown">
+          <a href="#features" onClick={() => setMenuOpen(false)}>Özellikler</a>
+          <a href="#plans" onClick={() => setMenuOpen(false)}>Planlar</a>
+          <button type="button" onClick={() => { onOpenPage("security"); setMenuOpen(false) }}>Güvenlik</button>
+          <button type="button" onClick={() => { onOpenPage("contact"); setMenuOpen(false) }}>İletişim</button>
+          <div className="public-nav-dropdown-actions">
+            <button onClick={() => { onLogin(); setMenuOpen(false) }} type="button" className="public-link-button">Giriş Yap</button>
+            <button onClick={() => { onSignup(); setMenuOpen(false) }} type="button" style={{ ...btnPrimary, width: "100%" }}>
+              Hemen Başla
+            </button>
+          </div>
         </div>
       </nav>
 

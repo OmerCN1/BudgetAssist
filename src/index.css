@@ -2962,6 +2962,74 @@ button:active {
   letter-spacing: 0;
 }
 
+.public-nav-hamburger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(187,202,191,0.18);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
+  color: #bbcabf;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.public-nav-hamburger:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.public-nav-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(5,9,13,0.97);
+  backdrop-filter: blur(40px);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding: 0.5rem clamp(1rem, 4vw, 1.5rem) 1.25rem;
+  flex-direction: column;
+  gap: 0;
+  z-index: 39;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+}
+
+.public-nav.is-menu-open .public-nav-dropdown {
+  display: flex;
+}
+
+.public-nav-dropdown a,
+.public-nav-dropdown > button {
+  color: #bbcabf;
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  padding: 0.75rem 0;
+  border: 0;
+  border-bottom: 1px solid rgba(187,202,191,0.08);
+  text-decoration: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+}
+
+.public-nav-dropdown a:hover,
+.public-nav-dropdown > button:hover {
+  color: #4edea3;
+}
+
+.public-nav-dropdown-actions {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
 .public-main {
   position: relative;
   z-index: 1;
@@ -4335,7 +4403,8 @@ button:active {
 .auth2-mobile-brand {
   display: none;
   align-items: center;
-  gap: 0.85rem;
+  margin-right: auto;
+  gap: 4rem
 }
 
 .auth2-back-btn-mobile {
@@ -4802,6 +4871,7 @@ button:active {
   .auth2-mobile-brand .auth2-brand {
     min-width: 0;
     flex: 1;
+    justify-content: center;
   }
 
   .auth2-form-container {
@@ -6030,6 +6100,11 @@ button:active {
     max-height: none;
   }
 
+  .ai-insights-panel {
+    padding-right: 0;
+    scrollbar-gutter: auto;
+  }
+
   .ai-chat-panel {
     min-height: 640px;
   }
@@ -6091,6 +6166,20 @@ button:active {
 
   .public-nav-links {
     display: none;
+  }
+
+  .public-nav-actions {
+    display: none;
+  }
+
+  .public-nav-hamburger {
+    display: flex;
+  }
+
+  .public-nav {
+    flex-direction: row;
+    align-items: center;
+    min-height: 64px;
   }
 
   .landing-bento,
@@ -6212,21 +6301,10 @@ button:active {
     white-space: nowrap;
   }
 
-  .public-nav,
   .auth-topbar {
     align-items: flex-start;
     flex-direction: column;
     min-height: auto;
-  }
-
-  .public-nav-actions {
-    width: 100%;
-    justify-content: space-between;
-    gap: 0.75rem;
-  }
-
-  .public-nav-actions button {
-    flex: 1;
   }
 
   .public-main {
@@ -6238,24 +6316,48 @@ button:active {
     flex-direction: column;
   }
 
-  .budget-calendar-weekdays {
-    display: none;
+  .budget-calendar-weekdays span {
+    padding: 0.4rem 0.2rem;
+    font-size: 0.6rem;
   }
 
   .budget-calendar-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
   }
 
   .budget-calendar-day {
-    min-height: auto;
-    border-right: 0;
-    display: grid;
-    grid-template-columns: 36px minmax(0, 1fr);
-    gap: 0.5rem;
+    min-height: 46px;
+    padding: 3px 2px;
+    border-right: 1px solid rgba(187,202,191,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .budget-calendar-day-number {
+    width: 22px;
+    height: 22px;
+    font-size: 0.62rem;
+    border-radius: 5px;
   }
 
   .budget-calendar-event-list {
     margin-top: 0;
+    gap: 2px;
+  }
+
+  .budget-calendar-event {
+    padding: 1px 2px;
+    border-radius: 3px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .budget-calendar-event span {
+    font-size: 0.55rem;
+  }
+
+  .budget-calendar-event b {
+    display: none;
   }
 
   .budget-calendar-agenda button {
@@ -6279,6 +6381,14 @@ button:active {
 
   .budget-calendar-event {
     white-space: normal;
+  }
+
+  .asset-movement-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .asset-movement-inner-row {
+    grid-template-columns: 1fr 1fr !important;
   }
 
   .receipts-gallery {
@@ -6438,6 +6548,23 @@ button:active {
 
   .receipt-lightbox {
     padding: 0.75rem;
+    align-items: flex-start;
+    padding-top: 0;
+  }
+
+  .receipt-lightbox-panel {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: 92vh;
+    max-height: 92svh;
+    border-radius: 0 0 12px 12px;
+    overflow-y: auto;
+  }
+
+  .receipt-lightbox-panel img {
+    flex: 0 0 auto;
+    max-height: 55vw;
   }
 
   .plans-hero {
@@ -8705,6 +8832,33 @@ button:active {
 
 [data-theme="light"] .public-brand {
   color: #0d1f15;
+}
+
+[data-theme="light"] .public-nav-hamburger {
+  border-color: rgba(60,100,75,0.18);
+  background: rgba(0,0,0,0.04);
+  color: #3c6447;
+}
+
+[data-theme="light"] .public-nav-hamburger:hover {
+  background: rgba(0,0,0,0.08);
+}
+
+[data-theme="light"] .public-nav-dropdown {
+  background: rgba(240,244,241,0.98);
+  border-bottom-color: rgba(60,100,75,0.1);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+}
+
+[data-theme="light"] .public-nav-dropdown a,
+[data-theme="light"] .public-nav-dropdown > button {
+  color: #3c6447;
+  border-bottom-color: rgba(60,100,75,0.1);
+}
+
+[data-theme="light"] .public-nav-dropdown a:hover,
+[data-theme="light"] .public-nav-dropdown > button:hover {
+  color: #0d9e6e;
 }
 
 [data-theme="light"] .public-nav-links a,

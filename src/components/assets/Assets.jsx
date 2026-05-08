@@ -405,6 +405,107 @@ export default function Assets({
         )}
       </div>
 
+      {assets.length > 0 && (
+        <Card style={{ marginBottom: 18 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }} className="asset-movement-grid">
+            <div>
+              <FieldLabel>Alım / Satım Hareketi</FieldLabel>
+              <div style={{ display: "grid", gap: 8 }}>
+                <select
+                  style={inputStyle}
+                  value={movementForm.assetId || assets[0]?.id || ""}
+                  onChange={(e) => setMovementForm((f) => ({ ...f, assetId: e.target.value }))}
+                >
+                  {assets.map((asset) => (
+                    <option key={asset.id} value={asset.id}>{asset.name}</option>
+                  ))}
+                </select>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                  <select
+                    style={inputStyle}
+                    value={movementForm.transactionType}
+                    onChange={(e) => setMovementForm((f) => ({ ...f, transactionType: e.target.value }))}
+                  >
+                    <option value="buy">Alım</option>
+                    <option value="sell">Satım</option>
+                    <option value="deposit">Ekleme</option>
+                    <option value="withdraw">Çekim</option>
+                  </select>
+                  <input
+                    style={inputStyle}
+                    type="date"
+                    value={movementForm.transactionDate}
+                    onChange={(e) => setMovementForm((f) => ({ ...f, transactionDate: e.target.value }))}
+                  />
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }} className="asset-movement-inner-row">
+                  <input
+                    style={inputStyle}
+                    type="number"
+                    min="0"
+                    step="any"
+                    placeholder="Miktar"
+                    value={movementForm.quantity}
+                    onChange={(e) => setMovementForm((f) => ({ ...f, quantity: e.target.value }))}
+                  />
+                  <input
+                    style={inputStyle}
+                    type="number"
+                    min="0"
+                    step="any"
+                    placeholder="Birim fiyat"
+                    value={movementForm.unitPrice}
+                    onChange={(e) => setMovementForm((f) => ({ ...f, unitPrice: e.target.value }))}
+                  />
+                  <input
+                    style={inputStyle}
+                    type="number"
+                    min="0"
+                    step="any"
+                    placeholder="Masraf"
+                    value={movementForm.fee}
+                    onChange={(e) => setMovementForm((f) => ({ ...f, fee: e.target.value }))}
+                  />
+                </div>
+                <input
+                  style={inputStyle}
+                  placeholder="Not"
+                  value={movementForm.note}
+                  onChange={(e) => setMovementForm((f) => ({ ...f, note: e.target.value }))}
+                />
+                <button style={btnPrimary} onClick={saveMovement}>Hareket Kaydet</button>
+              </div>
+            </div>
+            <div>
+              <FieldLabel>Son Hareketler</FieldLabel>
+              {recentMovements.length === 0 ? (
+                <div style={{ color: S.muted, fontSize: 13 }}>Henüz alım-satım hareketi yok.</div>
+              ) : (
+                <div style={{ display: "grid", gap: 7 }}>
+                  {recentMovements.map((movement) => {
+                    const asset = assetById.get(movement.assetId)
+                    const tone = movement.transactionType === "buy" || movement.transactionType === "deposit" ? S.green : S.red
+                    return (
+                      <div key={movement.id} className="glass-card" style={{ padding: "8px 10px", display: "grid", gridTemplateColumns: "1fr auto", gap: 10 }}>
+                        <div style={{ minWidth: 0 }}>
+                          <strong style={{ color: S.text, fontSize: 13 }}>{asset?.name || "Varlık"}</strong>
+                          <div style={{ color: S.muted, fontSize: 11 }}>
+                            {movementLabel(movement.transactionType)} · {formatQty(movement.quantity)} · {movement.transactionDate}
+                          </div>
+                        </div>
+                        <div className="finance-number" style={{ color: tone, fontFamily: FONT_MONO, fontWeight: 800 }}>
+                          {TRY(movement.totalAmount)}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        </Card>
+      )}
+
       {/* Döviz pozisyonu özeti */}
       {Object.keys(currencyGroups).length > 0 && rates && (
         <Card style={{ marginBottom: 18 }}>
@@ -541,107 +642,6 @@ export default function Assets({
           <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
             <button style={btnPrimary} onClick={save}>Kaydet</button>
             <button style={btnGhost} onClick={resetForm}>İptal</button>
-          </div>
-        </Card>
-      )}
-
-      {assets.length > 0 && (
-        <Card style={{ marginBottom: 18 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }} className="asset-movement-grid">
-            <div>
-              <FieldLabel>Alım / Satım Hareketi</FieldLabel>
-              <div style={{ display: "grid", gap: 8 }}>
-                <select
-                  style={inputStyle}
-                  value={movementForm.assetId || assets[0]?.id || ""}
-                  onChange={(e) => setMovementForm((f) => ({ ...f, assetId: e.target.value }))}
-                >
-                  {assets.map((asset) => (
-                    <option key={asset.id} value={asset.id}>{asset.name}</option>
-                  ))}
-                </select>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                  <select
-                    style={inputStyle}
-                    value={movementForm.transactionType}
-                    onChange={(e) => setMovementForm((f) => ({ ...f, transactionType: e.target.value }))}
-                  >
-                    <option value="buy">Alım</option>
-                    <option value="sell">Satım</option>
-                    <option value="deposit">Ekleme</option>
-                    <option value="withdraw">Çekim</option>
-                  </select>
-                  <input
-                    style={inputStyle}
-                    type="date"
-                    value={movementForm.transactionDate}
-                    onChange={(e) => setMovementForm((f) => ({ ...f, transactionDate: e.target.value }))}
-                  />
-                </div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
-                  <input
-                    style={inputStyle}
-                    type="number"
-                    min="0"
-                    step="any"
-                    placeholder="Miktar"
-                    value={movementForm.quantity}
-                    onChange={(e) => setMovementForm((f) => ({ ...f, quantity: e.target.value }))}
-                  />
-                  <input
-                    style={inputStyle}
-                    type="number"
-                    min="0"
-                    step="any"
-                    placeholder="Birim fiyat"
-                    value={movementForm.unitPrice}
-                    onChange={(e) => setMovementForm((f) => ({ ...f, unitPrice: e.target.value }))}
-                  />
-                  <input
-                    style={inputStyle}
-                    type="number"
-                    min="0"
-                    step="any"
-                    placeholder="Masraf"
-                    value={movementForm.fee}
-                    onChange={(e) => setMovementForm((f) => ({ ...f, fee: e.target.value }))}
-                  />
-                </div>
-                <input
-                  style={inputStyle}
-                  placeholder="Not"
-                  value={movementForm.note}
-                  onChange={(e) => setMovementForm((f) => ({ ...f, note: e.target.value }))}
-                />
-                <button style={btnPrimary} onClick={saveMovement}>Hareket Kaydet</button>
-              </div>
-            </div>
-            <div>
-              <FieldLabel>Son Hareketler</FieldLabel>
-              {recentMovements.length === 0 ? (
-                <div style={{ color: S.muted, fontSize: 13 }}>Henüz alım-satım hareketi yok.</div>
-              ) : (
-                <div style={{ display: "grid", gap: 7 }}>
-                  {recentMovements.map((movement) => {
-                    const asset = assetById.get(movement.assetId)
-                    const tone = movement.transactionType === "buy" || movement.transactionType === "deposit" ? S.green : S.red
-                    return (
-                      <div key={movement.id} className="glass-card" style={{ padding: "8px 10px", display: "grid", gridTemplateColumns: "1fr auto", gap: 10 }}>
-                        <div style={{ minWidth: 0 }}>
-                          <strong style={{ color: S.text, fontSize: 13 }}>{asset?.name || "Varlık"}</strong>
-                          <div style={{ color: S.muted, fontSize: 11 }}>
-                            {movementLabel(movement.transactionType)} · {formatQty(movement.quantity)} · {movement.transactionDate}
-                          </div>
-                        </div>
-                        <div className="finance-number" style={{ color: tone, fontFamily: FONT_MONO, fontWeight: 800 }}>
-                          {TRY(movement.totalAmount)}
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              )}
-            </div>
           </div>
         </Card>
       )}
