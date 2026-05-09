@@ -146,6 +146,12 @@ const IconSupport = () => (
   </svg>
 )
 
+const IconChevronDown = () => (
+  <svg {...iconProps} width="18" height="18">
+    <path d="m6 9 6 6 6-6" />
+  </svg>
+)
+
 const FEATURES = [
   {
     Icon: IconIncomeExpense,
@@ -370,6 +376,7 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
   const [activeFeature, setActiveFeature] = useState(0)
   const [heroTotal, setHeroTotal] = useState(0)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [openFaqIndex, setOpenFaqIndex] = useState(null)
   const yearly = billing === "yearly"
   const navRef = useRef(null)
   const brandLogoSrc = theme === "light" ? BRAND_LOGO_LIGHT_SRC : BRAND_LOGO_DARK_SRC
@@ -1053,16 +1060,39 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
         {/* ══ FAQ ═══════════════════════════════════════════════════════════ */}
         <section className="lp2-faq lp-reveal">
           <div className="lp2-section-head" style={{ marginBottom: "2rem" }}>
-            <span className="lp2-label">Sık Sorulanlar</span>
+            <span className="lp2-label">Sık Sorulan Sorular</span>
             <h2>Başlamadan önce<br /><em>aklınızdaki sorular</em></h2>
           </div>
           <div className="lp2-faq-grid">
-            {FAQS.map(({ q, a }) => (
-              <article className="glass-card lp2-faq-item" key={q}>
-                <h3>{q}</h3>
-                <p>{a}</p>
-              </article>
-            ))}
+            {FAQS.map(({ q, a }, index) => {
+              const isOpen = openFaqIndex === index
+              const answerId = `lp2-faq-answer-${index}`
+
+              return (
+                <article className={`glass-card lp2-faq-item${isOpen ? " is-open" : ""}`} key={q}>
+                  <h3 className="lp2-faq-question">
+                    <span className="lp2-faq-toggle-text">{q}</span>
+                    <button
+                      type="button"
+                      className="lp2-faq-toggle"
+                      aria-label={`${q} yanıtını ${isOpen ? "kapat" : "aç"}`}
+                      aria-expanded={isOpen}
+                      aria-controls={answerId}
+                      onClick={() => setOpenFaqIndex(isOpen ? null : index)}
+                    >
+                      <span className="lp2-faq-icon" aria-hidden="true">
+                        <IconChevronDown />
+                      </span>
+                    </button>
+                  </h3>
+                  <div className="lp2-faq-answer" id={answerId}>
+                    <div className="lp2-faq-answer-inner">
+                      <p>{a}</p>
+                    </div>
+                  </div>
+                </article>
+              )
+            })}
           </div>
         </section>
 
