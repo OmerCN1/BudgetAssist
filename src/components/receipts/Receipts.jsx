@@ -20,6 +20,7 @@ export default function Receipts({
   const [mode, setMode] = useState("all")
   const [urls, setUrls] = useState({})
   const [preview, setPreview] = useState(null)
+  const [uploadError, setUploadError] = useState(null)
 
   const txById = useMemo(() => new Map(txs.map((tx) => [tx.id, tx])), [txs])
   const filteredReceipts = useMemo(
@@ -94,11 +95,28 @@ export default function Receipts({
         onChange={async (event) => {
           const file = event.target.files?.[0]
           if (!file) return
-          await onUpload?.(file)
+          const allowed = ["image/", "application/pdf"]
+          if (!allowed.some((t) => file.type.startsWith(t))) {
+            setUploadError("Yalnızca resim veya PDF dosyaları yüklenebilir.")
+            setTimeout(() => setUploadError(null), 5000)
+            event.target.value = ""
+            return
+          }
+          try {
+            await onUpload?.(file)
+          } catch (err) {
+            setUploadError(err?.message || "Dosya yüklenirken bir hata oluştu.")
+            setTimeout(() => setUploadError(null), 5000)
+          }
           event.target.value = ""
         }}
         style={{ display: "none" }}
       />
+      {uploadError && (
+        <div style={{ background: `${S.red}18`, border: `1px solid ${S.red}55`, color: S.red, borderRadius: 8, padding: "10px 14px", fontSize: 13, marginBottom: 8 }}>
+          {uploadError}
+        </div>
+      )}
       <Card>
         <div className="receipts-stat-grid">
           {[

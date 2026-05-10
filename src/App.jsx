@@ -7,7 +7,7 @@ const PublicInfoPage = lazy(() => import("./components/auth/PublicInfoPage"))
 const FullApp = lazy(() => import("./FullApp"))
 
 export default function App() {
-  const [mode, setMode] = useState("landing") // "landing" | "info" | "full"
+  const [mode, setMode] = useState(() => window.location.pathname === "/admin" ? "full" : "landing") // "landing" | "info" | "full"
   const [infoPage, setInfoPage] = useState("")
   const [authMode, setAuthMode] = useState("login")
   const { theme } = useTheme()

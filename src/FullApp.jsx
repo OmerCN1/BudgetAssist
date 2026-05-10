@@ -137,6 +137,13 @@ export default function FullApp({ initialAuthMode = "login", onBackLanding, onOp
     paymentMethod: "",
   })
 
+  // After auth resolves, honour /admin URL for admin users
+  useEffect(() => {
+    if (!authLoading && user && window.location.pathname === "/admin") {
+      setView("admin")
+    }
+  }, [authLoading, user])
+
   const refreshData = useCallback(async () => {
     if (!user) return
     if (refreshPromiseRef.current) return refreshPromiseRef.current
@@ -1028,6 +1035,16 @@ export default function FullApp({ initialAuthMode = "login", onBackLanding, onOp
   }
 
   if (view === "admin") {
+    if (!authLoading && !isAdmin) {
+      return (
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "60vh", gap: 12, textAlign: "center" }}>
+          <span style={{ fontSize: 40 }}>🚫</span>
+          <p style={{ color: S.red, fontWeight: 700, fontSize: 16, margin: 0 }}>Yetersiz yetki</p>
+          <p style={{ color: S.sub, fontSize: 13, margin: 0 }}>Bu sayfaya erişim için yönetici hesabı gerekiyor.</p>
+          <button style={btnPrimary} onClick={() => setView("dashboard")}>Geri Dön</button>
+        </div>
+      )
+    }
     return (
       <Suspense fallback={<ShellMessage title="Admin Console" text="Panel yükleniyor." />}>
         <AdminPanel

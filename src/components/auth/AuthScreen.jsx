@@ -121,6 +121,8 @@ function getAuthErrorMessage(authError) {
     return "Supabase e-posta gönderim limiti doldu. Biraz bekleyip tekrar deneyin."
   if (msg.includes("email address") && msg.includes("is invalid"))
     return "E-posta adresi geçersiz görünüyor. Boşluk olmadığından emin olun."
+  if (msg.includes("invalid login credentials") || msg.includes("invalid credentials"))
+    return "Geçersiz e-posta veya şifre. Lütfen bilgilerinizi kontrol edin."
   return authError.message
 }
 

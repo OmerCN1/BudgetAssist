@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState, useCallback } from "react"
 
 import Card from "../ui/Card"
 import FieldLabel from "../ui/FieldLabel"
@@ -46,6 +46,45 @@ export default function Goals({
     date: today(),
     note: "",
   })
+
+  const CONFETTI_COLORS = ["#34d399", "#f59e0b", "#06b6d4", "#a78bfa", "#f472b6", "#fb923c", "#4ade80", "#facc15"]
+
+  const completedRef = useRef(new Set(
+    (() => { try { return JSON.parse(localStorage.getItem("ba_celebrated_goals") || "[]") } catch { return [] } })()
+  ))
+  const [celebrateGoal, setCelebrateGoal] = useState(null)
+
+  const confettiItems = useMemo(
+    () =>
+      celebrateGoal
+        ? Array.from({ length: 52 }, (_, i) => ({
+            left: `${Math.random() * 100}%`,
+            width: `${6 + Math.random() * 9}px`,
+            height: `${6 + Math.random() * 9}px`,
+            background: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+            animationDelay: `${(Math.random() * 1.4).toFixed(2)}s`,
+            animationDuration: `${(1.8 + Math.random() * 2).toFixed(2)}s`,
+            borderRadius: Math.random() > 0.5 ? "50%" : "3px",
+          }))
+        : [],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [celebrateGoal?.id]
+  )
+
+  const closeCelebration = useCallback(() => setCelebrateGoal(null), [])
+
+  useEffect(() => {
+    for (const goal of goals) {
+      const pct = goal.targetAmount > 0 ? Math.min((goal.currentAmount / goal.targetAmount) * 100, 100) : 0
+      if (pct >= 100 && !completedRef.current.has(goal.id)) {
+        completedRef.current.add(goal.id)
+        try { localStorage.setItem("ba_celebrated_goals", JSON.stringify(Array.from(completedRef.current))) } catch {}
+        setCelebrateGoal({ id: goal.id, name: goal.name })
+        const t = setTimeout(() => setCelebrateGoal(null), 6000)
+        return () => clearTimeout(t)
+      }
+    }
+  }, [goals])
 
   const activeGoals = goals.filter((goal) => !goal.isArchived)
   const totalTarget = activeGoals.reduce((sum, goal) => sum + goal.targetAmount, 0)
@@ -136,6 +175,31 @@ export default function Goals({
           </div>
         ))}
       </div>
+
+      {celebrateGoal && (
+        <div
+          onClick={closeCelebration}
+          style={{ position: "fixed", inset: 0, zIndex: 9998, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.65)", backdropFilter: "blur(4px)" }}
+        >
+          {confettiItems.map((style, i) => (
+            <div key={i} className="confetti-particle" style={style} />
+          ))}
+          <div
+            className="celebrate-modal"
+            onClick={(e) => e.stopPropagation()}
+            style={{ position: "relative", zIndex: 10000, background: "var(--bf-card-bg)", border: `2px solid ${S.green}66`, borderRadius: 20, padding: "44px 56px", textAlign: "center", boxShadow: `0 0 80px ${S.green}44`, maxWidth: 380, width: "90%" }}
+          >
+            <div style={{ fontSize: 64, marginBottom: 10 }}>🎉</div>
+            <div style={{ color: S.green, fontWeight: 800, fontSize: 22, marginBottom: 8 }}>Tebrikler!</div>
+            <div style={{ color: S.text, fontSize: 15, marginBottom: 28 }}>
+              <strong style={{ color: S.green }}>"{celebrateGoal.name}"</strong> hedefine ulaştın!
+            </div>
+            <button onClick={closeCelebration} style={{ ...btnPrimary, padding: "11px 32px", fontSize: 14 }}>
+              Harika! 🚀
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="goals-editor-grid" style={{ display: "grid", gridTemplateColumns: "0.9fr 1.1fr", gap: 10, marginTop: 0 }}>
         <Card>

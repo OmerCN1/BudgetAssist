@@ -1,3 +1,4 @@
+import { useState } from "react"
 import {
   Bar,
   BarChart,
@@ -30,6 +31,32 @@ export default function Reports({
   debtPayments = [],
   subscription,
 }) {
+  const [period, setPeriod] = useState("this_month")
+
+  const today = new Date()
+  const todayKey = monthKey(today.toISOString().slice(0, 10))
+  const prevMonthDate = new Date(today.getFullYear(), today.getMonth() - 1, 1)
+  const prevMonthKey = monthKey(prevMonthDate.toISOString().slice(0, 10))
+  const last3Keys = new Set(
+    [0, 1, 2].map((i) => {
+      const d = new Date(today.getFullYear(), today.getMonth() - i, 1)
+      return monthKey(d.toISOString().slice(0, 10))
+    })
+  )
+
+  const PERIODS = [
+    { id: "this_month", label: "Bu Ay" },
+    { id: "prev_month", label: "Önceki Ay" },
+    { id: "last_3", label: "Son 3 Ay" },
+  ]
+
+  const periodTxs = txs.filter((tx) => {
+    const key = monthKey(tx.date)
+    if (period === "this_month") return key === todayKey
+    if (period === "prev_month") return key === prevMonthKey
+    return last3Keys.has(key)
+  })
+
   const monthKeys = [...new Set(txs.map((tx) => monthKey(tx.date)))].sort().slice(-6)
   const monthlyData = monthKeys.map((key) => {
     const totals = totalsFor(txs.filter((tx) => monthKey(tx.date) === key))
@@ -40,17 +67,16 @@ export default function Reports({
       Net: totals.net,
     }
   })
-  const thisMonth = monthKeys.at(-1) || monthKey(new Date().toISOString().slice(0, 10))
-  const thisMonthTxs = txs.filter((tx) => monthKey(tx.date) === thisMonth)
-  const expenseCats = categoryTotals(thisMonthTxs, cats, "expense")
-  const incomeCats = categoryTotals(thisMonthTxs, cats, "income")
-  const totals = totalsFor(thisMonthTxs)
+  const thisMonth = todayKey
+  const expenseCats = categoryTotals(periodTxs, cats, "expense")
+  const incomeCats = categoryTotals(periodTxs, cats, "income")
+  const totals = totalsFor(periodTxs)
   const avgExpense = monthlyData.length
     ? monthlyData.reduce((total, row) => total + row.Gider, 0) / monthlyData.length
     : 0
   const hasTransactions = txs.length > 0
   const daysInMonth = new Date(Number(thisMonth.slice(0, 4)), Number(thisMonth.slice(5, 7)), 0).getDate()
-  const elapsedDay = thisMonth === monthKey(new Date().toISOString().slice(0, 10)) ? new Date().getDate() : daysInMonth
+  const elapsedDay = period === "this_month" ? today.getDate() : daysInMonth
   const monthEndForecast = elapsedDay > 0 ? (totals.expense / elapsedDay) * daysInMonth : totals.expense
   const monthlySubscriptions = recurringRules
     .filter((rule) => rule.isActive && rule.type === "expense")
@@ -81,12 +107,32 @@ export default function Reports({
           <h1 className="page-title">Raporlar</h1>
           <p className="page-subtitle">Harcama ve gelir trendlerinize genel bakış.</p>
         </div>
+        <div style={{ display: "flex", gap: 6 }}>
+          {PERIODS.map((p) => (
+            <button
+              key={p.id}
+              onClick={() => setPeriod(p.id)}
+              style={{
+                padding: "7px 14px",
+                borderRadius: 20,
+                border: `1px solid ${period === p.id ? S.green : S.border}`,
+                background: period === p.id ? `${S.green}22` : "transparent",
+                color: period === p.id ? S.green : S.sub,
+                fontSize: 12,
+                fontWeight: period === p.id ? 700 : 400,
+                cursor: "pointer",
+              }}
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="stat-bar">
         {[
-          { label: "Bu Ay Net", value: TRY(totals.net), color: totals.net >= 0 ? S.green : S.red },
-          { label: "Bu Ay Gider", value: TRY(totals.expense), color: S.red },
+          { label: `${PERIODS.find((p) => p.id === period)?.label} Net`, value: TRY(totals.net), color: totals.net >= 0 ? S.green : S.red },
+          { label: `${PERIODS.find((p) => p.id === period)?.label} Gider`, value: TRY(totals.expense), color: S.red },
           { label: "Ay Sonu Tahmini", value: TRY(monthEndForecast), color: monthEndForecast > avgExpense ? S.amber : S.cyan },
           { label: "Net Varlık", value: TRY(netWorth), color: netWorth >= 0 ? S.green : S.red },
         ].map((stat) => (
@@ -132,7 +178,7 @@ export default function Reports({
 
         <Card className="reports-chart-card">
           <div className="chart-card-header">
-            <p className="chart-card-title">Bu Ay Kategori Dağılımı</p>
+            <p className="chart-card-title">{PERIODS.find((p) => p.id === period)?.label} Kategori Dağılımı</p>
             <span className="chart-card-meta">Gider dağılımı</span>
           </div>
           {expenseCats.length > 0 ? (
