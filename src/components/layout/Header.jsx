@@ -56,6 +56,8 @@ export default function Header({ view, setView, balance, notificationCount = 0, 
     setMobileOpen(false)
   }
 
+  const navigateDashboard = () => navigate("dashboard")
+
   const addTransaction = () => {
     setView("transactions")
     onAddTx()
@@ -64,23 +66,34 @@ export default function Header({ view, setView, balance, notificationCount = 0, 
 
   return (
     <>
-    <button
+    <div
       className="mobile-sidebar-trigger"
-      type="button"
-      onClick={() => setMobileOpen(true)}
-      aria-label="Menüyü aç"
-      aria-expanded={mobileOpen}
     >
-      <img
-        className="sidebar-logo sidebar-logo-mobile"
-        src={brandLogoSrc}
-        alt="BudgetAssist"
-        style={{ width: 156, maxWidth: "62vw", height: 46, display: "block" }}
-      />
-      <svg aria-hidden="true" viewBox="0 0 24 24">
-        <path d="M4 7h16M4 12h16M4 17h16" />
-      </svg>
-    </button>
+      <button
+        className="mobile-sidebar-logo-button"
+        type="button"
+        onClick={navigateDashboard}
+        aria-label="Özet sayfasına git"
+      >
+        <img
+          className="sidebar-logo sidebar-logo-mobile"
+          src={brandLogoSrc}
+          alt="BudgetAssist"
+          style={{ width: 156, maxWidth: "62vw", height: 46, display: "block" }}
+        />
+      </button>
+      <button
+        className="mobile-sidebar-menu-button"
+        type="button"
+        onClick={() => setMobileOpen(true)}
+        aria-label="Menüyü aç"
+        aria-expanded={mobileOpen}
+      >
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="M4 7h16M4 12h16M4 17h16" />
+        </svg>
+      </button>
+    </div>
 
     {mobileOpen && (
       <button
@@ -101,12 +114,19 @@ export default function Header({ view, setView, balance, notificationCount = 0, 
           flexShrink: 0,
         }}
       >
-        <img
-          className="sidebar-logo"
-          src={brandLogoSrc}
-          alt="BudgetAssist"
-          style={{ width: 176, maxWidth: "calc(100% - 44px)", height: 52, display: "block" }}
-        />
+        <button
+          className="sidebar-brand-button"
+          type="button"
+          onClick={navigateDashboard}
+          aria-label="Özet sayfasına git"
+        >
+          <img
+            className="sidebar-logo"
+            src={brandLogoSrc}
+            alt="BudgetAssist"
+            style={{ width: 176, maxWidth: "100%", height: 52, display: "block" }}
+          />
+        </button>
         <button
           className="mobile-sidebar-close"
           type="button"

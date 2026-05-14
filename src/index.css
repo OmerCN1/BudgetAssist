@@ -1134,6 +1134,38 @@ button:active {
   filter: drop-shadow(0 8px 22px rgba(78,222,163,0.08));
 }
 
+.sidebar-brand-button,
+.mobile-sidebar-logo-button,
+.mobile-sidebar-menu-button {
+  border: 0;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+}
+
+.sidebar-brand-button {
+  display: block;
+  max-width: calc(100% - 44px);
+  flex: 0 1 auto;
+  border-radius: 8px;
+}
+
+.mobile-sidebar-logo-button {
+  display: block;
+  min-width: 0;
+  flex: 0 1 auto;
+  border-radius: 8px;
+}
+
+.mobile-sidebar-menu-button {
+  display: grid;
+  place-items: center;
+  margin-left: auto;
+  flex: 0 0 auto;
+}
+
 .app-icon-box {
   width: 34px;
   height: 34px;
