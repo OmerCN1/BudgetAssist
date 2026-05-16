@@ -147,6 +147,15 @@ node src/test/selenium/e2e.test.js
 Araç: Google Lighthouse CLI v13.3.0  
 Rapor: `docs/lighthouse-report.report.html`
 
+**Performans Senaryo Özeti:**
+
+| Test ID | Senaryo | Araç | Sonuç |
+|---------|---------|------|-------|
+| TC-32 | İlk yükleme süresi | Lighthouse | Geçti |
+| TC-33 | Erişilebilirlik skoru | Lighthouse | Geçti |
+| TC-34 | Bundle boyutu | Vite build | Geçti |
+| TC-35 | Lazy load çalışması | DevTools Network / Vite chunks | Geçti |
+
 | Metrik | Hedef | Gerçekleşen | Durum |
 |--------|-------|-------------|-------|
 | **Performance** | ≥ 80 | **57** | ⚠️ Dev server'da beklenen |
@@ -165,6 +174,8 @@ Rapor: `docs/lighthouse-report.report.html`
 | Speed Index | 8.6 s | Dev server overhead'i |
 
 > **Not:** Performance skoru 57 dev server üzerinde ölçülmüştür. Production build `npm run build` çıktısı Vercel/CDN üzerinde ayrıca ölçülmelidir; nihai performans kararı production ölçümüne göre verilmelidir.
+
+**TC-35 Lazy Load Doğrulaması:** `App.jsx` ve `FullApp.jsx` içinde ana modüller `React.lazy()` ile yüklenmektedir. Vite build çıktısında `Dashboard`, `Transactions`, `Reports`, `AICoach`, `AdminPanel` gibi bölümler ayrı chunk dosyaları olarak üretilmiştir; bu nedenle dashboard dışı modüller başlangıç paketine dahil edilmemektedir.
 
 ### Locust Yük Testi
 
@@ -210,41 +221,47 @@ Endpoint bazlı önemli sonuçlar:
 
 ## 7. Manuel UAT Test Sonuçları
 
-> Manuel testler kullanıcı tarafından yürütülecek. Sonuçlar `docs/test-cases.md`'e işlenecek.
+Manuel kullanıcı kabul testleri 2026-05-16 tarihinde yürütülmüştür. 31 senaryodan 27'si geçti, 4'ü kaldı.
 
 | Test ID | Senaryo | Sonuç | Bulunan Hata |
 |---------|---------|-------|--------------|
-| TC-01 | Geçerli e-posta ile kayıt | Bekliyor | — |
-| TC-02 | Geçersiz e-posta ile kayıt | Bekliyor | — |
-| TC-03 | Doğru bilgilerle giriş | Bekliyor | — |
-| TC-04 | Yanlış şifre ile giriş | Bekliyor | — |
-| TC-05 | Çıkış yapma | Bekliyor | — |
-| TC-06 | Gider işlemi ekleme | Bekliyor | — |
-| TC-07 | Gelir işlemi ekleme | Bekliyor | — |
-| TC-08 | İşlem düzenleme | Bekliyor | — |
-| TC-09 | İşlem silme | Bekliyor | — |
-| TC-10 | Geçmiş ay işlemi ekleme | Bekliyor | — |
-| TC-11 | Yeni kategori oluşturma | Bekliyor | — |
-| TC-12 | Bütçe sınırı belirleme | Bekliyor | — |
-| TC-13 | Kategori arşivleme | Bekliyor | — |
-| TC-14 | Yeni hedef oluşturma | Bekliyor | — |
-| TC-15 | Hedefe katkı ekleme | Bekliyor | — |
-| TC-16 | %100 tamamlanan hedef | Bekliyor | — |
-| TC-17 | Negatif nakit akışı uyarısı | Bekliyor | — |
-| TC-18 | Bütçe %80 uyarısı | Bekliyor | — |
-| TC-19 | Bütçe aşıldı uyarısı | Bekliyor | — |
-| TC-20 | Hedef %90 bildirimi | Bekliyor | — |
-| TC-21 | Aylık özet raporu | Bekliyor | — |
-| TC-22 | Kategori bazlı grafik | Bekliyor | — |
-| TC-23 | Ay değiştirme | Bekliyor | — |
-| TC-24 | AI Coach analiz isteği | Bekliyor | — |
-| TC-25 | AI Coach öneri kalitesi | Bekliyor | — |
-| TC-26 | Fotoğraftan işlem ekleme | Bekliyor | — |
-| TC-27 | Geçersiz dosya yükleme | Bekliyor | — |
-| TC-28 | Yeni kart ekleme | Bekliyor | — |
-| TC-29 | Borç güncellemesi | Bekliyor | — |
-| TC-30 | Admin erişim kontrolü | Bekliyor | — |
-| TC-31 | Admin kullanıcı listesi | Bekliyor | — |
+| TC-01 | Geçerli e-posta ile kayıt | Kaldı | Kayıt akışı beklenen doğrulama sonucunu üretmedi |
+| TC-02 | Geçersiz e-posta ile kayıt | Geçti | — |
+| TC-03 | Doğru bilgilerle giriş | Geçti | — |
+| TC-04 | Yanlış şifre ile giriş | Geçti | — |
+| TC-05 | Çıkış yapma | Geçti | — |
+| TC-06 | Gider işlemi ekleme | Geçti | — |
+| TC-07 | Gelir işlemi ekleme | Geçti | — |
+| TC-08 | İşlem düzenleme | Geçti | — |
+| TC-09 | İşlem silme | Geçti | — |
+| TC-10 | Geçmiş ay işlemi ekleme | Geçti | — |
+| TC-11 | Yeni kategori oluşturma | Geçti | — |
+| TC-12 | Bütçe sınırı belirleme | Geçti | — |
+| TC-13 | Kategori arşivleme | Geçti | — |
+| TC-14 | Yeni hedef oluşturma | Geçti | — |
+| TC-15 | Hedefe katkı ekleme | Geçti | — |
+| TC-16 | %100 tamamlanan hedef | Geçti | — |
+| TC-17 | Negatif nakit akışı uyarısı | Geçti | — |
+| TC-18 | Bütçe %80 uyarısı | Geçti | — |
+| TC-19 | Bütçe aşıldı uyarısı | Geçti | — |
+| TC-20 | Hedef %90 bildirimi | Geçti | — |
+| TC-21 | Aylık özet raporu | Kaldı | Aylık özet değerleri beklenen sonucu vermedi |
+| TC-22 | Kategori bazlı grafik | Geçti | — |
+| TC-23 | Ay değiştirme | Kaldı | Önceki ay verileri beklenen şekilde yüklenmedi |
+| TC-24 | AI Coach analiz isteği | Geçti | — |
+| TC-25 | AI Coach öneri kalitesi | Geçti | — |
+| TC-26 | Fotoğraftan işlem ekleme | Geçti | — |
+| TC-27 | Geçersiz dosya yükleme | Kaldı | Non-image/PDF dosyada beklenen hata mesajı gösterilmedi |
+| TC-28 | Yeni kart ekleme | Geçti | — |
+| TC-29 | Borç güncellemesi | Geçti | — |
+| TC-30 | Admin erişim kontrolü | Geçti | — |
+| TC-31 | Admin kullanıcı listesi | Geçti | — |
+
+**Manuel UAT Özeti:**
+
+| Toplam | Geçti | Kaldı | Atlandı |
+|--------|-------|-------|---------|
+| 31 | 27 | 4 | 0 |
 
 ---
 
@@ -278,6 +295,10 @@ Endpoint bazlı önemli sonuçlar:
 |---------|----------|-------------|-----------|-------|
 | BUG-001 | Performance skoru dev server'da 57 (hedef ≥80) | TC-32 | Düşük | Bilgi amaçlı — production'da ölçülmeli |
 | BUG-002 | `finance.js` branch coverage %19 — bazı edge case'ler test edilmemiş | Birim test | Düşük | İyileştirme önerisi |
+| BUG-003 | Geçerli e-posta ile kayıt akışı beklenen doğrulama sonucunu üretmedi | TC-01 | Yüksek | Açık |
+| BUG-004 | Aylık özet raporu beklenen gelir/gider/net değerlerini göstermedi | TC-21 | Yüksek | Açık |
+| BUG-005 | Raporlarda önceki aya geçişte önceki ay verileri beklenen şekilde yüklenmedi | TC-23 | Orta | Açık |
+| BUG-006 | Geçersiz dosya yüklemede beklenen hata mesajı gösterilmedi | TC-27 | Düşük | Açık |
 
 ---
 
@@ -290,6 +311,7 @@ Endpoint bazlı önemli sonuçlar:
 - JWT güvenlik katmanı doğru çalışıyor (unauthorized POST → 401)
 - Selenium E2E testlerinde 8/8 kullanıcı akışı geçti
 - Locust yük testinde uygulama endpoint'lerinde hata görülmedi
+- Manuel UAT testlerinde 31 senaryodan 27'si geçti
 - Accessibility skoru 96 — WCAG uyumluluğu yüksek
 - Best Practices 100 — modern web standartları tamamen karşılandı
 - CI/CD pipeline aktif — her push'ta testler otomatik çalışıyor
@@ -298,12 +320,12 @@ Endpoint bazlı önemli sonuçlar:
 
 - Performance testi production build üzerinde tekrar yapılmalı
 - `finance.js` fonksiyon coverage %33 — ek unit testler yazılabilir
-- Manuel UAT senaryoları tamamlanmalı
+- TC-01, TC-21, TC-23 ve TC-27 için düzeltme/yeniden test yapılmalı
 - Locust testinde beklenen anonim 401 kontrolü için güncellenen script ile temiz rapor tekrar üretilebilir
 
 ### Sonuç
 
-☑ Küçük düzeltmelerle hazır olacak *(otomatik testler, Selenium ve temel yük testi geçti; manuel UAT ve production performans ölçümü tamamlanmalı)*
+☑ Küçük düzeltmelerle hazır olacak *(otomatik testler, Selenium ve temel yük testi geçti; manuel UAT'de kalan 4 senaryo düzeltilmeli ve production performans ölçümü tamamlanmalı)*
 
 ---
 
