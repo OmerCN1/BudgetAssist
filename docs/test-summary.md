@@ -9,9 +9,9 @@
 
 ## Yönetici Özeti
 
-Tüm otomatik kod ve build kontrolleri başarıyla geçmiştir. 56/56 birim test geçti, coverage hedefleri karşılandı, production build başarılı ve yaklaşık 160 ms'de tamamlandı. Lighthouse erişilebilirlik (96), Best Practices (100) ve SEO (92) skorları hedeflerin üzerindedir. Performance skoru dev server ortamında 57 olarak ölçülmüştür; production build/Vercel ortamında ayrıca tekrar ölçülmelidir. Selenium E2E testinde 8/8 kullanıcı akışı başarıyla geçmiştir. Locust ile 10 eş zamanlı kullanıcı ve 60 saniyelik yük testi çalıştırılmıştır; uygulama endpoint'lerinde hata görülmemiş, yalnızca anonim REST guard kontrolünde beklenen 401 yanıtları failure olarak raporlanmıştır. Manuel UAT testleri (TC-01..TC-35) kullanıcı tarafından yürütülecektir.
+Tüm otomatik kod ve build kontrolleri başarıyla geçmiştir. 56/56 birim test geçti, coverage hedefleri karşılandı, production build başarılı ve yaklaşık 160 ms'de tamamlandı. Production ortamında PageSpeed Insights ölçümleri hedeflerin üzerindedir: masaüstü skorları Performance 100, Accessibility 100, Best Practices 100 ve SEO 100; mobil skorları Performance 89, Accessibility 100, Best Practices 100 ve SEO 100 olarak ölçülmüştür. Selenium E2E testinde 8/8 kullanıcı akışı başarıyla geçmiştir. Locust ile 10 eş zamanlı kullanıcı ve 60 saniyelik yük testi çalıştırılmıştır; uygulama endpoint'lerinde hata görülmemiş, yalnızca anonim REST guard kontrolünde beklenen 401 yanıtları failure olarak raporlanmıştır. Manuel UAT testleri (TC-01..TC-35) kullanıcı tarafından yürütülecektir.
 
-**Genel Değerlendirme:** ✅ Otomatik test/build, Selenium E2E ve temel yük testi tamamlandı; yayın kararı için manuel UAT ve production performans ölçümü tamamlanmalıdır.
+**Genel Değerlendirme:** ✅ Otomatik test/build, Selenium E2E, temel yük testi ve production PageSpeed ölçümü tamamlandı; yayın kararı için manuel UAT tamamlanmalıdır.
 
 ---
 
@@ -142,10 +142,11 @@ node src/test/selenium/e2e.test.js
 
 ## 6. Performans Testi
 
-### Lighthouse (dev server — http://localhost:5173)
+### PageSpeed Insights (production)
 
-Araç: Google Lighthouse CLI v13.3.0  
-Rapor: `docs/lighthouse-report.report.html`
+Araç: Google PageSpeed Insights / Lighthouse  
+Ölçüm tarihi: 2026-05-18  
+Kaynak: Production URL üzerinden PageSpeed ekran görüntüleri
 
 **Performans Senaryo Özeti:**
 
@@ -156,24 +157,24 @@ Rapor: `docs/lighthouse-report.report.html`
 | TC-34 | Bundle boyutu | Vite build | Geçti |
 | TC-35 | Lazy load çalışması | DevTools Network / Vite chunks | Geçti |
 
-| Metrik | Hedef | Gerçekleşen | Durum |
-|--------|-------|-------------|-------|
-| **Performance** | ≥ 80 | **57** | ⚠️ Dev server'da beklenen |
-| **Accessibility** | ≥ 90 | **96** | ✅ |
-| **Best Practices** | ≥ 90 | **100** | ✅ |
-| **SEO** | ≥ 80 | **92** | ✅ |
+| Metrik | Hedef | Mobil | Masaüstü | Durum |
+|--------|-------|-------|----------|-------|
+| **Performance** | ≥ 80 | **89** | **100** | ✅ |
+| **Accessibility** | ≥ 90 | **100** | **100** | ✅ |
+| **Best Practices** | ≥ 90 | **100** | **100** | ✅ |
+| **SEO** | ≥ 80 | **100** | **100** | ✅ |
 
-**Core Web Vitals (dev server):**
+**Core Web Vitals / Lighthouse metrikleri:**
 
-| Metrik | Değer | Açıklama |
-|--------|-------|----------|
-| First Contentful Paint | 7.7 s | Dev server'da; production'da ~1-2 s beklenir |
-| Largest Contentful Paint | 19.8 s | Supabase auth init + JS parse süresi |
-| Total Blocking Time | 0 ms | ✅ Ana thread bloke değil |
-| Cumulative Layout Shift | 0 | ✅ Layout kararlı |
-| Speed Index | 8.6 s | Dev server overhead'i |
+| Metrik | Mobil | Masaüstü | Durum |
+|--------|-------|----------|-------|
+| First Contentful Paint | 1.4 s | 0.3 s | ✅ |
+| Largest Contentful Paint | 2.6 s | 0.7 s | ✅ |
+| Total Blocking Time | 280 ms | 50 ms | ✅ |
+| Cumulative Layout Shift | 0 | 0 | ✅ |
+| Speed Index | 4.0 s | 0.7 s | ✅ |
 
-> **Not:** Performance skoru 57 dev server üzerinde ölçülmüştür. Production build `npm run build` çıktısı Vercel/CDN üzerinde ayrıca ölçülmelidir; nihai performans kararı production ölçümüne göre verilmelidir.
+> **Not:** Önceki 57 Performance skoru dev server üzerinde alınmış ara ölçümdü. Production PageSpeed sonucunda mobil Performance 89, masaüstü Performance 100 olarak doğrulandığı için performans hedefi karşılanmıştır.
 
 **TC-35 Lazy Load Doğrulaması:** `App.jsx` ve `FullApp.jsx` içinde ana modüller `React.lazy()` ile yüklenmektedir. Vite build çıktısında `Dashboard`, `Transactions`, `Reports`, `AICoach`, `AdminPanel` gibi bölümler ayrı chunk dosyaları olarak üretilmiştir; bu nedenle dashboard dışı modüller başlangıç paketine dahil edilmemektedir.
 
@@ -293,7 +294,7 @@ Manuel kullanıcı kabul testleri 2026-05-16 tarihinde yürütülmüştür. 31 s
 
 | Hata ID | Açıklama | İlgili Test | Kritiklik | Durum |
 |---------|----------|-------------|-----------|-------|
-| BUG-001 | Performance skoru dev server'da 57 (hedef ≥80) | TC-32 | Düşük | Bilgi amaçlı — production'da ölçülmeli |
+| BUG-001 | Production PageSpeed ölçümüyle performans hedefi doğrulandı | TC-32 | Düşük | Kapalı — mobil 89, masaüstü 100 |
 | BUG-002 | `finance.js` branch coverage %19 — bazı edge case'ler test edilmemiş | Birim test | Düşük | İyileştirme önerisi |
 | BUG-003 | Geçerli e-posta ile kayıt akışı beklenen doğrulama sonucunu üretmedi | TC-01 | Yüksek | Açık |
 | BUG-004 | Aylık özet raporu beklenen gelir/gider/net değerlerini göstermedi | TC-21 | Yüksek | Açık |
@@ -312,20 +313,21 @@ Manuel kullanıcı kabul testleri 2026-05-16 tarihinde yürütülmüştür. 31 s
 - Selenium E2E testlerinde 8/8 kullanıcı akışı geçti
 - Locust yük testinde uygulama endpoint'lerinde hata görülmedi
 - Manuel UAT testlerinde 31 senaryodan 27'si geçti
-- Accessibility skoru 96 — WCAG uyumluluğu yüksek
+- PageSpeed mobil Performance 89 ve masaüstü Performance 100 — performans hedefi karşılandı
+- Accessibility skoru 100 — WCAG uyumluluğu yüksek
 - Best Practices 100 — modern web standartları tamamen karşılandı
+- SEO skoru 100 — arama motoru uyumluluğu hedefin üzerinde
 - CI/CD pipeline aktif — her push'ta testler otomatik çalışıyor
 
 ### Eksikler / İyileştirme Önerileri
 
-- Performance testi production build üzerinde tekrar yapılmalı
 - `finance.js` fonksiyon coverage %33 — ek unit testler yazılabilir
 - TC-01, TC-21, TC-23 ve TC-27 için düzeltme/yeniden test yapılmalı
 - Locust testinde beklenen anonim 401 kontrolü için güncellenen script ile temiz rapor tekrar üretilebilir
 
 ### Sonuç
 
-☑ Küçük düzeltmelerle hazır olacak *(otomatik testler, Selenium ve temel yük testi geçti; manuel UAT'de kalan 4 senaryo düzeltilmeli ve production performans ölçümü tamamlanmalı)*
+☑ Küçük düzeltmelerle hazır olacak *(otomatik testler, Selenium, temel yük testi ve production performans ölçümü geçti; manuel UAT'de kalan 4 senaryo düzeltilmeli)*
 
 ---
 
@@ -334,8 +336,8 @@ Manuel kullanıcı kabul testleri 2026-05-16 tarihinde yürütülmüştür. 31 s
 | Dosya | Açıklama |
 |-------|----------|
 | `coverage/index.html` | Vitest coverage HTML raporu |
-| `docs/lighthouse-report.report.html` | Lighthouse performans raporu |
-| `docs/lighthouse-report.report.json` | Lighthouse ham veri (JSON) |
+| `docs/lighthouse-report.report.html` | Eski dev server Lighthouse ara raporu |
+| `docs/lighthouse-report.report.json` | Eski dev server Lighthouse ham veri (JSON) |
 | `docs/openapi.yaml` | Swagger/OpenAPI 3.0 spec |
 | `src/test/selenium/e2e.test.js` | Selenium E2E test scripti |
 | `locustfile.py` | Locust yük testi senaryoları |

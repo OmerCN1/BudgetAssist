@@ -70,7 +70,7 @@ BudgetAssist, kullanıcıların gelir-gider takibi, bütçe yönetimi, finansal 
 | Birim test yazımı | Geliştirici | Tamamlandı |
 | Entegrasyon test senaryoları | Geliştirici | Dokümante edildi |
 | CI pipeline kurulumu | Geliştirici | Tamamlandı |
-| Performans raporu | Geliştirici | Bekliyor |
+| Performans raporu | Geliştirici | Tamamlandı |
 | Kullanıcı kabul testi | Test ekibi | Bekliyor |
 
 ---
@@ -83,7 +83,7 @@ BudgetAssist, kullanıcıların gelir-gider takibi, bütçe yönetimi, finansal 
 - Utility fonksiyonlar için otomatik birim testler (Vitest)
 - Kritik kullanıcı akışları için manuel test senaryoları (`docs/test-cases.md`)
 - CI pipeline ile her push'ta testlerin otomatik çalıştırılması
-- Lighthouse ile performans skorunun ölçülmesi
+- PageSpeed Insights / Lighthouse ile performans skorunun ölçülmesi
 
 ---
 
@@ -125,8 +125,8 @@ BudgetAssist, kullanıcıların gelir-gider takibi, bütçe yönetimi, finansal 
 **Katılımcılar:** Geliştirici ekibi
 
 **Metodoloji:**
-- **Araç:** Google Lighthouse CLI
-- **Çalıştırma:** `npx lighthouse http://localhost:5173 --output html --output-path ./docs/lighthouse-report.html`
+- **Araç:** Google PageSpeed Insights / Google Lighthouse CLI
+- **Çalıştırma:** Production URL PageSpeed Insights üzerinden ölçülür; lokal ön kontrol için `npx lighthouse http://localhost:5173 --output html --output-path ./docs/lighthouse-report.html` kullanılabilir
 - **Hedef skorlar:**
 
 | Metrik | Hedef |
@@ -220,9 +220,9 @@ VITE_GROQ_API_KEY=[anahtar]
 | Hafta 1 | Birim testler yazıldı | Tamamlandı |
 | Hafta 1 | CI pipeline kuruldu | Tamamlandı |
 | Hafta 2 | Entegrasyon test senaryoları | Devam ediyor |
-| Hafta 2 | Performans raporu (Lighthouse) | Bekliyor |
+| Hafta 2 | Performans raporu (PageSpeed Insights / Lighthouse) | Tamamlandı |
 | Hafta 3 | Kullanıcı kabul testleri | Bekliyor |
-| Hafta 3 | Test özet raporu | Bekliyor |
+| Hafta 3 | Test özet raporu | Tamamlandı |
 
 ---
 
@@ -291,8 +291,8 @@ Test sırasında bulunan hatalar şu şekilde kaydedilir:
 
 - [x] `docs/test-plan.md` — Bu belge
 - [x] `docs/test-cases.md` — Test senaryoları ve durumları
-- [ ] `docs/test-summary.md` — Test özet raporu (testler tamamlandıktan sonra)
-- [ ] `docs/lighthouse-report.html` — Performans raporu
+- [x] `docs/test-summary.md` — Test özet raporu
+- [x] PageSpeed Insights production ölçümü — Performans raporu
 - [x] `.github/workflows/test.yml` — CI pipeline
 - [x] `coverage/index.html` — Coverage raporu (`npm run test:coverage` ile üretilir)
 
@@ -340,7 +340,7 @@ Test sırasında bulunan hatalar şu şekilde kaydedilir:
 | @vitest/coverage-v8 | Coverage raporu | 4.1.5 |
 | jsdom | Tarayıcı simülasyonu | 29.1.1 |
 | GitHub Actions | CI/CD otomasyonu | - |
-| Google Lighthouse | Performans analizi | CLI |
+| Google PageSpeed Insights / Lighthouse | Performans analizi | Web / CLI |
 | Supabase CLI | Veritabanı yönetimi | Güncel |
 
 ---

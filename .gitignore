@@ -21,3 +21,5 @@ BudgetAssist_Test_Plani.pdf
 docs/lighthouse-report.report.json
 docs/lighthouse-report.report.html
 docs/locust-report.html
+outputs/
+/test-transactions-*.csv
