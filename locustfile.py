@@ -53,7 +53,7 @@ TEST_PASSWORD = os.getenv("SELENIUM_TEST_PASSWORD", "")
 
 def get_auth_token(client):
     """Supabase Auth'tan JWT access_token alır."""
-    resp = client.post(
+    with client.post(
         "/auth/v1/token?grant_type=password",
         json={"email": TEST_EMAIL, "password": TEST_PASSWORD},
         headers={
@@ -62,11 +62,11 @@ def get_auth_token(client):
         },
         name="/auth/v1/token (login)",
         catch_response=True,
-    )
-    if resp.status_code == 200:
-        data = resp.json()
-        return data.get("access_token", "")
-    resp.failure(f"Login başarısız: {resp.status_code}")
+    ) as resp:
+        if resp.status_code == 200:
+            data = resp.json()
+            return data.get("access_token", "")
+        resp.failure(f"Login başarısız: {resp.status_code}")
     return ""
 
 
