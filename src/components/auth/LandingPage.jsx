@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react"
 import { S, FONT_BODY, FONT_MONO, btnPrimary, btnGhost } from "../../constants/theme"
+import { LANGUAGE_OPTIONS } from "../../constants/language"
 
 const BRAND_LOGO_LIGHT_SRC = "/assets/ba_logo_black.svg"
 const BRAND_LOGO_DARK_SRC = "/assets/ba_logo_white.svg"
@@ -381,9 +382,235 @@ const HERO_CHART_TREND =
   "M0,72 C0.18,72 0.32,72 0.5,72 C0.84,70 1.16,64 1.5,64 C1.84,64 2.16,56 2.5,56 C2.84,56 3.16,62 3.5,62 C3.84,62 4.16,46 4.5,46 C4.84,46 5.16,38 5.5,38 C5.84,38 6.16,42 6.5,42 C6.84,42 7.16,30 7.5,30 C7.84,30 8.16,20 8.5,20 C8.84,20 9.16,26 9.5,26 C9.84,26 10.16,12 10.5,12 C10.84,12 11.16,4 11.5,4 C11.68,4 11.82,4 12,4"
 const HERO_CHART_AREA = `${HERO_CHART_TREND} L12,100 L0,100 Z`
 const HERO_TOTAL_AMOUNT = 284750
-const formatHeroTotal = (value) => `₺${Math.round(value).toLocaleString("tr-TR")},00`
+const EN_TRANSLATIONS = {
+  "Gelir & Gider Takibi": "Income & Expense Tracking",
+  "Tüm işlemlerinizi otomatik kategorize edin. Gerçek zamanlı bakiye ve nakit akışı görünümüyle her zaman bir adım önde olun.": "Automatically categorize every transaction. Stay one step ahead with real-time balance and cash-flow visibility.",
+  "Temel": "Core",
+  "AI Finansal Koç": "AI Financial Coach",
+  "Kişisel harcama alışkanlıklarınızı öğrenen yapay zeka, size özel tasarruf önerileri ve risk uyarıları sunar.": "AI learns your personal spending habits and delivers tailored saving tips and risk alerts.",
+  "Premium": "Premium",
+  "Detaylı Raporlar": "Detailed Reports",
+  "Aylık trendler, kategori dağılımı ve nakit akışı grafikleriyle finansal durumunuzu net görün.": "See your financial picture clearly with monthly trends, category breakdowns, and cash-flow charts.",
+  "Standart": "Standard",
+  "Kredi Kartı Takibi": "Credit Card Tracking",
+  "Birden fazla kredi kartınızı tek ekranda yönetin. Limit kullanımı, ekstre tarihleri ve borç durumunu takip edin.": "Manage multiple credit cards in one place. Track limit usage, statement dates, and balances.",
+  "Yeni": "New",
+  "Borç Yönetimi": "Debt Management",
+  "Verdiğiniz ve aldığınız borçları takip edin. Otomatik hatırlatmalar ve ödeme planlamasıyla hiçbir borcu kaçırmayın.": "Track money you owe and money owed to you. Never miss a debt with reminders and payment planning.",
+  "Tekrarlayan İşlemler": "Recurring Transactions",
+  "Kira, fatura, abonelik gibi düzenli ödemelerinizi otomatikleştirin. Hiçbir ödemeyi kaçırmazsınız.": "Automate rent, bills, subscriptions, and other regular payments so nothing slips through.",
+  "Hedef & Birikim": "Goals & Savings",
+  "Finansal hedeflerinizi belirleyin, ilerlemenizi takip edin. Tatil, araba, ev — her hayalinizi planlayın.": "Set financial goals and track progress. Plan every dream, from a trip to a car or home.",
+  "Fiş & Fatura Arşivi": "Receipt & Invoice Archive",
+  "Kamera ile fişlerinizi tarayın, AI otomatik doldurun. Tüm belgeleriniz bulutta güvende.": "Scan receipts with your camera and let AI fill in the details. Keep every document safely in the cloud.",
+  "Ücretsiz": "Free",
+  "Başlangıç için": "For getting started",
+  "Gelir/Gider takibi": "Income/expense tracking",
+  "3 kategori limiti": "3 category limit",
+  "Manuel veri girişi": "Manual data entry",
+  "10 fiş arşivi": "10 receipt archive",
+  "Ücretsiz Başla": "Start Free",
+  "En Popüler": "Most Popular",
+  "Sınırsız kategori": "Unlimited categories",
+  "Borç & Varlık yönetimi": "Debt & asset management",
+  "250 fiş arşivi": "250 receipt archive",
+  "Standart'ı Seç": "Choose Standard",
+  "En İyi Değer": "Best Value",
+  "Otomatik bütçe risk analizi": "Automated budget risk analysis",
+  "Sınırsız hedef & birikim": "Unlimited goals & savings",
+  "Sınırsız fiş arşivi": "Unlimited receipt archive",
+  "Banka entegrasyonu": "Bank integration",
+  "Öncelikli destek": "Priority support",
+  "Premium'a Geç": "Upgrade to Premium",
+  "Kredi kartı takibi özelliği hayat kurtarıcı. 3 farklı kartımı tek ekranda görüp ekstre tarihlerimi kaçırmıyorum.": "The credit card tracking feature is a lifesaver. I see three different cards in one screen and never miss statement dates.",
+  "Yazılım Geliştirici": "Software Developer",
+  "AI koç gerçekten işe yarıyor. İlk ayda aboneliklerimi düzenleyerek ₺640 tasarruf ettim.": "The AI coach really works. I saved ₺640 in the first month by organizing my subscriptions.",
+  "Girişimci": "Founder",
+  "Borç takibi sayesinde arkadaşlarımla hesaplaşmak artık çok kolay. Hiçbir şeyi unutmuyorum.": "Debt tracking makes settling up with friends incredibly easy. I do not forget anything anymore.",
+  "Finans Uzmanı": "Finance Specialist",
+  "Fiş tarama özelliği muhasebe işimi ciddi şekilde rahatlattı. Harcamalarım artık kategorilere otomatik düşüyor.": "Receipt scanning has made my accounting work much lighter. My expenses now land in categories automatically.",
+  "Kafe İşletmecisi": "Cafe Owner",
+  "Varlık ve borçlarımı aynı panelde görmek finansal durumumu çok daha net anlamamı sağladı.": "Seeing assets and debts in the same panel helped me understand my financial position much more clearly.",
+  "Ürün Yöneticisi": "Product Manager",
+  "Hedef takibi sayesinde tatil bütçemi ilk kez dağılmadan tamamladım. Uyarılar tam zamanında geliyor.": "Goal tracking helped me complete my vacation budget without losing focus for the first time. Alerts arrive right on time.",
+  "Tasarımcı": "Designer",
+  "Kredi kartı limitleri ve ekstre tarihleri tek ekranda olunca ay sonu sürprizleri bitti.": "Having card limits and statement dates in one screen ended those month-end surprises.",
+  "Satış Müdürü": "Sales Manager",
+  "AI koçun abonelik önerileriyle kullanmadığım servisleri temizledim. İlk haftadan fark ettirdi.": "The AI coach's subscription tips helped me clean up services I no longer used. I noticed the difference in week one.",
+  "Serbest Çalışan": "Freelancer",
+  "Bağla": "Connect",
+  "Hesabınızı oluşturun, gelir-gider kategorilerinizi ve ilk finansal hedeflerinizi dakikalar içinde tanımlayın.": "Create your account, define income and expense categories, and set your first financial goals in minutes.",
+  "3 dk": "3 min",
+  "Takip Et": "Track",
+  "Varlık, borç, kart limiti ve tekrar eden ödemeleri tek panelde canlı bir finans akışına dönüştürün.": "Turn assets, debts, card limits, and recurring payments into one live financial flow.",
+  "Tek panel": "One panel",
+  "AI Öneri Al": "Get AI Tips",
+  "AI koç harcama alışkanlıklarınızı analiz eder, tasarruf fırsatlarını ve riskleri anlaşılır önerilere çevirir.": "The AI coach analyzes your spending habits and turns saving opportunities and risks into clear suggestions.",
+  "%23 tasarruf": "23% savings",
+  "Şifreli altyapı": "Encrypted infrastructure",
+  "Hassas oturum ve veri akışları modern güvenlik pratikleriyle korunur.": "Sensitive sessions and data flows are protected with modern security practices.",
+  "Veri kontrolü sizde": "You control your data",
+  "Hesap, işlem ve arşiv verilerinizi istediğiniz zaman yönetebilirsiniz.": "Manage your account, transaction, and archive data whenever you want.",
+  "Güvenli finans deneyimi": "Secure finance experience",
+  "Gizlilik, erişim ve hesap güvenliği landing akışının merkezinde tutulur.": "Privacy, access, and account security stay central to the landing experience.",
+  "Destek hazır": "Support is ready",
+  "Kurulum, güvenlik veya hesap sorularında iletişim kanalları açık kalır.": "Communication channels stay open for setup, security, or account questions.",
+  "Ücretsiz planla başlayabilir miyim?": "Can I start with the free plan?",
+  "Evet. Temel gelir-gider takibiyle başlayabilir, ihtiyaçlarınız arttığında Standart veya Premium plana geçebilirsiniz.": "Yes. You can start with core income and expense tracking, then move to Standard or Premium as your needs grow.",
+  "Kredi kartı bilgilerim gerekiyor mu?": "Do I need to enter credit card details?",
+  "Ücretsiz hesap oluşturmak için kredi kartı gerekmez. Plan seçimini daha sonra yapabilirsiniz.": "No credit card is required to create a free account. You can choose a plan later.",
+  "AI koç neyi analiz eder?": "What does the AI coach analyze?",
+  "Harcama eğilimlerinizi, aboneliklerinizi, bütçe risklerini ve tasarruf fırsatlarını anlaşılır önerilere dönüştürür.": "It turns spending trends, subscriptions, budget risks, and saving opportunities into clear recommendations.",
+  "Verilerimi sonradan yönetebilir miyim?": "Can I manage my data later?",
+  "Evet. İşlem, fiş, hedef ve hesap bilgilerinizi panel üzerinden düzenleyebilir veya kaldırabilirsiniz.": "Yes. You can edit or remove transactions, receipts, goals, and account details from the dashboard.",
+  "Aktif Kullanıcı": "Active Users",
+  "Yönetilen Varlık": "Assets Managed",
+  "Güvenlik Skoru": "Security Score",
+  "App Store Puanı": "App Store Rating",
+  "Navigasyon": "Navigation",
+  "Menüyü kapat": "Close menu",
+  "Menüyü aç": "Open menu",
+  "Özellikler": "Features",
+  "Planlar": "Plans",
+  "Güvenlik": "Security",
+  "İletişim": "Contact",
+  "Giriş Yap": "Log In",
+  "Hemen Başla": "Get Started",
+  "Yeni: AI Finans Koçu v2.0 · Varlık & Borç Takibi · Kredi Kartı Yönetimi": "New: AI Finance Coach v2.0 · Asset & Debt Tracking · Credit Card Management",
+  "Paranızı": "Manage your",
+  "akıllıca": "money",
+  "yönetin.": "smarter.",
+  "Gelir, gider, borç, varlık ve yatırımlarınızı tek platformda takip edin. AI destekli analizlerle finansal hedeflerinize çok daha hızlı ulaşın.": "Track income, expenses, debt, assets, and investments in one platform. Reach your financial goals much faster with AI-powered analysis.",
+  "Ücretsiz Başla →": "Start Free →",
+  "47.000+ kullanıcı · 4.9/5 puan": "47,000+ users · 4.9/5 rating",
+  "Toplam Varlık": "Total Assets",
+  "Toplam varlık 284.750 Türk lirası": "Total assets 284,750 Turkish lira",
+  "+%4.8 bu ay": "+4.8% this month",
+  "Kredi Kartı": "Credit Card",
+  "Borçlar": "Debts",
+  "Hedef": "Goal",
+  "Varlıklar": "Assets",
+  "Maaş": "Salary",
+  "Bugün": "Today",
+  "Kira": "Rent",
+  "Dün": "Yesterday",
+  "3 gün önce": "3 days ago",
+  "AI Koç": "AI Coach",
+  "Bu ay abonelik giderlerini %23 azaltabilirsiniz.": "You can reduce subscription expenses by 23% this month.",
+  "Limit Kullanımı": "Limit Usage",
+  "Desteklenen finansal kurumlar": "Supported financial institutions",
+  "Nasıl Çalışır?": "How It Works",
+  "Finansal kontrolü": "Build financial control",
+  "3 adımda kurun": "in 3 steps",
+  "Dağınık işlem, hedef ve ödeme bilgilerini karar alabileceğiniz sade bir akışa çevirin.": "Turn scattered transactions, goals, and payment details into a simple flow you can act on.",
+  "8 Güçlü Özellik": "8 Powerful Features",
+  "Her finansal ihtiyacınız için": "One platform for every",
+  "tek platform": "financial need",
+  "Sıradan bir bütçe uygulaması değil — tam kapsamlı bir finansal kontrol merkezi.": "Not just another budgeting app. It is a complete financial control center.",
+  "özelliğini keşfet →": "feature →",
+  "Maaş Ödemesi": "Salary Payment",
+  "Market": "Groceries",
+  "Elektrik": "Electricity",
+  "Kira Geliri": "Rental Income",
+  "Bu ay yemek harcamanız %34 arttı. Geçen ay ortalama ₺2.100 harcadınız.": "Your food spending increased 34% this month. Last month you spent ₺2,100 on average.",
+  "Netflix, Spotify ve 3 aboneliğiniz çakışıyor — aylık ₺340 tasarruf mümkün.": "Netflix, Spotify, and 3 subscriptions overlap. Monthly savings of ₺340 are possible.",
+  "Oca": "Jan",
+  "Şub": "Feb",
+  "Mar": "Mar",
+  "Nis": "Apr",
+  "May": "May",
+  "Haz": "Jun",
+  "Limit kullanımı": "Limit usage",
+  "Ahmet'e borçlu": "Owe Ahmet",
+  "Zeynep'ten alacak": "Receivable from Zeynep",
+  "Kira borcum": "Rent debt",
+  "15 Mayıs": "May 15",
+  "22 Mayıs": "May 22",
+  "1 Haziran": "June 1",
+  "Her ay 1'i": "1st of every month",
+  "Her ay 15'i": "15th of every month",
+  "İnternet": "Internet",
+  "Her ay 20'si": "20th of every month",
+  "Tatil Fonu": "Vacation Fund",
+  "Araba Birikikim": "Car Savings",
+  "Acil Durum Fonu": "Emergency Fund",
+  "3 May": "May 3",
+  "1 May": "May 1",
+  "28 Nis": "Apr 28",
+  "Elektronik": "Electronics",
+  "Finans verileriniz için sakin ve güvenli bir alan.": "A calm, secure space for your financial data.",
+  "BudgetAssist, kişisel finans verilerinizi anlaşılır kontroller ve güvenli hesap deneyimiyle yönetmeniz için tasarlandı.": "BudgetAssist is designed to help you manage personal finance data with clear controls and a secure account experience.",
+  "Güvenlik detaylarını incele →": "Review security details →",
+  "Kullanıcı Yorumları": "User Stories",
+  "47.000+ kişi zaten kullanıyor": "47,000+ people already use it",
+  "Kullanıcı yorumları": "User testimonials",
+  "Fiyatlandırma": "Pricing",
+  "Planınızı seçin": "Choose your plan",
+  "Ücretsiz başlayın, ihtiyaç büyüdükçe yükseltin.": "Start free and upgrade as your needs grow.",
+  "Fatura dönemi": "Billing period",
+  "Aylık": "Monthly",
+  "Yıllık": "Yearly",
+  "/ay": "/mo",
+  "Yıllık ödemede": "Save",
+  "tasarruf": "with yearly billing",
+  "Sık Sorulan Sorular": "FAQ",
+  "Başlamadan önce": "Questions before",
+  "aklınızdaki sorular": "you get started",
+  "yanıtını": "answer",
+  "kapat": "close",
+  "aç": "open",
+  "Başlamak ücretsiz": "Free to start",
+  "Finansal özgürlüğünüze": "Start your financial",
+  "bugün başlayın": "freedom today",
+  "Ücretsiz hesap oluşturun, kredi kartı gerekmez. İlk 30 gün premium özellikleri ücretsiz deneyin.": "Create a free account, no credit card required. Try premium features free for the first 30 days.",
+  "Ücretsiz Hesap Oluştur →": "Create Free Account →",
+  "Kredi kartı gerekmez": "No credit card required",
+  "30 gün ücretsiz": "30 days free",
+  "İstediğiniz an iptal": "Cancel anytime",
+  "Gelir, gider, borç ve varlıklarınızı tek platformda yönetin. Finansal özgürlüğünüze bugün başlayın.": "Manage income, expenses, debt, and assets in one platform. Start your financial freedom today.",
+  "Ürün": "Product",
+  "Şirket": "Company",
+  "Hakkımızda": "About",
+  "Blog": "Blog",
+  "Yasal": "Legal",
+  "Gizlilik Politikası": "Privacy Policy",
+  "Kullanım Koşulları": "Terms of Use",
+  "KVKK": "KVKK",
+  "Güvenlik Merkezi": "Security Center",
+  "Uygulamayı İndir": "Download the App",
+  "App Store'dan İndir": "Download on the App Store",
+  "App Store'da": "On the App Store",
+  "iOS için İndir": "Download for iOS",
+  "Google Play'den İndir": "Get it on Google Play",
+  "Google Play'de": "On Google Play",
+  "Android için İndir": "Download for Android",
+  "© 2026 BudgetAssist. Tüm hakları saklıdır.": "© 2026 BudgetAssist. All rights reserved.",
+  "Gizlilik": "Privacy",
+}
 
-export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "dark" }) {
+const translate = (language, key) => (language === "en" ? EN_TRANSLATIONS[key] ?? key : key)
+const formatHeroTotal = (value, language) => `₺${Math.round(value).toLocaleString(language === "en" ? "en-US" : "tr-TR")},00`
+
+function LanguageSwitch({ language, onChange, className = "" }) {
+  return (
+    <div className={`public-language-switch${className ? ` ${className}` : ""}`} role="group" aria-label={language === "en" ? "Language" : "Dil"}>
+      {LANGUAGE_OPTIONS.map((option) => (
+        <button
+          key={option.code}
+          type="button"
+          className={language === option.code ? "is-active" : ""}
+          onClick={() => onChange(option.code)}
+          aria-pressed={language === option.code}
+          aria-label={option.name}
+        >
+          {option.label}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+export default function LandingPage({ onLogin, onSignup, onOpenPage, language = "tr", onLanguageChange, theme = "dark" }) {
   const [billing, setBilling] = useState("yearly")
   const [activeFeature, setActiveFeature] = useState(0)
   const [heroTotal, setHeroTotal] = useState(0)
@@ -394,8 +621,18 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
   const brandLogoSrc = theme === "light" ? BRAND_LOGO_LIGHT_SRC : BRAND_LOGO_DARK_SRC
   const activeFeatureData = FEATURES[activeFeature]
   const ActiveFeatureIcon = activeFeatureData.Icon
+  const tx = (key) => translate(language, key)
 
   const planPrice = (m) => `₺${yearly ? Math.round(m * 0.8) : m}`
+  const setLandingLanguage = (nextLanguage) => {
+    onLanguageChange?.(nextLanguage)
+  }
+
+  const getFaqToggleLabel = (question, isOpen) => (
+    language === "en"
+      ? `${tx(question)} ${isOpen ? "close" : "open"}`
+      : `${question} yanıtını ${isOpen ? "kapat" : "aç"}`
+  )
 
   useEffect(() => {
     // Skip animation on mobile — show final value immediately to avoid React re-render cost
@@ -476,20 +713,21 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
           <button className="public-brand" onClick={() => { onSignup(); setMenuOpen(false) }} type="button" aria-label="BudgetAssist">
             <img className="public-brand-logo" src={brandLogoSrc} alt="BudgetAssist" style={{ width: 130 }} />
           </button>
-          <button type="button" className="public-nav-dropdown-close" onClick={() => setMenuOpen(false)} aria-label="Menüyü kapat">
+          <button type="button" className="public-nav-dropdown-close" onClick={() => setMenuOpen(false)} aria-label={tx("Menüyü kapat")}>
             <IconX />
           </button>
         </div>
         <div className="public-nav-dropdown-links">
-          <a href="#features" onClick={() => setMenuOpen(false)}>Özellikler</a>
-          <a href="#plans" onClick={() => setMenuOpen(false)}>Planlar</a>
-          <button type="button" onClick={() => { onOpenPage("security"); setMenuOpen(false) }}>Güvenlik</button>
-          <button type="button" onClick={() => { onOpenPage("contact"); setMenuOpen(false) }}>İletişim</button>
+          <a href="#features" onClick={() => setMenuOpen(false)}>{tx("Özellikler")}</a>
+          <a href="#plans" onClick={() => setMenuOpen(false)}>{tx("Planlar")}</a>
+          <button type="button" onClick={() => { onOpenPage("security"); setMenuOpen(false) }}>{tx("Güvenlik")}</button>
+          <button type="button" onClick={() => { onOpenPage("contact"); setMenuOpen(false) }}>{tx("İletişim")}</button>
         </div>
+        <LanguageSwitch language={language} onChange={setLandingLanguage} className="is-mobile" />
         <div className="public-nav-dropdown-actions">
-          <button onClick={() => { onLogin(); setMenuOpen(false) }} type="button" className="public-nav-dropdown-login">Giriş Yap</button>
+          <button onClick={() => { onLogin(); setMenuOpen(false) }} type="button" className="public-nav-dropdown-login">{tx("Giriş Yap")}</button>
           <button onClick={() => { onSignup(); setMenuOpen(false) }} type="button" style={{ ...btnPrimary, width: "100%" }}>
-            Hemen Başla
+            {tx("Hemen Başla")}
           </button>
         </div>
       </div>
@@ -499,23 +737,24 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
         <button className="public-brand" onClick={onSignup} type="button" aria-label="BudgetAssist">
           <img className="public-brand-logo" src={brandLogoSrc} alt="BudgetAssist" />
         </button>
-        <div className="public-nav-links" aria-label="Navigasyon">
-          <a href="#features">Özellikler</a>
-          <a href="#plans">Planlar</a>
-          <button type="button" onClick={() => onOpenPage("security")}>Güvenlik</button>
-          <button type="button" onClick={() => onOpenPage("contact")}>İletişim</button>
+        <div className="public-nav-links" aria-label={tx("Navigasyon")}>
+          <a href="#features">{tx("Özellikler")}</a>
+          <a href="#plans">{tx("Planlar")}</a>
+          <button type="button" onClick={() => onOpenPage("security")}>{tx("Güvenlik")}</button>
+          <button type="button" onClick={() => onOpenPage("contact")}>{tx("İletişim")}</button>
         </div>
         <div className="public-nav-actions">
-          <button onClick={onLogin} type="button" className="public-link-button">Giriş Yap</button>
+          <LanguageSwitch language={language} onChange={setLandingLanguage} />
+          <button onClick={onLogin} type="button" className="public-link-button">{tx("Giriş Yap")}</button>
           <button onClick={onSignup} type="button" style={{ ...btnPrimary, padding: "10px 22px" }}>
-            Hemen Başla
+            {tx("Hemen Başla")}
           </button>
         </div>
         <button
           type="button"
           className="public-nav-hamburger"
           onClick={() => setMenuOpen((v) => !v)}
-          aria-label={menuOpen ? "Menüyü kapat" : "Menüyü aç"}
+          aria-label={menuOpen ? tx("Menüyü kapat") : tx("Menüyü aç")}
           aria-expanded={menuOpen}
         >
           {menuOpen ? <IconX /> : <IconMenu />}
@@ -534,26 +773,23 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
             <div className="lp2-hero-text lp-enter">
               <div className="lp2-kicker">
                 <span className="lp2-kicker-dot" />
-                <span>Yeni: AI Finans Koçu v2.0 · Varlık & Borç Takibi · Kredi Kartı Yönetimi</span>
+                <span>{tx("Yeni: AI Finans Koçu v2.0 · Varlık & Borç Takibi · Kredi Kartı Yönetimi")}</span>
               </div>
 
               <h1>
-                Paranızı<br />
-                <em className="lp2-shimmer">akıllıca</em><br />
-                <span>yönetin.</span>
+                {tx("Paranızı")}<br />
+                <em className="lp2-shimmer">{tx("akıllıca")}</em><br />
+                <span>{tx("yönetin.")}</span>
               </h1>
 
-              <p>
-                Gelir, gider, borç, varlık ve yatırımlarınızı tek platformda takip edin.
-                AI destekli analizlerle finansal hedeflerinize çok daha hızlı ulaşın.
-              </p>
+              <p>{tx("Gelir, gider, borç, varlık ve yatırımlarınızı tek platformda takip edin. AI destekli analizlerle finansal hedeflerinize çok daha hızlı ulaşın.")}</p>
 
               <div className="lp2-hero-actions">
                 <button onClick={onSignup} type="button" style={{ ...btnPrimary, padding: "15px 30px", fontSize: 14 }}>
-                  Ücretsiz Başla →
+                  {tx("Ücretsiz Başla →")}
                 </button>
                 <button onClick={onLogin} type="button" style={{ ...btnGhost, padding: "15px 30px", fontSize: 14 }}>
-                  Giriş Yap
+                  {tx("Giriş Yap")}
                 </button>
               </div>
 
@@ -563,7 +799,7 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
                 </div>
                 <div>
                   <div className="lp2-stars">★★★★★</div>
-                  <span>47.000+ kullanıcı · 4.9/5 puan</span>
+                  <span>{tx("47.000+ kullanıcı · 4.9/5 puan")}</span>
                 </div>
               </div>
             </div>
@@ -611,18 +847,18 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
                 {/* Top bar */}
                 <div className="lp2-dash-topbar">
                   <div>
-                    <small>Toplam Varlık</small>
+                    <small>{tx("Toplam Varlık")}</small>
                     <strong
                       className="lp2-dash-total"
                       style={{ fontFamily: FONT_MONO }}
-                      aria-label="Toplam varlık 284.750 Türk lirası"
+                      aria-label={tx("Toplam varlık 284.750 Türk lirası")}
                     >
-                      {formatHeroTotal(heroTotal)}
+                      {formatHeroTotal(heroTotal, language)}
                     </strong>
                   </div>
                   <div className="lp2-dash-delta">
                     <span>↑</span>
-                    <span>+%4.8 bu ay</span>
+                    <span>{tx("+%4.8 bu ay")}</span>
                   </div>
                 </div>
 
@@ -654,28 +890,28 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
                   <div className="lp2-dash-mod">
                     <span style={{ color: S.green }}>◈</span>
                     <div>
-                      <small>Kredi Kartı</small>
+                      <small>{tx("Kredi Kartı")}</small>
                       <b style={{ fontFamily: FONT_MONO }}>₺12.340</b>
                     </div>
                   </div>
                   <div className="lp2-dash-mod">
                     <span style={{ color: S.cyan }}>⊙</span>
                     <div>
-                      <small>Borçlar</small>
+                      <small>{tx("Borçlar")}</small>
                       <b style={{ fontFamily: FONT_MONO }}>₺4.800</b>
                     </div>
                   </div>
                   <div className="lp2-dash-mod">
                     <span style={{ color: S.amber }}>◉</span>
                     <div>
-                      <small>Hedef</small>
+                      <small>{tx("Hedef")}</small>
                       <b style={{ fontFamily: FONT_MONO }}>%68</b>
                     </div>
                   </div>
                   <div className="lp2-dash-mod">
                     <span style={{ color: "#ffb3af" }}>⊞</span>
                     <div>
-                      <small>Varlıklar</small>
+                      <small>{tx("Varlıklar")}</small>
                       <b style={{ fontFamily: FONT_MONO }}>₺240K</b>
                     </div>
                   </div>
@@ -691,8 +927,8 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
                     <div className="lp2-dash-tx" key={tx.label}>
                       <span style={{ color: tx.color, background: `${tx.color}18` }}>{tx.icon}</span>
                       <div>
-                        <b>{tx.label}</b>
-                        <small>{tx.date}</small>
+                        <b>{translate(language, tx.label)}</b>
+                        <small>{translate(language, tx.date)}</small>
                       </div>
                       <em style={{ color: tx.color, fontFamily: FONT_MONO }}>{tx.amt}</em>
                     </div>
@@ -704,9 +940,9 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
               <div className="lp2-float lp2-float-ai glass-card">
                 <div className="lp2-float-ai-head">
                   <span style={{ color: S.green }}>✦</span>
-                  <strong>AI Koç</strong>
+                  <strong>{tx("AI Koç")}</strong>
                 </div>
-                <p>Bu ay abonelik giderlerini <b style={{ color: S.green }}>%23</b> azaltabilirsiniz.</p>
+                <p>{language === "en" ? "You can reduce subscription expenses by " : "Bu ay abonelik giderlerini "}<b style={{ color: S.green }}>%23</b>{language === "en" ? " this month." : " azaltabilirsiniz."}</p>
                 <div className="lp2-float-ai-bar">
                   <i style={{ width: "77%" }} />
                 </div>
@@ -715,7 +951,7 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
               <div className="lp2-float lp2-float-card glass-card">
                 <small>Garanti BBVA •••• 4821</small>
                 <div className="lp2-float-card-limit">
-                  <span>Limit Kullanımı</span>
+                  <span>{tx("Limit Kullanımı")}</span>
                   <b style={{ color: S.cyan, fontFamily: FONT_MONO }}>%42</b>
                 </div>
                 <div className="lp2-float-card-bar">
@@ -733,7 +969,7 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
 
         {/* ══ LOGOS ═════════════════════════════════════════════════════════ */}
         <div className="lp2-logos lp-reveal">
-          <span>Desteklenen finansal kurumlar</span>
+          <span>{tx("Desteklenen finansal kurumlar")}</span>
           <div className="lp2-logos-row">
             {["Ziraat Bankası", "Garanti BBVA", "İş Bankası", "Yapı Kredi", "Akbank", "Halkbank"].map((l) => (
               <span key={l}>{l}</span>
@@ -744,9 +980,9 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
         {/* ══ HOW IT WORKS ══════════════════════════════════════════════════ */}
         <section className="lp2-how lp-reveal">
           <div className="lp2-section-head">
-            <span className="lp2-label">Nasıl Çalışır?</span>
-            <h2>Finansal kontrolü<br /><em>3 adımda kurun</em></h2>
-            <p>Dağınık işlem, hedef ve ödeme bilgilerini karar alabileceğiniz sade bir akışa çevirin.</p>
+            <span className="lp2-label">{tx("Nasıl Çalışır?")}</span>
+            <h2>{tx("Finansal kontrolü")}<br /><em>{tx("3 adımda kurun")}</em></h2>
+            <p>{tx("Dağınık işlem, hedef ve ödeme bilgilerini karar alabileceğiniz sade bir akışa çevirin.")}</p>
           </div>
 
           <div className="lp2-how-grid">
@@ -756,9 +992,9 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
                 <div className="lp2-how-icon">
                   <Icon />
                 </div>
-                <h3>{title}</h3>
-                <p>{desc}</p>
-                <strong style={{ fontFamily: FONT_MONO }}>{stat}</strong>
+                <h3>{tx(title)}</h3>
+                <p>{tx(desc)}</p>
+                <strong style={{ fontFamily: FONT_MONO }}>{tx(stat)}</strong>
               </article>
             ))}
           </div>
@@ -767,9 +1003,9 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
         {/* ══ FEATURES ══════════════════════════════════════════════════════ */}
         <section className="lp2-features" id="features">
           <div className="lp2-section-head lp-reveal">
-            <span className="lp2-label">8 Güçlü Özellik</span>
-            <h2>Her finansal ihtiyacınız için<br /><em>tek platform</em></h2>
-            <p>Sıradan bir bütçe uygulaması değil — tam kapsamlı bir finansal kontrol merkezi.</p>
+            <span className="lp2-label">{tx("8 Güçlü Özellik")}</span>
+            <h2>{tx("Her finansal ihtiyacınız için")}<br /><em>{tx("tek platform")}</em></h2>
+            <p>{tx("Sıradan bir bütçe uygulaması değil — tam kapsamlı bir finansal kontrol merkezi.")}</p>
           </div>
 
           <div className="lp2-feat-layout lp-reveal">
@@ -787,10 +1023,10 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
                   </span>
                   <div>
                     <div className="lp2-feat-title">
-                      {f.title}
-                      {f.new && <span className="lp2-new-badge">Yeni</span>}
+                      {tx(f.title)}
+                      {f.new && <span className="lp2-new-badge">{tx("Yeni")}</span>}
                     </div>
-                    <div className="lp2-feat-tag">{f.tag}</div>
+                    <div className="lp2-feat-tag">{tx(f.tag)}</div>
                   </div>
                   <span className="lp2-feat-arrow">›</span>
                 </button>
@@ -806,11 +1042,11 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
                 <ActiveFeatureIcon />
               </div>
               <div className="lp2-feat-detail-tag">
-                {activeFeatureData.new && <span className="lp2-new-badge">Yeni</span>}
-                <span>{activeFeatureData.tag}</span>
+                {activeFeatureData.new && <span className="lp2-new-badge">{tx("Yeni")}</span>}
+                <span>{tx(activeFeatureData.tag)}</span>
               </div>
-              <h3>{activeFeatureData.title}</h3>
-              <p>{activeFeatureData.desc}</p>
+              <h3>{tx(activeFeatureData.title)}</h3>
+              <p>{tx(activeFeatureData.desc)}</p>
 
               {/* Visual preview per feature */}
               <div className="lp2-feat-preview">
@@ -823,7 +1059,7 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
                       { l: "Kira Geliri", a: "+₺6.000", c: S.green },
                     ].map((tx) => (
                       <div className="lp2-prev-tx" key={tx.l}>
-                        <span>{tx.l}</span>
+                        <span>{translate(language, tx.l)}</span>
                         <b style={{ color: tx.c, fontFamily: FONT_MONO }}>{tx.a}</b>
                       </div>
                     ))}
@@ -833,11 +1069,11 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
                   <div className="lp2-preview-ai">
                     <div className="lp2-ai-bubble lp2-ai-bubble-in">
                       <span>✦</span>
-                      <p>Bu ay yemek harcamanız %34 arttı. Geçen ay ortalama ₺2.100 harcadınız.</p>
+                      <p>{tx("Bu ay yemek harcamanız %34 arttı. Geçen ay ortalama ₺2.100 harcadınız.")}</p>
                     </div>
                     <div className="lp2-ai-bubble lp2-ai-bubble-in" style={{ animationDelay: "0.3s" }}>
                       <span>✦</span>
-                      <p>Netflix, Spotify ve 3 aboneliğiniz çakışıyor — aylık <b style={{ color: S.green }}>₺340 tasarruf</b> mümkün.</p>
+                      <p>{language === "en" ? "Netflix, Spotify, and 3 subscriptions overlap. Monthly savings of " : "Netflix, Spotify ve 3 aboneliğiniz çakışıyor — aylık "}<b style={{ color: S.green }}>₺340{language === "en" ? "" : " tasarruf"}</b>{language === "en" ? " are possible." : " mümkün."}</p>
                     </div>
                   </div>
                 )}
@@ -856,7 +1092,7 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
                         <div className="lp2-prev-bar-rail">
                           <div className="lp2-prev-bar" />
                         </div>
-                        <span className="lp2-prev-month">{m}</span>
+                        <span className="lp2-prev-month">{tx(m)}</span>
                       </div>
                     ))}
                   </div>
@@ -876,7 +1112,7 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
                           <i style={{ width: `${c.used}%`, background: c.color }} />
                         </div>
                         <div className="lp2-prev-card-bottom">
-                          <small>Limit kullanımı</small>
+                          <small>{tx("Limit kullanımı")}</small>
                           <b style={{ color: c.color }}>%{c.used}</b>
                         </div>
                       </div>
@@ -892,8 +1128,8 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
                     ].map((d) => (
                       <div key={d.name} className="lp2-prev-debt">
                         <div>
-                          <b>{d.name}</b>
-                          <small>{d.due}</small>
+                          <b>{translate(language, d.name)}</b>
+                          <small>{translate(language, d.due)}</small>
                         </div>
                         <span style={{ color: d.c, fontFamily: FONT_MONO }}>{d.amt}</span>
                       </div>
@@ -910,8 +1146,8 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
                       <div key={r.name} className="lp2-prev-recurring">
                         <div className="lp2-prev-rec-icon">⟲</div>
                         <div>
-                          <b>{r.name}</b>
-                          <small>{r.period}</small>
+                          <b>{translate(language, r.name)}</b>
+                          <small>{translate(language, r.period)}</small>
                         </div>
                         <span style={{ fontFamily: FONT_MONO }}>{r.amt}</span>
                       </div>
@@ -927,7 +1163,7 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
                     ].map((g) => (
                       <div key={g.name} className="lp2-prev-goal">
                         <div className="lp2-prev-goal-top">
-                          <span>{g.name}</span>
+                          <span>{translate(language, g.name)}</span>
                           <b style={{ color: g.color }}>%{g.pct}</b>
                         </div>
                         <div className="lp2-prev-goal-bar">
@@ -948,11 +1184,11 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
                         <div className="lp2-prev-receipt-icon">⊞</div>
                         <div>
                           <b>{r.store}</b>
-                          <small>{r.date}</small>
+                          <small>{translate(language, r.date)}</small>
                         </div>
                         <div style={{ textAlign: "right" }}>
                           <b style={{ fontFamily: FONT_MONO }}>{r.amt}</b>
-                          <small className="lp2-receipt-tag">{r.tag}</small>
+                          <small className="lp2-receipt-tag">{translate(language, r.tag)}</small>
                         </div>
                       </div>
                     ))}
@@ -966,7 +1202,7 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
                 className="lp2-feat-cta"
                 style={{ color: activeFeatureData.color, borderColor: `${activeFeatureData.color}40` }}
               >
-                {activeFeatureData.title} özelliğini keşfet →
+                {language === "en" ? `Explore ${tx(activeFeatureData.title)} →` : `${activeFeatureData.title} özelliğini keşfet →`}
               </button>
             </div>
           </div>
@@ -975,11 +1211,11 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
         {/* ══ SECURITY STRIP ════════════════════════════════════════════════ */}
         <section className="lp2-security-strip lp-reveal">
           <div className="lp2-security-copy">
-            <span className="lp2-label">Güvenlik</span>
-            <h2>Finans verileriniz için sakin ve güvenli bir alan.</h2>
-            <p>BudgetAssist, kişisel finans verilerinizi anlaşılır kontroller ve güvenli hesap deneyimiyle yönetmeniz için tasarlandı.</p>
+            <span className="lp2-label">{tx("Güvenlik")}</span>
+            <h2>{tx("Finans verileriniz için sakin ve güvenli bir alan.")}</h2>
+            <p>{tx("BudgetAssist, kişisel finans verilerinizi anlaşılır kontroller ve güvenli hesap deneyimiyle yönetmeniz için tasarlandı.")}</p>
             <button type="button" onClick={() => onOpenPage("security")}>
-              Güvenlik detaylarını incele →
+              {tx("Güvenlik detaylarını incele →")}
             </button>
           </div>
           <div className="lp2-security-grid">
@@ -987,8 +1223,8 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
               <div className="lp2-security-point" key={title}>
                 <span><Icon /></span>
                 <div>
-                  <strong>{title}</strong>
-                  <p>{desc}</p>
+                  <strong>{tx(title)}</strong>
+                  <p>{tx(desc)}</p>
                 </div>
               </div>
             ))}
@@ -1000,7 +1236,7 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
           {STATS.map(({ value, label, color }) => (
             <div key={label}>
               <strong data-count className="finance-number" style={{ color }}>{value}</strong>
-              <span>{label}</span>
+              <span>{tx(label)}</span>
             </div>
           ))}
         </div>
@@ -1008,20 +1244,20 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
         {/* ══ TESTIMONIALS ══════════════════════════════════════════════════ */}
         <section className="lp2-testimonials lp-reveal">
           <div className="lp2-section-head" style={{ marginBottom: "2.5rem" }}>
-            <span className="lp2-label">Kullanıcı Yorumları</span>
-            <h2>47.000+ kişi zaten kullanıyor</h2>
+            <span className="lp2-label">{tx("Kullanıcı Yorumları")}</span>
+            <h2>{tx("47.000+ kişi zaten kullanıyor")}</h2>
           </div>
-          <div className="lp2-testi-marquee" aria-label="Kullanıcı yorumları">
+          <div className="lp2-testi-marquee" aria-label={tx("Kullanıcı yorumları")}>
             <div className="lp2-testi-track">
               {[...TESTIMONIALS, ...TESTIMONIALS].map((t, i) => (
                 <article className="glass-card lp2-testi-card" key={`${t.name}-${i}`} aria-hidden={i >= TESTIMONIALS.length}>
                   <div className="lp2-testi-stars">★★★★★</div>
-                  <p>"{t.text}"</p>
+                  <p>"{tx(t.text)}"</p>
                   <div className="lp2-testi-author">
                     <span className="lp2-testi-avatar">{t.avatar}</span>
                     <div>
                       <strong>{t.name}</strong>
-                      <small>{t.role}</small>
+                      <small>{tx(t.role)}</small>
                     </div>
                   </div>
                 </article>
@@ -1033,15 +1269,15 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
         {/* ══ PRICING ═══════════════════════════════════════════════════════ */}
         <section className="lp2-pricing lp-reveal" id="plans">
           <div className="lp2-section-head" style={{ marginBottom: "0.5rem" }}>
-            <span className="lp2-label">Fiyatlandırma</span>
-            <h2>Planınızı seçin</h2>
-            <p>Ücretsiz başlayın, ihtiyaç büyüdükçe yükseltin.</p>
+            <span className="lp2-label">{tx("Fiyatlandırma")}</span>
+            <h2>{tx("Planınızı seçin")}</h2>
+            <p>{tx("Ücretsiz başlayın, ihtiyaç büyüdükçe yükseltin.")}</p>
           </div>
 
-          <div className="lp2-billing-toggle" role="group" aria-label="Fatura dönemi">
-            <button type="button" className={billing === "monthly" ? "is-active" : ""} onClick={() => setBilling("monthly")}>Aylık</button>
+          <div className="lp2-billing-toggle" role="group" aria-label={tx("Fatura dönemi")}>
+            <button type="button" className={billing === "monthly" ? "is-active" : ""} onClick={() => setBilling("monthly")}>{tx("Aylık")}</button>
             <button type="button" className={billing === "yearly" ? "is-active" : ""} onClick={() => setBilling("yearly")}>
-              Yıllık <small>-%20</small>
+              {tx("Yıllık")} <small>-%20</small>
             </button>
           </div>
 
@@ -1052,21 +1288,21 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
                 className={`lp2-plan-card glass-card${plan.tone === "premium" ? " lp2-plan-premium" : ""}${plan.tone === "standard" ? " lp2-plan-standard" : ""}`}
               >
                 {plan.tone !== "muted" && (
-                  <div className={`lp2-plan-badge${plan.tone === "premium" ? " is-premium" : ""}`}>{plan.note}</div>
+                  <div className={`lp2-plan-badge${plan.tone === "premium" ? " is-premium" : ""}`}>{tx(plan.note)}</div>
                 )}
-                <h3>{plan.name}</h3>
+                <h3>{tx(plan.name)}</h3>
                 <div className="lp2-plan-price">
                   <strong style={{ fontFamily: FONT_MONO }}>{planPrice(plan.monthly)}</strong>
-                  <span>/ay</span>
+                  <span>{tx("/ay")}</span>
                 </div>
                 {yearly && plan.monthly > 0 && (
-                  <small className="lp2-plan-saving">Yıllık ödemede ₺{Math.round(plan.monthly * 12 * 0.2)} tasarruf</small>
+                  <small className="lp2-plan-saving">{tx("Yıllık ödemede")} ₺{Math.round(plan.monthly * 12 * 0.2)} {tx("tasarruf")}</small>
                 )}
                 <ul className="lp2-plan-features">
                   {plan.features.map((f) => (
                     <li key={f}>
                       <span>✓</span>
-                      {f}
+                      {tx(f)}
                     </li>
                   ))}
                 </ul>
@@ -1075,7 +1311,7 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
                   onClick={onSignup}
                   className={plan.tone === "premium" ? "lp2-plan-btn-primary" : "lp2-plan-btn-secondary"}
                 >
-                  {plan.action}
+                  {tx(plan.action)}
                 </button>
               </article>
             ))}
@@ -1085,8 +1321,8 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
         {/* ══ FAQ ═══════════════════════════════════════════════════════════ */}
         <section className="lp2-faq lp-reveal">
           <div className="lp2-section-head" style={{ marginBottom: "2rem" }}>
-            <span className="lp2-label">Sık Sorulan Sorular</span>
-            <h2>Başlamadan önce<br /><em>aklınızdaki sorular</em></h2>
+            <span className="lp2-label">{tx("Sık Sorulan Sorular")}</span>
+            <h2>{tx("Başlamadan önce")}<br /><em>{tx("aklınızdaki sorular")}</em></h2>
           </div>
           <div className="lp2-faq-grid">
             {FAQS.map(({ q, a }, index) => {
@@ -1096,11 +1332,11 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
               return (
                 <article className={`glass-card lp2-faq-item${isOpen ? " is-open" : ""}`} key={q}>
                   <h3 className="lp2-faq-question">
-                    <span className="lp2-faq-toggle-text">{q}</span>
+                    <span className="lp2-faq-toggle-text">{tx(q)}</span>
                     <button
                       type="button"
                       className="lp2-faq-toggle"
-                      aria-label={`${q} yanıtını ${isOpen ? "kapat" : "aç"}`}
+                      aria-label={getFaqToggleLabel(q, isOpen)}
                       aria-expanded={isOpen}
                       aria-controls={answerId}
                       onClick={() => setOpenFaqIndex(isOpen ? null : index)}
@@ -1112,7 +1348,7 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
                   </h3>
                   <div className="lp2-faq-answer" id={answerId}>
                     <div className="lp2-faq-answer-inner">
-                      <p>{a}</p>
+                      <p>{tx(a)}</p>
                     </div>
                   </div>
                 </article>
@@ -1125,21 +1361,18 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
         <section className="lp2-cta lp-reveal">
           <div className="lp2-cta-grid" aria-hidden="true" />
           <div className="lp2-cta-glow" aria-hidden="true" />
-          <span className="lp2-label" style={{ position: "relative" }}>Başlamak ücretsiz</span>
+          <span className="lp2-label" style={{ position: "relative" }}>{tx("Başlamak ücretsiz")}</span>
           <h2 style={{ position: "relative" }}>
-            Finansal özgürlüğünüze<br />
-            <em>bugün başlayın</em>
+            {tx("Finansal özgürlüğünüze")}<br />
+            <em>{tx("bugün başlayın")}</em>
           </h2>
-          <p style={{ position: "relative" }}>
-            Ücretsiz hesap oluşturun, kredi kartı gerekmez.<br />
-            İlk 30 gün premium özellikleri ücretsiz deneyin.
-          </p>
+          <p style={{ position: "relative" }}>{tx("Ücretsiz hesap oluşturun, kredi kartı gerekmez. İlk 30 gün premium özellikleri ücretsiz deneyin.")}</p>
           <button onClick={onSignup} type="button" style={{ ...btnPrimary, padding: "17px 40px", fontSize: 15, position: "relative" }}>
-            Ücretsiz Hesap Oluştur →
+            {tx("Ücretsiz Hesap Oluştur →")}
           </button>
           <div className="lp2-cta-features" style={{ position: "relative" }}>
             {["Kredi kartı gerekmez", "30 gün ücretsiz", "İstediğiniz an iptal"].map((f) => (
-              <span key={f}><b style={{ color: S.green }}>✓</b> {f}</span>
+              <span key={f}><b style={{ color: S.green }}>✓</b> {tx(f)}</span>
             ))}
           </div>
         </section>
@@ -1152,7 +1385,7 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
           <div className="lp2-footer-top">
             <div className="lp2-footer-brand">
               <img className="public-brand-logo" src={brandLogoSrc} alt="BudgetAssist" />
-              <p>Gelir, gider, borç ve varlıklarınızı tek platformda yönetin. Finansal özgürlüğünüze bugün başlayın.</p>
+              <p>{tx("Gelir, gider, borç ve varlıklarınızı tek platformda yönetin. Finansal özgürlüğünüze bugün başlayın.")}</p>
               <div className="lp2-footer-social">
                 <a href="https://x.com" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)" className="lp2-footer-social-link">
                   <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.254 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
@@ -1166,51 +1399,51 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, theme = "da
               </div>
             </div>
             <div className="lp2-footer-col">
-              <strong>Ürün</strong>
-              <a href="#features" className="lp2-footer-link">Özellikler</a>
-              <a href="#plans" className="lp2-footer-link">Planlar</a>
-              <button type="button" className="lp2-footer-link" onClick={onSignup}>AI Finansal Koç</button>
-              <button type="button" className="lp2-footer-link" onClick={onSignup}>Kredi Kartı Takibi</button>
-              <button type="button" className="lp2-footer-link" onClick={onSignup}>Borç Yönetimi</button>
+              <strong>{tx("Ürün")}</strong>
+              <a href="#features" className="lp2-footer-link">{tx("Özellikler")}</a>
+              <a href="#plans" className="lp2-footer-link">{tx("Planlar")}</a>
+              <button type="button" className="lp2-footer-link" onClick={onSignup}>{tx("AI Finansal Koç")}</button>
+              <button type="button" className="lp2-footer-link" onClick={onSignup}>{tx("Kredi Kartı Takibi")}</button>
+              <button type="button" className="lp2-footer-link" onClick={onSignup}>{tx("Borç Yönetimi")}</button>
             </div>
             <div className="lp2-footer-col">
-              <strong>Şirket</strong>
-              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("contact")}>Hakkımızda</button>
-              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("contact")}>Blog</button>
-              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("contact")}>İletişim</button>
-              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("security")}>Güvenlik</button>
+              <strong>{tx("Şirket")}</strong>
+              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("contact")}>{tx("Hakkımızda")}</button>
+              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("contact")}>{tx("Blog")}</button>
+              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("contact")}>{tx("İletişim")}</button>
+              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("security")}>{tx("Güvenlik")}</button>
             </div>
             <div className="lp2-footer-col">
-              <strong>Yasal</strong>
-              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("privacy")}>Gizlilik Politikası</button>
-              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("terms")}>Kullanım Koşulları</button>
-              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("privacy")}>KVKK</button>
-              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("security")}>Güvenlik Merkezi</button>
+              <strong>{tx("Yasal")}</strong>
+              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("privacy")}>{tx("Gizlilik Politikası")}</button>
+              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("terms")}>{tx("Kullanım Koşulları")}</button>
+              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("privacy")}>{tx("KVKK")}</button>
+              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("security")}>{tx("Güvenlik Merkezi")}</button>
             </div>
             <div className="lp2-footer-col">
-              <strong>Uygulamayı İndir</strong>
-              <a href="#" className="lp2-footer-app-btn" onClick={(e) => e.preventDefault()} aria-label="App Store'dan İndir">
+              <strong>{tx("Uygulamayı İndir")}</strong>
+              <a href="#" className="lp2-footer-app-btn" onClick={(e) => e.preventDefault()} aria-label={tx("App Store'dan İndir")}>
                 <img src="/assets/Apple_logo_grey.svg" alt="" aria-hidden="true" className="lp2-footer-app-logo lp2-footer-app-logo-apple" />
                 <div>
-                  <small>App Store'da</small>
-                  <b>iOS için İndir</b>
+                  <small>{tx("App Store'da")}</small>
+                  <b>{tx("iOS için İndir")}</b>
                 </div>
               </a>
-              <a href="#" className="lp2-footer-app-btn" onClick={(e) => e.preventDefault()} aria-label="Google Play'den İndir">
+              <a href="#" className="lp2-footer-app-btn" onClick={(e) => e.preventDefault()} aria-label={tx("Google Play'den İndir")}>
                 <img src="/assets/google_play.svg" alt="" aria-hidden="true" className="lp2-footer-app-logo lp2-footer-app-logo-play" />
                 <div>
-                  <small>Google Play'de</small>
-                  <b>Android için İndir</b>
+                  <small>{tx("Google Play'de")}</small>
+                  <b>{tx("Android için İndir")}</b>
                 </div>
               </a>
             </div>
           </div>
           <div className="lp2-footer-bottom">
-            <small>© 2026 BudgetAssist. Tüm hakları saklıdır.</small>
+            <small>{tx("© 2026 BudgetAssist. Tüm hakları saklıdır.")}</small>
             <div className="lp2-footer-bottom-links">
-              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("privacy")}>Gizlilik</button>
-              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("terms")}>Kullanım Koşulları</button>
-              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("security")}>Güvenlik</button>
+              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("privacy")}>{tx("Gizlilik")}</button>
+              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("terms")}>{tx("Kullanım Koşulları")}</button>
+              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("security")}>{tx("Güvenlik")}</button>
             </div>
           </div>
         </div>

@@ -66,7 +66,7 @@ const Assets = lazy(() => import("./components/assets/Assets"))
 const CreditCards = lazy(() => import("./components/creditcards/CreditCards"))
 const AdminPanel = lazy(() => import("./components/admin/AdminPanel"))
 
-export default function FullApp({ initialAuthMode = "login", onBackLanding, onOpenPage }) {
+export default function FullApp({ initialAuthMode = "login", onBackLanding, onOpenPage, language = "tr" }) {
   const { user, loading: authLoading, isAdmin, isBanned, isConfigured } = useAuth()
   const userId = user?.id || null
   const { theme, toggleTheme } = useTheme()
@@ -1028,6 +1028,7 @@ export default function FullApp({ initialAuthMode = "login", onBackLanding, onOp
           initialMode={authMode}
           onBackLanding={onBackLanding}
           onOpenPage={onOpenPage}
+          language={language}
           theme={theme}
         />
       </Suspense>

@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from "react"
 import { S, FONT_BODY, btnPrimary, btnGhost } from "../../constants/theme"
+import { LANGUAGE_OPTIONS } from "../../constants/language"
 const BRAND_LOGO_LIGHT_SRC = "/assets/ba_logo_black.svg"
 const BRAND_LOGO_DARK_SRC = "/assets/ba_logo_white.svg"
 
@@ -85,8 +86,141 @@ const PAGES = {
 
 const footerPages = ["privacy", "terms", "security", "contact"]
 
-export default function PublicInfoPage({ page = "privacy", onBackLanding, onLogin, onSignup, onOpenPage, theme = "dark" }) {
-  const content = PAGES[page] || PAGES.privacy
+const PAGES_EN = {
+  privacy: {
+    label: "Privacy Policy",
+    kicker: "Privacy",
+    title: "Your data stays under your control.",
+    summary:
+      "BudgetAssist uses your financial data only to power your account experience, protect security, and respond to support requests.",
+    stat: "KVKK / GDPR focused",
+    updated: "April 30, 2026",
+    cards: [
+      ["Data scope", "Profile, transaction, category, goal, receipt, and app usage data may be associated with your account."],
+      ["Purpose of use", "Data is processed for budget summaries, reporting, AI analysis, notifications, and support workflows."],
+      ["Your rights", "You can send access, correction, deletion, and export requests to our support team."],
+    ],
+    sections: [
+      ["Information collected", "Registration details, financial records you add manually, uploaded documents, and technical session data may be stored."],
+      ["Sharing", "Your data is not sold. It may be processed only with infrastructure, authentication, and support providers needed to run the service."],
+      ["Retention", "Data is protected while your account remains active. After an account deletion request, records outside legal obligations are cleared."],
+    ],
+  },
+  terms: {
+    label: "Terms of Use",
+    kicker: "Terms",
+    title: "Clear rules for smooth financial tracking.",
+    summary:
+      "By using BudgetAssist, you are responsible for your account security, the accuracy of the data you enter, and using the service for lawful purposes.",
+    stat: "Fair use",
+    updated: "April 30, 2026",
+    cards: [
+      ["Account", "You are responsible for keeping account details accurate and current, and for protecting your password."],
+      ["Subscription", "Paid plans renew based on the selected billing period; after cancellation, access continues until the end of the current period."],
+      ["Use", "The service is for personal or business finance tracking; misuse and unauthorized access attempts are prohibited."],
+    ],
+    sections: [
+      ["Service scope", "BudgetAssist offers tools for income, expenses, goals, reports, documents, and AI-assisted interpretation. Financial decisions ultimately belong to the user."],
+      ["Plan changes", "Features and prices may be updated with prior notice. Users are informed when critical changes occur."],
+      ["Termination", "Access may be restricted for use that violates these terms. Users may request account closure at any time."],
+    ],
+  },
+  security: {
+    label: "Security",
+    kicker: "Security",
+    title: "Calm, strong protection for financial data.",
+    summary:
+      "BudgetAssist focuses on protecting sensitive data through authentication, access control, encrypted communication, and regular monitoring practices.",
+    stat: "99.9% monitoring",
+    updated: "April 30, 2026",
+    cards: [
+      ["Encrypted traffic", "Communication between the browser and services is protected with modern TLS standards."],
+      ["Access control", "User data is separated through account-based authorization controls."],
+      ["Operational monitoring", "Error, performance, and security signals are monitored regularly."],
+    ],
+    sections: [
+      ["Authentication", "Session management and account access are handled through Supabase authentication infrastructure."],
+      ["Document security", "Uploaded receipts and documents are stored within the account context; sharing and access operations pass through authorization controls."],
+      ["Responsible disclosure", "Send suspected vulnerabilities through the support channel. Priority review and feedback processes are applied."],
+    ],
+  },
+  contact: {
+    label: "Contact",
+    kicker: "Contact",
+    title: "We are here for your questions.",
+    summary:
+      "You can reach the team about product, account, billing, or security topics. We route your message to the right channel and respond quickly.",
+    stat: "Response within 24 hours",
+    updated: "April 30, 2026",
+    cards: [
+      ["Support", "Get account and product help through support@budgetassist.app."],
+      ["Security", "security@budgetassist.app is the priority channel for security reports."],
+      ["Partnerships", "Share integration and collaboration requests through partnerships@budgetassist.app."],
+    ],
+    sections: [
+      ["Business hours", "Support requests are prioritized on weekdays between 09:00 and 18:00."],
+      ["What to include", "Adding your account email, a short issue summary, and screenshots when available helps speed up the process."],
+      ["Urgent topics", "For account access or security concerns, add Urgent to the subject line."],
+    ],
+  },
+}
+
+const UI_TEXT = {
+  tr: {
+    navLabel: "Bilgi sayfalari",
+    login: "Giriş Yap",
+    start: "Hemen Başla",
+    back: "← Ana sayfaya dön",
+    updated: "Son güncelleme",
+    summarySuffix: "ozeti",
+    details: "Detaylar",
+    otherPages: "Diger sayfalar",
+    relatedTitle: "Merak ettiğiniz başlığı açın.",
+    ctaTitle: "BudgetAssist'i deneyin",
+    ctaText: "Finansal kayıtlarınızı daha net takip etmek için ücretsiz hesap oluşturun.",
+    freeStart: "Ücretsiz Başla",
+    language: "Dil",
+  },
+  en: {
+    navLabel: "Info pages",
+    login: "Log In",
+    start: "Get Started",
+    back: "← Back to home",
+    updated: "Last updated",
+    summarySuffix: "summary",
+    details: "Details",
+    otherPages: "Other pages",
+    relatedTitle: "Open the topic you are curious about.",
+    ctaTitle: "Try BudgetAssist",
+    ctaText: "Create a free account to track your financial records with more clarity.",
+    freeStart: "Start Free",
+    language: "Language",
+  },
+}
+
+function LanguageSwitch({ language, onChange }) {
+  return (
+    <div className="public-language-switch" role="group" aria-label={UI_TEXT[language]?.language || UI_TEXT.tr.language}>
+      {LANGUAGE_OPTIONS.map((option) => (
+        <button
+          key={option.code}
+          type="button"
+          className={language === option.code ? "is-active" : ""}
+          onClick={() => onChange?.(option.code)}
+          aria-pressed={language === option.code}
+          aria-label={option.name}
+        >
+          {option.label}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+export default function PublicInfoPage({ page = "privacy", onBackLanding, onLogin, onSignup, onOpenPage, language = "tr", onLanguageChange, theme = "dark" }) {
+  const pages = language === "en" ? PAGES_EN : PAGES
+  const ui = UI_TEXT[language] || UI_TEXT.tr
+  const content = pages[page] || pages.privacy
   const related = useMemo(() => footerPages.filter((id) => id !== page).slice(0, 3), [page])
   const brandLogoSrc = theme === "light" ? BRAND_LOGO_LIGHT_SRC : BRAND_LOGO_DARK_SRC
 
@@ -105,7 +239,7 @@ export default function PublicInfoPage({ page = "privacy", onBackLanding, onLogi
         <button className="public-brand" onClick={onBackLanding} type="button" aria-label="BudgetAssist">
           <img className="public-brand-logo" src={brandLogoSrc} alt="BudgetAssist" />
         </button>
-        <div className="public-nav-links" aria-label="Bilgi sayfalari">
+        <div className="public-nav-links" aria-label={ui.navLabel}>
           {footerPages.map((id) => (
             <a
               href={`#${id}`}
@@ -113,14 +247,15 @@ export default function PublicInfoPage({ page = "privacy", onBackLanding, onLogi
               className={id === page ? "is-active" : ""}
               onClick={(event) => openPage(event, id)}
             >
-              {PAGES[id].label}
+              {pages[id].label}
             </a>
           ))}
         </div>
         <div className="public-nav-actions">
-          <button onClick={onLogin} type="button" className="public-link-button">Giriş Yap</button>
+          <LanguageSwitch language={language} onChange={onLanguageChange} />
+          <button onClick={onLogin} type="button" className="public-link-button">{ui.login}</button>
           <button onClick={onSignup} type="button" style={{ ...btnPrimary, padding: "10px 20px" }}>
-            Hemen Başla
+            {ui.start}
           </button>
         </div>
       </nav>
@@ -129,20 +264,20 @@ export default function PublicInfoPage({ page = "privacy", onBackLanding, onLogi
         <section className="public-info-hero">
           <div>
             <button type="button" className="public-info-back" onClick={onBackLanding}>
-              ← Ana sayfaya dön
+              {ui.back}
             </button>
             <span className="lp-section-label">{content.kicker}</span>
             <h1>{content.label}</h1>
             <p>{content.summary}</p>
           </div>
           <aside className="glass-card public-info-summary">
-            <span>Son güncelleme</span>
+            <span>{ui.updated}</span>
             <strong>{content.updated}</strong>
             <small>{content.stat}</small>
           </aside>
         </section>
 
-        <section className="public-info-card-grid" aria-label={`${content.label} ozeti`}>
+        <section className="public-info-card-grid" aria-label={`${content.label} ${ui.summarySuffix}`}>
           {content.cards.map(([title, text], index) => (
             <article className="glass-card public-info-card" key={title}>
               <span style={{ color: index === 1 ? S.cyan : S.green }}>{String(index + 1).padStart(2, "0")}</span>
@@ -154,7 +289,7 @@ export default function PublicInfoPage({ page = "privacy", onBackLanding, onLogi
 
         <section className="glass-card public-info-detail">
           <div className="public-info-detail-head">
-            <span className="lp-section-label">Detaylar</span>
+            <span className="lp-section-label">{ui.details}</span>
             <h2>{content.title}</h2>
           </div>
           <div className="public-info-section-list">
@@ -169,27 +304,27 @@ export default function PublicInfoPage({ page = "privacy", onBackLanding, onLogi
 
         <section className="public-info-related">
           <div>
-            <span className="lp-section-label">Diger sayfalar</span>
-            <h2>Merak ettiğiniz başlığı açın.</h2>
+            <span className="lp-section-label">{ui.otherPages}</span>
+            <h2>{ui.relatedTitle}</h2>
           </div>
           <div>
             {related.map((id) => (
               <a href={`#${id}`} key={id} onClick={(event) => openPage(event, id)}>
-                {PAGES[id].label}
+                {pages[id].label}
               </a>
             ))}
           </div>
         </section>
 
         <section className="public-info-cta">
-          <h2>BudgetAssist'i deneyin</h2>
-          <p>Finansal kayıtlarınızı daha net takip etmek için ücretsiz hesap oluşturun.</p>
+          <h2>{ui.ctaTitle}</h2>
+          <p>{ui.ctaText}</p>
           <div>
             <button onClick={onSignup} type="button" style={{ ...btnPrimary, padding: "14px 24px" }}>
-              Ücretsiz Başla
+              {ui.freeStart}
             </button>
             <button onClick={onLogin} type="button" style={{ ...btnGhost, padding: "14px 24px" }}>
-              Giriş Yap
+              {ui.login}
             </button>
           </div>
         </section>
@@ -203,7 +338,7 @@ export default function PublicInfoPage({ page = "privacy", onBackLanding, onLogi
         <div>
           {footerPages.map((id) => (
             <a href={`#${id}`} key={id} onClick={(event) => openPage(event, id)}>
-              {PAGES[id].label}
+              {pages[id].label}
             </a>
           ))}
         </div>

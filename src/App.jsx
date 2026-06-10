@@ -1,5 +1,6 @@
 import { lazy, Suspense, useState, useEffect } from "react"
 import { S, FONT_BODY, btnPrimary } from "./constants/theme"
+import { getStoredLanguage, setStoredLanguage } from "./constants/language"
 import { useTheme } from "./hooks/useTheme"
 
 const LandingPage = lazy(() => import("./components/auth/LandingPage"))
@@ -10,7 +11,17 @@ export default function App() {
   const [mode, setMode] = useState(() => window.location.pathname === "/admin" ? "full" : "landing") // "landing" | "info" | "full"
   const [infoPage, setInfoPage] = useState("")
   const [authMode, setAuthMode] = useState("login")
+  const [language, setLanguage] = useState(getStoredLanguage)
   const { theme } = useTheme()
+
+  const changeLanguage = (nextLanguage) => {
+    setLanguage(nextLanguage)
+    setStoredLanguage(nextLanguage)
+  }
+
+  useEffect(() => {
+    document.documentElement.lang = language
+  }, [language])
 
   // Deferred session check — load Supabase only after the page is idle
   useEffect(() => {
@@ -41,6 +52,7 @@ export default function App() {
           initialAuthMode={authMode}
           onBackLanding={() => setMode("landing")}
           onOpenPage={openPage}
+          language={language}
         />
       </Suspense>
     )
@@ -55,6 +67,8 @@ export default function App() {
           onLogin={() => openAuth("login")}
           onSignup={() => openAuth("signup")}
           onOpenPage={openPage}
+          language={language}
+          onLanguageChange={changeLanguage}
           theme={theme}
         />
       </Suspense>
@@ -67,6 +81,8 @@ export default function App() {
         onLogin={() => openAuth("login")}
         onSignup={() => openAuth("signup")}
         onOpenPage={openPage}
+        language={language}
+        onLanguageChange={changeLanguage}
         theme={theme}
       />
     </Suspense>

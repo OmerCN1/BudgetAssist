@@ -115,18 +115,111 @@ const SOCIAL_PROVIDERS = [
   { id: "apple",  label: "Apple",  Icon: IconApple },
 ]
 
-function getAuthErrorMessage(authError) {
+const AUTH_TEXT = {
+  tr: {
+    home: "Ana Sayfa",
+    panelTitleLine1: "Finansal özgürlüğünüzü",
+    panelTitleLine2: "keşfedin.",
+    panelSub: "Varlıklarınızı takip edin, harcamalarınızı analiz edin ve yapay zeka destekli önerilerle daha iyi finansal kararlar verin.",
+    panelBadge: "256-bit şifreli · GDPR uyumlu · Ücretsiz başlayın",
+    loginTitle: "Tekrar hoş geldiniz",
+    signupTitle: "Hesap oluşturun",
+    loginSub: "Hesabınıza giriş yaparak devam edin.",
+    signupSub: "Dakikalar içinde ücretsiz hesabınızı açın.",
+    login: "Giriş Yap",
+    signup: "Kayıt Ol",
+    fullName: "Ad Soyad",
+    email: "E-posta Adresi",
+    password: "Şifre",
+    hidePassword: "Şifreyi gizle",
+    showPassword: "Şifreyi göster",
+    forgotPassword: "Şifremi Unuttum",
+    forgotMessage: "Şifre sıfırlama için Supabase e-posta ayarlarını etkinleştirin.",
+    submitSignup: "Ücretsiz Kayıt Ol",
+    divider: "veya şununla devam et",
+    socialDisabled: "girişi bu kurulumda etkin değil.",
+    hasAccount: "Zaten hesabınız var mı?",
+    noAccount: "Hesabınız yok mu?",
+    privacy: "Gizlilik",
+    terms: "Kullanım Koşulları",
+    security: "Güvenlik",
+    configWarning: "Supabase bağlantısı eksik.",
+    configWarningAction: "dosyasına",
+    and: "ve",
+    configWarningValues: "değerlerini ekleyin.",
+    signupPending: "Kayıt alındı. E-posta onayı açıksa gelen kutunuzu kontrol edin.",
+    signupSuccess: "Hesabınız oluşturuldu.",
+    loginSuccess: "Giriş başarılı.",
+    rateLimit: "Supabase e-posta gönderim limiti doldu. Biraz bekleyip tekrar deneyin.",
+    invalidEmail: "E-posta adresi geçersiz görünüyor. Boşluk olmadığından emin olun.",
+    invalidCredentials: "Geçersiz e-posta veya şifre. Lütfen bilgilerinizi kontrol edin.",
+    features: [
+      "Tüm varlıklarınızı tek panelden yönetin",
+      "Yapay zeka destekli finansal koçluk",
+      "Fiş ve fatura tarama & kategorizasyon",
+      "Gerçek zamanlı portföy analizi",
+    ],
+    passwordLabels: ["Çok zayıf", "Zayıf", "Orta", "Güçlü", "Çok güçlü"],
+  },
+  en: {
+    home: "Home",
+    panelTitleLine1: "Discover your",
+    panelTitleLine2: "financial freedom.",
+    panelSub: "Track your assets, analyze spending, and make better financial decisions with AI-powered suggestions.",
+    panelBadge: "256-bit encrypted · GDPR aligned · Start for free",
+    loginTitle: "Welcome back",
+    signupTitle: "Create your account",
+    loginSub: "Log in to your account to continue.",
+    signupSub: "Open your free account in minutes.",
+    login: "Log In",
+    signup: "Sign Up",
+    fullName: "Full Name",
+    email: "Email Address",
+    password: "Password",
+    hidePassword: "Hide password",
+    showPassword: "Show password",
+    forgotPassword: "Forgot Password",
+    forgotMessage: "Enable Supabase email settings for password reset.",
+    submitSignup: "Sign Up Free",
+    divider: "or continue with",
+    socialDisabled: "sign-in is not enabled in this setup.",
+    hasAccount: "Already have an account?",
+    noAccount: "Do not have an account?",
+    privacy: "Privacy",
+    terms: "Terms of Use",
+    security: "Security",
+    configWarning: "Supabase connection is missing.",
+    configWarningAction: "Add",
+    and: "and",
+    configWarningValues: "to your file.",
+    signupPending: "Registration received. If email confirmation is enabled, please check your inbox.",
+    signupSuccess: "Your account has been created.",
+    loginSuccess: "Login successful.",
+    rateLimit: "Supabase email rate limit has been reached. Please wait a bit and try again.",
+    invalidEmail: "The email address looks invalid. Make sure it does not contain spaces.",
+    invalidCredentials: "Invalid email or password. Please check your details.",
+    features: [
+      "Manage all your assets from one panel",
+      "AI-powered financial coaching",
+      "Receipt and invoice scanning & categorization",
+      "Real-time portfolio analysis",
+    ],
+    passwordLabels: ["Very weak", "Weak", "Medium", "Strong", "Very strong"],
+  },
+}
+
+function getAuthErrorMessage(authError, labels) {
   const msg = authError.message.toLowerCase()
   if (msg.includes("rate limit"))
-    return "Supabase e-posta gönderim limiti doldu. Biraz bekleyip tekrar deneyin."
+    return labels.rateLimit
   if (msg.includes("email address") && msg.includes("is invalid"))
-    return "E-posta adresi geçersiz görünüyor. Boşluk olmadığından emin olun."
+    return labels.invalidEmail
   if (msg.includes("invalid login credentials") || msg.includes("invalid credentials"))
-    return "Geçersiz e-posta veya şifre. Lütfen bilgilerinizi kontrol edin."
+    return labels.invalidCredentials
   return authError.message
 }
 
-export default function AuthScreen({ isConfigured, initialMode = "login", onBackLanding, onOpenPage, theme = "dark" }) {
+export default function AuthScreen({ isConfigured, initialMode = "login", onBackLanding, onOpenPage, language = "tr", theme = "dark" }) {
   const [mode, setMode] = useState(initialMode)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -140,6 +233,7 @@ export default function AuthScreen({ isConfigured, initialMode = "login", onBack
 
   const isSignup = mode === "signup"
   const brandLogoSrc = theme === "light" ? BRAND_LOGO_LIGHT_SRC : BRAND_LOGO_DARK_SRC
+  const copy = AUTH_TEXT[language] || AUTH_TEXT.tr
 
   useEffect(() => {
     setMode(initialMode)
@@ -180,16 +274,16 @@ export default function AuthScreen({ isConfigured, initialMode = "login", onBack
     setLoading(false)
 
     if (authError) {
-      setError(getAuthErrorMessage(authError))
+      setError(getAuthErrorMessage(authError, copy))
       return
     }
 
     if (isSignup && !data.session) {
-      setMessage("Kayıt alındı. E-posta onayı açıksa gelen kutunuzu kontrol edin.")
+      setMessage(copy.signupPending)
       return
     }
 
-    setMessage(isSignup ? "Hesabınız oluşturuldu." : "Giriş başarılı.")
+    setMessage(isSignup ? copy.signupSuccess : copy.loginSuccess)
   }
 
   return (
@@ -198,7 +292,7 @@ export default function AuthScreen({ isConfigured, initialMode = "login", onBack
       <div className="auth2-panel">
         <button className="auth2-back-btn" onClick={onBackLanding} type="button">
           <IconArrowLeft />
-          <span>Ana Sayfa</span>
+          <span>{copy.home}</span>
         </button>
 
         <div className="auth2-panel-content">
@@ -209,11 +303,11 @@ export default function AuthScreen({ isConfigured, initialMode = "login", onBack
 
           <div className="auth2-panel-hero">
             <h2 className="auth2-panel-title">
-              Finansal özgürlüğünüzü<br />
-              <span>keşfedin.</span>
+              {copy.panelTitleLine1}<br />
+              <span>{copy.panelTitleLine2}</span>
             </h2>
             <p className="auth2-panel-sub">
-              Varlıklarınızı takip edin, harcamalarınızı analiz edin ve yapay zeka destekli önerilerle daha iyi finansal kararlar verin.
+              {copy.panelSub}
             </p>
           </div>
 
@@ -221,14 +315,14 @@ export default function AuthScreen({ isConfigured, initialMode = "login", onBack
             {FEATURES.map((f, i) => (
               <li key={i} className="auth2-feature-item" style={{ animationDelay: `${0.1 + i * 0.1}s` }}>
                 <span className="auth2-feature-icon"><f.Icon /></span>
-                <span>{f.text}</span>
+                <span>{copy.features[i] || f.text}</span>
               </li>
             ))}
           </ul>
 
           <div className="auth2-panel-badge">
             <IconShield />
-            <span>256-bit şifreli · GDPR uyumlu · Ücretsiz başlayın</span>
+            <span>{copy.panelBadge}</span>
           </div>
         </div>
 
@@ -255,12 +349,10 @@ export default function AuthScreen({ isConfigured, initialMode = "login", onBack
             {/* Header */}
             <div className="auth2-form-header">
               <h1 className="auth2-form-title">
-                {isSignup ? "Hesap oluşturun" : "Tekrar hoş geldiniz"}
+                {isSignup ? copy.signupTitle : copy.loginTitle}
               </h1>
               <p className="auth2-form-sub">
-                {isSignup
-                  ? "Dakikalar içinde ücretsiz hesabınızı açın."
-                  : "Hesabınıza giriş yaparak devam edin."}
+                {isSignup ? copy.signupSub : copy.loginSub}
               </p>
             </div>
 
@@ -271,22 +363,22 @@ export default function AuthScreen({ isConfigured, initialMode = "login", onBack
                 className={`auth2-tab ${!isSignup ? "active" : ""}`}
                 onClick={() => switchMode("login")}
               >
-                Giriş Yap
+                {copy.login}
               </button>
               <button
                 type="button"
                 className={`auth2-tab ${isSignup ? "active" : ""}`}
                 onClick={() => switchMode("signup")}
               >
-                Kayıt Ol
+                {copy.signup}
               </button>
             </div>
 
             {!isConfigured ? (
               <div className="auth2-warning">
-                Supabase bağlantısı eksik. <code>.env.local</code> dosyasına{" "}
-                <code>VITE_SUPABASE_URL</code> ve <code>VITE_SUPABASE_PUBLISHABLE_KEY</code>{" "}
-                değerlerini ekleyin.
+                {copy.configWarning} <code>.env.local</code> {copy.configWarningAction}{" "}
+                <code>VITE_SUPABASE_URL</code> {copy.and} <code>VITE_SUPABASE_PUBLISHABLE_KEY</code>{" "}
+                {copy.configWarningValues}
               </div>
             ) : (
               <form onSubmit={submit} className="auth2-form" noValidate>
@@ -307,7 +399,7 @@ export default function AuthScreen({ isConfigured, initialMode = "login", onBack
                         autoComplete="name"
                       />
                       <label className="auth2-float-label" htmlFor="displayName">
-                        Ad Soyad
+                        {copy.fullName}
                       </label>
                     </div>
                   </div>
@@ -330,7 +422,7 @@ export default function AuthScreen({ isConfigured, initialMode = "login", onBack
                       autoComplete="email"
                     />
                     <label className="auth2-float-label" htmlFor="email">
-                      E-posta Adresi
+                      {copy.email}
                     </label>
                   </div>
                 </div>
@@ -353,13 +445,13 @@ export default function AuthScreen({ isConfigured, initialMode = "login", onBack
                       autoComplete={isSignup ? "new-password" : "current-password"}
                     />
                     <label className="auth2-float-label" htmlFor="password">
-                      Şifre
+                      {copy.password}
                     </label>
                     <button
                       type="button"
                       className="auth2-eye-btn"
                       onClick={() => setShowPassword((v) => !v)}
-                      aria-label={showPassword ? "Şifreyi gizle" : "Şifreyi göster"}
+                      aria-label={showPassword ? copy.hidePassword : copy.showPassword}
                     >
                       {showPassword ? <IconEyeOff /> : <IconEye />}
                     </button>
@@ -369,14 +461,14 @@ export default function AuthScreen({ isConfigured, initialMode = "login", onBack
                       <button
                         type="button"
                         className="auth2-forgot-btn"
-                        onClick={() => setMessage("Şifre sıfırlama için Supabase e-posta ayarlarını etkinleştirin.")}
+                        onClick={() => setMessage(copy.forgotMessage)}
                       >
-                        Şifremi Unuttum
+                        {copy.forgotPassword}
                       </button>
                     </div>
                   )}
                   {isSignup && password.length > 0 && (
-                    <PasswordStrength password={password} />
+                    <PasswordStrength password={password} labels={copy.passwordLabels} />
                   )}
                 </div>
 
@@ -403,15 +495,15 @@ export default function AuthScreen({ isConfigured, initialMode = "login", onBack
                   {loading ? (
                     <span className="auth2-spinner" />
                   ) : isSignup ? (
-                    "Ücretsiz Kayıt Ol"
+                    copy.submitSignup
                   ) : (
-                    "Giriş Yap"
+                    copy.login
                   )}
                 </button>
 
                 {/* Divider */}
                 <div className="auth2-divider">
-                  <span>veya şununla devam et</span>
+                  <span>{copy.divider}</span>
                 </div>
 
                 {/* Social */}
@@ -421,7 +513,7 @@ export default function AuthScreen({ isConfigured, initialMode = "login", onBack
                       key={id}
                       type="button"
                       className="auth2-social-btn"
-                      onClick={() => setError(`${label} girişi bu kurulumda etkin değil.`)}
+                      onClick={() => setError(`${label} ${copy.socialDisabled}`)}
                     >
                       <Icon />
                       <span>{label}</span>
@@ -431,14 +523,14 @@ export default function AuthScreen({ isConfigured, initialMode = "login", onBack
 
                 {/* Switch mode */}
                 <p className="auth2-switch">
-                  {isSignup ? "Zaten hesabınız var mı?" : "Hesabınız yok mu?"}
+                  {isSignup ? copy.hasAccount : copy.noAccount}
                   {" "}
                   <button
                     type="button"
                     className="auth2-switch-btn"
                     onClick={() => switchMode(isSignup ? "login" : "signup")}
                   >
-                    {isSignup ? "Giriş Yap" : "Ücretsiz Kayıt Ol"}
+                    {isSignup ? copy.login : copy.submitSignup}
                   </button>
                 </p>
               </form>
@@ -446,9 +538,9 @@ export default function AuthScreen({ isConfigured, initialMode = "login", onBack
           </div>
 
           <footer className="auth2-footer">
-            <a href="#privacy" onClick={(event) => { event.preventDefault(); onOpenPage("privacy") }}>Gizlilik</a>
-            <a href="#terms" onClick={(event) => { event.preventDefault(); onOpenPage("terms") }}>Kullanım Koşulları</a>
-            <a href="#security" onClick={(event) => { event.preventDefault(); onOpenPage("security") }}>Güvenlik</a>
+            <a href="#privacy" onClick={(event) => { event.preventDefault(); onOpenPage("privacy") }}>{copy.privacy}</a>
+            <a href="#terms" onClick={(event) => { event.preventDefault(); onOpenPage("terms") }}>{copy.terms}</a>
+            <a href="#security" onClick={(event) => { event.preventDefault(); onOpenPage("security") }}>{copy.security}</a>
             <span>© 2026 BudgetAssist</span>
           </footer>
         </div>
@@ -457,7 +549,7 @@ export default function AuthScreen({ isConfigured, initialMode = "login", onBack
   )
 }
 
-function PasswordStrength({ password }) {
+function PasswordStrength({ password, labels }) {
   const checks = [
     password.length >= 8,
     /[A-Z]/.test(password),
@@ -465,7 +557,6 @@ function PasswordStrength({ password }) {
     /[^A-Za-z0-9]/.test(password),
   ]
   const score = checks.filter(Boolean).length
-  const labels = ["Çok zayıf", "Zayıf", "Orta", "Güçlü", "Çok güçlü"]
   const colors = ["#f43f5e", "#f59e0b", "#f59e0b", "#4edea3", "#4edea3"]
 
   return (
