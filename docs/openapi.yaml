@@ -10,8 +10,11 @@ info:
     name: BudgetAssist Geliştirici Ekibi
 
 servers:
-  - url: https://xfmbxqkowwoyxxunylhr.supabase.co/functions/v1
-    description: Production (Supabase)
+  - url: https://{projectRef}.supabase.co/functions/v1
+    description: Kendi Supabase test projeniz
+    variables:
+      projectRef:
+        default: your-test-project
   - url: http://localhost:54321/functions/v1
     description: Yerel geliştirme (supabase start)
 

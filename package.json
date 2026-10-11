@@ -11,7 +11,9 @@
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "create:test-users": "node scripts/create-test-users.mjs"
+    "create:test-users": "node scripts/create-test-users.mjs",
+    "test:db": "bash scripts/test-db.sh",
+    "test:scripts": "node --test scripts/tests/*.test.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.104.1",
@@ -33,5 +35,8 @@
     "selenium-webdriver": "^4.44.0",
     "vite": "^8.0.10",
     "vitest": "^4.1.5"
+  },
+  "engines": {
+    "node": "^22.13.0 || >=24.0.0"
   }
 }

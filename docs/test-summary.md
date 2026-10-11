@@ -78,7 +78,7 @@ Araç: Vite v8.0.10
 ## 3. API Testi (Supabase Edge Functions)
 
 Araç: curl  
-Hedef: `https://xfmbxqkowwoyxxunylhr.supabase.co/functions/v1/`
+Hedef: `https://your-test-project.supabase.co/functions/v1/`
 
 | Test ID | Endpoint | Method | Beklenen | Gerçekleşen | Durum |
 |---------|----------|--------|----------|-------------|-------|
@@ -185,7 +185,7 @@ Dosya: `locustfile.py`
 **Durum:** Locust dosyası oluşturuldu. Proje içindeki `.venv` sanal ortamında Locust kuruludur.
 
 ```bash
-.venv/bin/locust -f locustfile.py --host=https://xfmbxqkowwoyxxunylhr.supabase.co \
+.venv/bin/locust -f locustfile.py --host=https://your-test-project.supabase.co \
        --headless -u 10 -r 2 --run-time 60s \
        --html docs/locust-report.html
 ```

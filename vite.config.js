@@ -7,7 +7,7 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: './src/test/setup.js',
-    exclude: ['**/node_modules/**', '**/dist/**', '**/selenium/**'],
+    exclude: ['**/node_modules/**', '**/dist/**', '**/selenium/**', '**/scripts/tests/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],

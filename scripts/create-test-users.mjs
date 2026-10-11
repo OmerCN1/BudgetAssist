@@ -28,8 +28,11 @@ Options:
   --start <number>     First user number. Default: 1
   --prefix <text>      Email prefix. Default: testuser
   --domain <domain>    Email domain. Default: budgetassist.test
-  --password <text>    Password for all users. Default: TestUser!2026
   --dry-run            Print users without creating them
+
+Required environment for creation:
+  SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, TEST_USER_PASSWORD (at least 12 characters)
+Use a dedicated test project. No default password is provided.
 `);
   process.exit(0);
 }
@@ -40,9 +43,13 @@ const count = Number(args.get("count") ?? 50);
 const start = Number(args.get("start") ?? 1);
 const prefix = args.get("prefix") ?? "testuser";
 const domain = args.get("domain") ?? "budgetassist.test";
-const password =
-  args.get("password") ?? process.env.TEST_USER_PASSWORD ?? "TestUser!2026";
+const password = process.env.TEST_USER_PASSWORD;
 const dryRun = args.has("dry-run");
+
+if (args.has("password")) {
+  console.error("ERROR: Set TEST_USER_PASSWORD in the environment instead of passing a password on the command line.");
+  process.exit(1);
+}
 
 if (!Number.isInteger(count) || count < 1) {
   console.error("ERROR: --count must be a positive integer.");
@@ -60,6 +67,21 @@ if (!dryRun && (!supabaseUrl || !serviceRoleKey)) {
   );
   console.error("Run with --help to see an example.");
   process.exit(1);
+}
+
+if (!dryRun && (!password || password.length < 12)) {
+  console.error("ERROR: TEST_USER_PASSWORD is required and must contain at least 12 characters.");
+  process.exit(1);
+}
+
+if (!dryRun) {
+  try {
+    const target = new URL(supabaseUrl);
+    if (!["http:", "https:"].includes(target.protocol) || target.username || target.password || target.search || target.hash || target.pathname !== "/") throw new Error();
+  } catch {
+    console.error("ERROR: SUPABASE_URL must be an HTTP(S) project origin without credentials, a path, or query parameters.");
+    process.exit(1);
+  }
 }
 
 const supabase = dryRun ? null : createClient(supabaseUrl, serviceRoleKey, {

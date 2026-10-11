@@ -19,7 +19,7 @@ const PLANS = [
     monthly: 49,
     badge: "Popüler",
     tone: "standard",
-    features: ["Sınırsız kategori", "Banka entegrasyonu", "Detaylı raporlar"],
+    features: ["Sınırsız kategori", "Kredi kartı takibi", "Detaylı raporlar"],
     action: "Standart'ı Seç",
   },
   {
@@ -28,7 +28,7 @@ const PLANS = [
     monthly: 149,
     badge: "En İyi Değer",
     tone: "premium",
-    features: ["AI Finansal Koç", "Otomatik bütçe risk analizi", "Sınırsız hedef", "Öncelikli destek"],
+    features: ["AI Finansal Koç", "Otomatik bütçe risk analizi", "Sınırsız hedef", "AI destekli fiş tarama"],
     action: "Premium'a Geç",
   },
 ]
@@ -36,7 +36,7 @@ const PLANS = [
 const COMPARISON = [
   { feature: "Aylık İşlem Limiti", free: "100", standard: "Sınırsız", premium: "Sınırsız" },
   { feature: "Özel Kategoriler", free: "3", standard: "Sınırsız", premium: "Sınırsız" },
-  { feature: "Banka Senkronizasyonu", free: false, standard: true, premium: true },
+  { feature: "Kredi Kartı Takibi", free: false, standard: true, premium: true },
   { feature: "Gelişmiş Raporlar", free: false, standard: true, premium: true },
   { feature: "Yapay Zeka Asistanı", free: false, standard: false, premium: true },
   { feature: "Fiş / Fatura Arşivi", free: "10 belge", standard: "250 belge", premium: "Sınırsız" },
@@ -87,7 +87,7 @@ export default function SubscriptionPlans({ subscription, onPlanChange, onBackAc
         <div>
           <span>BudgetAssist Plans</span>
           <h1>Planınızı Seçin</h1>
-          <p>Aktif aboneliğiniz veritabanında saklanır ve profil ekranındaki plan kartı buna göre güncellenir.</p>
+          <p>Eğitim amaçlı demo planlar. Seçiminiz profilinize kaydedilir; ödeme alınmaz veya otomatik yenileme yapılmaz.</p>
         </div>
         <div className="plans-billing-toggle" role="group" aria-label="Faturalandırma dönemi">
           <button type="button" className={billing === "monthly" ? "is-active" : ""} onClick={() => setBilling("monthly")}>Aylık</button>
@@ -155,9 +155,9 @@ export default function SubscriptionPlans({ subscription, onPlanChange, onBackAc
       <section className="plans-summary-row">
         <div>
           <strong>{yearly ? "Yıllık plan aktif" : "Aylık plan aktif"}</strong>
-          <span>{yearly ? `Yıllık ödeme seçeneğinde ortalama %20 indirim uygulanır.` : "Aylık planlarda taahhüt yoktur."}</span>
+          <span>{yearly ? `Yıllık ödeme seçeneğinde ortalama %20 indirim uygulanır.` : "Fiyatlar örnektir; gerçek bir satış teklifi değildir."}</span>
         </div>
-        <b>{yearly ? `Yıllık örnek tasarruf: ₺${Math.round(annualSavings)}` : "İstediğiniz an yükseltebilirsiniz"}</b>
+        <b>{yearly ? `Yıllık örnek tasarruf: ₺${Math.round(annualSavings)}` : "Demo planını değiştirebilirsiniz"}</b>
       </section>
 
       <section className="plans-comparison">

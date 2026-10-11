@@ -6,16 +6,16 @@ Kurulum:
   pip install locust
 
 Çalıştırma (interaktif web arayüzü):
-  locust -f locustfile.py --host=https://xfmbxqkowwoyxxunylhr.supabase.co
+  locust -f locustfile.py --host=https://your-test-project.supabase.co
 
 Çalıştırma (headless, 10 kullanıcı, 60 saniye):
-  locust -f locustfile.py --host=https://xfmbxqkowwoyxxunylhr.supabase.co \\
+  locust -f locustfile.py --host=https://your-test-project.supabase.co \\
          --headless -u 10 -r 2 --run-time 60s \\
          --html docs/locust-report.html
 
 Ayarlar:
   SUPABASE_ANON_KEY  → Supabase anon key (JWT formatında, eyJ ile başlayan)
-  SUPABASE_URL       → Proje URL'i
+  SUPABASE_URL       → Yalnızca size ait test projesinin URL'i (--host ile de verilebilir)
 
 Not: Edge Function'lar JWT doğrulaması gerektirir.
      Gerçek kullanıcı JWT token'ı almak için önce Supabase Auth endpoint'ini
@@ -43,7 +43,7 @@ def load_dotenv_local():
 
 load_dotenv_local()
 
-SUPABASE_URL = os.getenv("SUPABASE_URL", "https://xfmbxqkowwoyxxunylhr.supabase.co")
+SUPABASE_URL = os.getenv("SUPABASE_URL") or None
 ANON_KEY = os.getenv("SUPABASE_ANON_KEY") or os.getenv("VITE_SUPABASE_PUBLISHABLE_KEY", "")
 
 # Test için geçici kullanıcı bilgileri (env'den al)
@@ -78,6 +78,7 @@ class AnonymousUser(HttpUser):
     Landing page + CORS preflight yükü simülasyonu.
     """
 
+    host = SUPABASE_URL
     wait_time = between(1, 3)
     weight = 3  # Toplam trafiğin %60'ı
 
@@ -135,6 +136,7 @@ class AuthenticatedUser(HttpUser):
     AI Coach, Edge Function ve REST API çağrıları.
     """
 
+    host = SUPABASE_URL
     wait_time = between(2, 5)
     weight = 2  # Toplam trafiğin %40'ı
 
@@ -246,7 +248,7 @@ class AuthenticatedUser(HttpUser):
 def on_test_start(environment, **kwargs):
     print("\n" + "=" * 60)
     print("  BudgetAssist — Locust Yük Testi Başladı")
-    print(f"  Host: {SUPABASE_URL}")
+    print(f"  Host: {environment.host or SUPABASE_URL}")
     print(f"  Auth: {'✅ JWT alınacak' if TEST_EMAIL else '⚠️  SELENIUM_TEST_EMAIL ayarlanmamış (sadece anonim testler)'}")
     print("=" * 60 + "\n")
 

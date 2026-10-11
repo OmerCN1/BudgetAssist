@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import { S, FONT_BODY, FONT_MONO, btnPrimary, btnGhost } from "../../constants/theme"
 import { LANGUAGE_OPTIONS } from "../../constants/language"
+import { PROJECT_REPOSITORY_URL, PROJECT_README_URL, PROJECT_ISSUES_URL } from "../../constants/project"
 
 const BRAND_LOGO_LIGHT_SRC = "/assets/ba_logo_black.svg"
 const BRAND_LOGO_DARK_SRC = "/assets/ba_logo_white.svg"
@@ -248,60 +249,27 @@ const PLANS = [
     name: "Premium",
     monthly: 149,
     note: "En İyi Değer",
-    features: ["AI Finansal Koç", "Otomatik bütçe risk analizi", "Sınırsız hedef & birikim", "Sınırsız fiş arşivi", "Banka entegrasyonu", "Öncelikli destek"],
+    features: ["AI Finansal Koç", "Otomatik bütçe risk analizi", "Sınırsız hedef & birikim", "Sınırsız fiş arşivi", "AI destekli fiş tarama", "Demo plan seçimi"],
     action: "Premium'a Geç",
     tone: "premium",
   },
 ]
 
-const TESTIMONIALS = [
+const USE_CASES = [
   {
-    text: "Kredi kartı takibi özelliği hayat kurtarıcı. 3 farklı kartımı tek ekranda görüp ekstre tarihlerimi kaçırmıyorum.",
-    name: "Zeynep K.",
-    role: "Yazılım Geliştirici",
-    avatar: "ZK",
+    title: "Kartlarınızı bir arada görün",
+    text: "Örnek senaryo: Birden fazla kredi kartının limitlerini, borçlarını ve ekstre tarihlerini tek ekrandan takip edin.",
+    Icon: IconCreditCard,
   },
   {
-    text: "AI koç gerçekten işe yarıyor. İlk ayda aboneliklerimi düzenleyerek ₺640 tasarruf ettim.",
-    name: "Mehmet D.",
-    role: "Girişimci",
-    avatar: "MD",
+    title: "Aboneliklerinizi gözden geçirin",
+    text: "Örnek senaryo: Düzenli harcamalarınızı inceleyin ve kullanmadığınız abonelikleri belirleyerek bütçenizi planlayın.",
+    Icon: IconRecurring,
   },
   {
-    text: "Borç takibi sayesinde arkadaşlarımla hesaplaşmak artık çok kolay. Hiçbir şeyi unutmuyorum.",
-    name: "Ayşe Ş.",
-    role: "Finans Uzmanı",
-    avatar: "AŞ",
-  },
-  {
-    text: "Fiş tarama özelliği muhasebe işimi ciddi şekilde rahatlattı. Harcamalarım artık kategorilere otomatik düşüyor.",
-    name: "Kerem B.",
-    role: "Kafe İşletmecisi",
-    avatar: "KB",
-  },
-  {
-    text: "Varlık ve borçlarımı aynı panelde görmek finansal durumumu çok daha net anlamamı sağladı.",
-    name: "Selin A.",
-    role: "Ürün Yöneticisi",
-    avatar: "SA",
-  },
-  {
-    text: "Hedef takibi sayesinde tatil bütçemi ilk kez dağılmadan tamamladım. Uyarılar tam zamanında geliyor.",
-    name: "Tolga E.",
-    role: "Tasarımcı",
-    avatar: "TE",
-  },
-  {
-    text: "Kredi kartı limitleri ve ekstre tarihleri tek ekranda olunca ay sonu sürprizleri bitti.",
-    name: "Derya N.",
-    role: "Satış Müdürü",
-    avatar: "DN",
-  },
-  {
-    text: "AI koçun abonelik önerileriyle kullanmadığım servisleri temizledim. İlk haftadan fark ettirdi.",
-    name: "Mert Y.",
-    role: "Serbest Çalışan",
-    avatar: "MY",
+    title: "Birikiminizi planlayın",
+    text: "Örnek senaryo: Bir tatil hedefi oluşturun, örnek katkılar ekleyin ve hedefe doğru ilerlemenizi izleyin.",
+    Icon: IconGoals,
   },
 ]
 
@@ -325,15 +293,15 @@ const HOW_IT_WORKS = [
     step: "03",
     title: "AI Öneri Al",
     desc: "AI koç harcama alışkanlıklarınızı analiz eder, tasarruf fırsatlarını ve riskleri anlaşılır önerilere çevirir.",
-    stat: "%23 tasarruf",
+    stat: "AI içgörüleri",
   },
 ]
 
 const SECURITY_POINTS = [
   {
     Icon: IconLock,
-    title: "Şifreli altyapı",
-    desc: "Hassas oturum ve veri akışları modern güvenlik pratikleriyle korunur.",
+    title: "Hesap erişimi",
+    desc: "Giriş ve oturum işlemleri Supabase Auth üzerinden yürütülür.",
   },
   {
     Icon: IconControl,
@@ -342,13 +310,13 @@ const SECURITY_POINTS = [
   },
   {
     Icon: IconShield,
-    title: "Güvenli finans deneyimi",
-    desc: "Gizlilik, erişim ve hesap güvenliği landing akışının merkezinde tutulur.",
+    title: "Test verileriyle deneyin",
+    desc: "Demo kullanımında gerçek finansal veya hassas kişisel bilgiler eklemeyin.",
   },
   {
     Icon: IconSupport,
-    title: "Destek hazır",
-    desc: "Kurulum, güvenlik veya hesap sorularında iletişim kanalları açık kalır.",
+    title: "Açık kaynak proje",
+    desc: "Kaynak kodunu inceleyin; hata ve geliştirme önerilerinizi GitHub üzerinden paylaşın.",
   },
 ]
 
@@ -372,10 +340,10 @@ const FAQS = [
 ]
 
 const STATS = [
-  { value: "500K+", label: "Aktif Kullanıcı", color: S.text },
-  { value: "₺12B+", label: "Yönetilen Varlık", color: S.green },
-  { value: "%99.9", label: "Güvenlik Skoru", color: S.text },
-  { value: "4.9/5", label: "App Store Puanı", color: S.cyan },
+  { value: "8", label: "Finans modülü", color: S.text },
+  { value: "TR / EN", label: "Arayüz dili", color: S.green },
+  { value: "CSV", label: "İçe / dışa aktarma", color: S.text },
+  { value: "MIT", label: "Açık kaynak lisansı", color: S.cyan },
 ]
 
 const HERO_CHART_TREND =
@@ -383,6 +351,42 @@ const HERO_CHART_TREND =
 const HERO_CHART_AREA = `${HERO_CHART_TREND} L12,100 L0,100 Z`
 const HERO_TOTAL_AMOUNT = 284750
 const EN_TRANSLATIONS = {
+  "Hesap erişimi": "Account access",
+  "Giriş ve oturum işlemleri Supabase Auth üzerinden yürütülür.": "Sign-in and session operations use Supabase Auth.",
+  "Test verileriyle deneyin": "Try with test data",
+  "Demo kullanımında gerçek finansal veya hassas kişisel bilgiler eklemeyin.": "Do not add real financial or sensitive personal information when trying the demo.",
+  "Açık kaynak proje": "Open-source project",
+  "Kaynak kodunu inceleyin; hata ve geliştirme önerilerinizi GitHub üzerinden paylaşın.": "Explore the source code and share bug reports and suggestions through GitHub.",
+  "Finans modülü": "Finance modules",
+  "Arayüz dili": "Interface languages",
+  "İçe / dışa aktarma": "Import / export",
+  "Açık kaynak lisansı": "Open-source license",
+  "AI içgörüleri": "AI insights",
+  "AI destekli fiş tarama": "AI receipt scanning",
+  "Demo plan seçimi": "Demo plan selection",
+  "Test hesabınızı oluşturun ve örnek verilerle projeyi keşfedin. Gerçek finansal bilgilerinizi kullanmayın.": "Create a test account and explore the project with sample data. Do not use real financial information.",
+  "Eğitim amaçlı": "For education",
+  "Örnek verilerle deneyin": "Try with sample data",
+  "Açık kaynak": "Open source",
+  "Proje": "Project",
+  "Bilgilendirme": "Information",
+  "Demo Veri Bilgilendirmesi": "Demo Data Notice",
+  "Demo Kullanım Koşulları": "Demo Terms of Use",
+  "Projeyi incele": "Explore the project",
+  "Kurulum ve testler": "Setup and tests",
+  "Geri bildirim paylaş": "Share feedback",
+  "Eğitim amaçlı demo proje · Örnek veriler içerir.": "Educational demo project · Contains sample data.",
+  "Gerçek finansal veya hassas kişisel bilgilerinizi kullanmayın.": "Do not use real financial or sensitive personal information.",
+  "Örnek kullanım senaryoları": "Example use cases",
+  "Uygulamayı nasıl kullanabilirsiniz?": "How could you use the app?",
+  "Bu senaryolar tanıtım amaçlıdır; gerçek kullanıcı yorumları değildir.": "These scenarios are illustrative, not real customer testimonials.",
+  "Kartlarınızı bir arada görün": "See your cards in one place",
+  "Örnek senaryo: Birden fazla kredi kartının limitlerini, borçlarını ve ekstre tarihlerini tek ekrandan takip edin.": "Example scenario: Track limits, balances, and statement dates for multiple credit cards in one view.",
+  "Aboneliklerinizi gözden geçirin": "Review your subscriptions",
+  "Örnek senaryo: Düzenli harcamalarınızı inceleyin ve kullanmadığınız abonelikleri belirleyerek bütçenizi planlayın.": "Example scenario: Review recurring expenses and identify unused subscriptions as you plan your budget.",
+  "Birikiminizi planlayın": "Plan your savings",
+  "Örnek senaryo: Bir tatil hedefi oluşturun, örnek katkılar ekleyin ve hedefe doğru ilerlemenizi izleyin.": "Example scenario: Create a vacation goal, add sample contributions, and track your progress.",
+  "Demo planlar ve fiyatlar · Gerçek bir satış teklifi değildir.": "Demo plans and prices · Not an actual sales offer.",
   "Gelir & Gider Takibi": "Income & Expense Tracking",
   "Tüm işlemlerinizi otomatik kategorize edin. Gerçek zamanlı bakiye ve nakit akışı görünümüyle her zaman bir adım önde olun.": "Automatically categorize every transaction. Stay one step ahead with real-time balance and cash-flow visibility.",
   "Temel": "Core",
@@ -419,8 +423,6 @@ const EN_TRANSLATIONS = {
   "Otomatik bütçe risk analizi": "Automated budget risk analysis",
   "Sınırsız hedef & birikim": "Unlimited goals & savings",
   "Sınırsız fiş arşivi": "Unlimited receipt archive",
-  "Banka entegrasyonu": "Bank integration",
-  "Öncelikli destek": "Priority support",
   "Premium'a Geç": "Upgrade to Premium",
   "Kredi kartı takibi özelliği hayat kurtarıcı. 3 farklı kartımı tek ekranda görüp ekstre tarihlerimi kaçırmıyorum.": "The credit card tracking feature is a lifesaver. I see three different cards in one screen and never miss statement dates.",
   "Yazılım Geliştirici": "Software Developer",
@@ -466,7 +468,6 @@ const EN_TRANSLATIONS = {
   "Aktif Kullanıcı": "Active Users",
   "Yönetilen Varlık": "Assets Managed",
   "Güvenlik Skoru": "Security Score",
-  "App Store Puanı": "App Store Rating",
   "Navigasyon": "Navigation",
   "Menüyü kapat": "Close menu",
   "Menüyü aç": "Open menu",
@@ -482,7 +483,6 @@ const EN_TRANSLATIONS = {
   "yönetin.": "smarter.",
   "Gelir, gider, borç, varlık ve yatırımlarınızı tek platformda takip edin. AI destekli analizlerle finansal hedeflerinize çok daha hızlı ulaşın.": "Track income, expenses, debt, assets, and investments in one platform. Reach your financial goals much faster with AI-powered analysis.",
   "Ücretsiz Başla →": "Start Free →",
-  "47.000+ kullanıcı · 4.9/5 puan": "47,000+ users · 4.9/5 rating",
   "Toplam Varlık": "Total Assets",
   "Toplam varlık 284.750 Türk lirası": "Total assets 284,750 Turkish lira",
   "+%4.8 bu ay": "+4.8% this month",
@@ -498,7 +498,6 @@ const EN_TRANSLATIONS = {
   "AI Koç": "AI Coach",
   "Bu ay abonelik giderlerini %23 azaltabilirsiniz.": "You can reduce subscription expenses by 23% this month.",
   "Limit Kullanımı": "Limit Usage",
-  "Desteklenen finansal kurumlar": "Supported financial institutions",
   "Nasıl Çalışır?": "How It Works",
   "Finansal kontrolü": "Build financial control",
   "3 adımda kurun": "in 3 steps",
@@ -542,7 +541,6 @@ const EN_TRANSLATIONS = {
   "BudgetAssist, kişisel finans verilerinizi anlaşılır kontroller ve güvenli hesap deneyimiyle yönetmeniz için tasarlandı.": "BudgetAssist is designed to help you manage personal finance data with clear controls and a secure account experience.",
   "Güvenlik detaylarını incele →": "Review security details →",
   "Kullanıcı Yorumları": "User Stories",
-  "47.000+ kişi zaten kullanıyor": "47,000+ people already use it",
   "Kullanıcı yorumları": "User testimonials",
   "Fiyatlandırma": "Pricing",
   "Planınızı seçin": "Choose your plan",
@@ -562,11 +560,8 @@ const EN_TRANSLATIONS = {
   "Başlamak ücretsiz": "Free to start",
   "Finansal özgürlüğünüze": "Start your financial",
   "bugün başlayın": "freedom today",
-  "Ücretsiz hesap oluşturun, kredi kartı gerekmez. İlk 30 gün premium özellikleri ücretsiz deneyin.": "Create a free account, no credit card required. Try premium features free for the first 30 days.",
   "Ücretsiz Hesap Oluştur →": "Create Free Account →",
   "Kredi kartı gerekmez": "No credit card required",
-  "30 gün ücretsiz": "30 days free",
-  "İstediğiniz an iptal": "Cancel anytime",
   "Gelir, gider, borç ve varlıklarınızı tek platformda yönetin. Finansal özgürlüğünüze bugün başlayın.": "Manage income, expenses, debt, and assets in one platform. Start your financial freedom today.",
   "Ürün": "Product",
   "Şirket": "Company",
@@ -578,11 +573,7 @@ const EN_TRANSLATIONS = {
   "KVKK": "KVKK",
   "Güvenlik Merkezi": "Security Center",
   "Uygulamayı İndir": "Download the App",
-  "App Store'dan İndir": "Download on the App Store",
-  "App Store'da": "On the App Store",
   "iOS için İndir": "Download for iOS",
-  "Google Play'den İndir": "Get it on Google Play",
-  "Google Play'de": "On Google Play",
   "Android için İndir": "Download for Android",
   "© 2026 BudgetAssist. Tüm hakları saklıdır.": "© 2026 BudgetAssist. All rights reserved.",
   "Gizlilik": "Privacy",
@@ -664,32 +655,11 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, language = 
     const onScroll = () => nav?.classList.toggle("is-scrolled", window.scrollY > 20)
     window.addEventListener("scroll", onScroll, { passive: true })
 
-    const animateCounter = (el, target, prefix, suffix, isFloat) => {
-      const start = performance.now()
-      const tick = (now) => {
-        const p = Math.min((now - start) / 1600, 1)
-        const e = 1 - Math.pow(1 - p, 3)
-        el.textContent = prefix + (isFloat ? (e * target).toFixed(1) : Math.floor(e * target)) + suffix
-        if (p < 1) requestAnimationFrame(tick)
-      }
-      requestAnimationFrame(tick)
-    }
-
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return
           entry.target.classList.add("is-visible")
-          if (entry.target.classList.contains("lp-stats")) {
-            const ss = entry.target.querySelectorAll("strong[data-count]")
-            const defs = [
-              [ss[0], 500, "", "K+", false],
-              [ss[1], 12, "₺", "B+", false],
-              [ss[2], 99, "%", ".9", false],
-              [ss[3], 4.9, "", "/5", true],
-            ]
-            defs.forEach(([el, ...args]) => el && animateCounter(el, ...args))
-          }
           observer.unobserve(entry.target)
         })
       },
@@ -794,12 +764,10 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, language = 
               </div>
 
               <div className="lp2-social-proof">
-                <div className="lp2-avatars">
-                  {["ZK", "MD", "AŞ", "KB", "TE"].map((a) => <span key={a}>{a}</span>)}
-                </div>
                 <div>
-                  <div className="lp2-stars">★★★★★</div>
-                  <span>{tx("47.000+ kullanıcı · 4.9/5 puan")}</span>
+                  <span>{tx("Eğitim amaçlı demo proje · Örnek veriler içerir.")}</span>
+                  <br />
+                  <span>{tx("Gerçek finansal veya hassas kişisel bilgilerinizi kullanmayın.")}</span>
                 </div>
               </div>
             </div>
@@ -966,16 +934,6 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, language = 
             <span />
           </div>
         </section>
-
-        {/* ══ LOGOS ═════════════════════════════════════════════════════════ */}
-        <div className="lp2-logos lp-reveal">
-          <span>{tx("Desteklenen finansal kurumlar")}</span>
-          <div className="lp2-logos-row">
-            {["Ziraat Bankası", "Garanti BBVA", "İş Bankası", "Yapı Kredi", "Akbank", "Halkbank"].map((l) => (
-              <span key={l}>{l}</span>
-            ))}
-          </div>
-        </div>
 
         {/* ══ HOW IT WORKS ══════════════════════════════════════════════════ */}
         <section className="lp2-how lp-reveal">
@@ -1235,31 +1193,28 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, language = 
         <div className="lp-stats lp2-stats lp-reveal">
           {STATS.map(({ value, label, color }) => (
             <div key={label}>
-              <strong data-count className="finance-number" style={{ color }}>{value}</strong>
+              <strong className="finance-number" style={{ color }}>{value}</strong>
               <span>{tx(label)}</span>
             </div>
           ))}
         </div>
 
-        {/* ══ TESTIMONIALS ══════════════════════════════════════════════════ */}
+        {/* ══ EXAMPLE USE CASES ══════════════════════════════════════════════════ */}
         <section className="lp2-testimonials lp-reveal">
           <div className="lp2-section-head" style={{ marginBottom: "2.5rem" }}>
-            <span className="lp2-label">{tx("Kullanıcı Yorumları")}</span>
-            <h2>{tx("47.000+ kişi zaten kullanıyor")}</h2>
+            <span className="lp2-label">{tx("Örnek kullanım senaryoları")}</span>
+            <h2>{tx("Uygulamayı nasıl kullanabilirsiniz?")}</h2>
+            <p>{tx("Bu senaryolar tanıtım amaçlıdır; gerçek kullanıcı yorumları değildir.")}</p>
           </div>
-          <div className="lp2-testi-marquee" aria-label={tx("Kullanıcı yorumları")}>
+          <div className="lp2-testi-marquee" aria-label={tx("Örnek kullanım senaryoları")}>
             <div className="lp2-testi-track">
-              {[...TESTIMONIALS, ...TESTIMONIALS].map((t, i) => (
-                <article className="glass-card lp2-testi-card" key={`${t.name}-${i}`} aria-hidden={i >= TESTIMONIALS.length}>
-                  <div className="lp2-testi-stars">★★★★★</div>
-                  <p>"{tx(t.text)}"</p>
+              {[...USE_CASES, ...USE_CASES].map(({ title, text, Icon }, i) => (
+                <article className="glass-card lp2-testi-card" key={`${title}-${i}`} aria-hidden={i >= USE_CASES.length}>
                   <div className="lp2-testi-author">
-                    <span className="lp2-testi-avatar">{t.avatar}</span>
-                    <div>
-                      <strong>{t.name}</strong>
-                      <small>{tx(t.role)}</small>
-                    </div>
+                    <span className="lp2-testi-avatar"><Icon /></span>
+                    <strong>{tx(title)}</strong>
                   </div>
+                  <p style={{ fontStyle: "normal" }}>{tx(text)}</p>
                 </article>
               ))}
             </div>
@@ -1271,7 +1226,7 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, language = 
           <div className="lp2-section-head" style={{ marginBottom: "0.5rem" }}>
             <span className="lp2-label">{tx("Fiyatlandırma")}</span>
             <h2>{tx("Planınızı seçin")}</h2>
-            <p>{tx("Ücretsiz başlayın, ihtiyaç büyüdükçe yükseltin.")}</p>
+            <p>{tx("Demo planlar ve fiyatlar · Gerçek bir satış teklifi değildir.")}</p>
           </div>
 
           <div className="lp2-billing-toggle" role="group" aria-label={tx("Fatura dönemi")}>
@@ -1366,12 +1321,12 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, language = 
             {tx("Finansal özgürlüğünüze")}<br />
             <em>{tx("bugün başlayın")}</em>
           </h2>
-          <p style={{ position: "relative" }}>{tx("Ücretsiz hesap oluşturun, kredi kartı gerekmez. İlk 30 gün premium özellikleri ücretsiz deneyin.")}</p>
+          <p style={{ position: "relative" }}>{tx("Test hesabınızı oluşturun ve örnek verilerle projeyi keşfedin. Gerçek finansal bilgilerinizi kullanmayın.")}</p>
           <button onClick={onSignup} type="button" style={{ ...btnPrimary, padding: "17px 40px", fontSize: 15, position: "relative" }}>
             {tx("Ücretsiz Hesap Oluştur →")}
           </button>
           <div className="lp2-cta-features" style={{ position: "relative" }}>
-            {["Kredi kartı gerekmez", "30 gün ücretsiz", "İstediğiniz an iptal"].map((f) => (
+            {["Eğitim amaçlı", "Örnek verilerle deneyin", "Açık kaynak"].map((f) => (
               <span key={f}><b style={{ color: S.green }}>✓</b> {tx(f)}</span>
             ))}
           </div>
@@ -1386,15 +1341,10 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, language = 
             <div className="lp2-footer-brand">
               <img className="public-brand-logo" src={brandLogoSrc} alt="BudgetAssist" />
               <p>{tx("Gelir, gider, borç ve varlıklarınızı tek platformda yönetin. Finansal özgürlüğünüze bugün başlayın.")}</p>
+              <p>{tx("Eğitim amaçlı demo proje · Örnek veriler içerir.")}</p>
               <div className="lp2-footer-social">
-                <a href="https://x.com" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)" className="lp2-footer-social-link">
-                  <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.254 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
-                </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="lp2-footer-social-link">
-                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-                </a>
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="lp2-footer-social-link">
-                  <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                <a href={PROJECT_REPOSITORY_URL} target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="lp2-footer-social-link">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-14-2 16" /></svg>
                 </a>
               </div>
             </div>
@@ -1407,34 +1357,27 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, language = 
               <button type="button" className="lp2-footer-link" onClick={onSignup}>{tx("Borç Yönetimi")}</button>
             </div>
             <div className="lp2-footer-col">
-              <strong>{tx("Şirket")}</strong>
+              <strong>{tx("Proje")}</strong>
               <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("contact")}>{tx("Hakkımızda")}</button>
-              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("contact")}>{tx("Blog")}</button>
+              <a href={PROJECT_REPOSITORY_URL} target="_blank" rel="noopener noreferrer" className="lp2-footer-link">GitHub</a>
               <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("contact")}>{tx("İletişim")}</button>
               <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("security")}>{tx("Güvenlik")}</button>
             </div>
             <div className="lp2-footer-col">
-              <strong>{tx("Yasal")}</strong>
-              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("privacy")}>{tx("Gizlilik Politikası")}</button>
-              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("terms")}>{tx("Kullanım Koşulları")}</button>
-              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("privacy")}>{tx("KVKK")}</button>
+              <strong>{tx("Bilgilendirme")}</strong>
+              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("privacy")}>{tx("Demo Veri Bilgilendirmesi")}</button>
+              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("terms")}>{tx("Demo Kullanım Koşulları")}</button>
               <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("security")}>{tx("Güvenlik Merkezi")}</button>
             </div>
             <div className="lp2-footer-col">
-              <strong>{tx("Uygulamayı İndir")}</strong>
-              <a href="#" className="lp2-footer-app-btn" onClick={(e) => e.preventDefault()} aria-label={tx("App Store'dan İndir")}>
-                <img src="/assets/Apple_logo_grey.svg" alt="" aria-hidden="true" className="lp2-footer-app-logo lp2-footer-app-logo-apple" />
-                <div>
-                  <small>{tx("App Store'da")}</small>
-                  <b>{tx("iOS için İndir")}</b>
-                </div>
+              <strong>{tx("Projeyi incele")}</strong>
+              <a href={PROJECT_README_URL} target="_blank" rel="noopener noreferrer" className="lp2-footer-app-btn">
+                <IconReports />
+                <div><small>README</small><b>{tx("Kurulum ve testler")}</b></div>
               </a>
-              <a href="#" className="lp2-footer-app-btn" onClick={(e) => e.preventDefault()} aria-label={tx("Google Play'den İndir")}>
-                <img src="/assets/google_play.svg" alt="" aria-hidden="true" className="lp2-footer-app-logo lp2-footer-app-logo-play" />
-                <div>
-                  <small>{tx("Google Play'de")}</small>
-                  <b>{tx("Android için İndir")}</b>
-                </div>
+              <a href={PROJECT_ISSUES_URL} target="_blank" rel="noopener noreferrer" className="lp2-footer-app-btn">
+                <IconSupport />
+                <div><small>GitHub Issues</small><b>{tx("Geri bildirim paylaş")}</b></div>
               </a>
             </div>
           </div>
@@ -1442,7 +1385,7 @@ export default function LandingPage({ onLogin, onSignup, onOpenPage, language = 
             <small>{tx("© 2026 BudgetAssist. Tüm hakları saklıdır.")}</small>
             <div className="lp2-footer-bottom-links">
               <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("privacy")}>{tx("Gizlilik")}</button>
-              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("terms")}>{tx("Kullanım Koşulları")}</button>
+              <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("terms")}>{tx("Demo Kullanım Koşulları")}</button>
               <button type="button" className="lp2-footer-link" onClick={() => onOpenPage("security")}>{tx("Güvenlik")}</button>
             </div>
           </div>

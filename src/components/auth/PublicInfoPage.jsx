@@ -1,85 +1,161 @@
 import { useEffect, useMemo } from "react"
 import { S, FONT_BODY, btnPrimary, btnGhost } from "../../constants/theme"
 import { LANGUAGE_OPTIONS } from "../../constants/language"
+import {
+  PROJECT_REPOSITORY_URL,
+  PROJECT_ISSUES_URL,
+  PROJECT_SECURITY_URL,
+} from "../../constants/project"
 const BRAND_LOGO_LIGHT_SRC = "/assets/ba_logo_black.svg"
 const BRAND_LOGO_DARK_SRC = "/assets/ba_logo_white.svg"
 
-
 const PAGES = {
   privacy: {
-    label: "Gizlilik Politikası",
-    kicker: "Gizlilik",
-    title: "Verileriniz sizin kontrolünüzde.",
+    label: "Demo Veri Bilgilendirmesi",
+    kicker: "Veri kullanımı",
+    title: "Test verileriyle keşfedin.",
     summary:
-      "BudgetAssist, finansal verilerinizi yalnızca hesabınızdaki deneyimi oluşturmak, güvenliği korumak ve destek taleplerini yanıtlamak için kullanır.",
-    stat: "KVKK / GDPR odakli",
-    updated: "30 Nisan 2026",
+      "BudgetAssist bir eğitim projesidir. Hesap oluşturduğunuzda veya veri eklediğinizde, bağlı Supabase projesinde gerçek kayıtlar oluşabilir. Yalnızca sentetik test verileri kullanın.",
+    stat: "Eğitim amaçlı demo",
+    updated: "10 Ekim 2026",
     cards: [
-      ["Veri kapsamı", "Profil, işlem, kategori, hedef, fiş ve uygulama kullanım verileri hesabınızla ilişkilendirilir."],
-      ["Kullanım amacı", "Bütçe özeti, raporlama, AI analizleri, bildirimler ve destek süreçleri için işlenir."],
-      ["Haklarınız", "Veri erişimi, düzeltme, silme ve dışa aktarma taleplerinizi destek ekibimize iletebilirsiniz."],
+      [
+        "Hesap ve kayıtlar",
+        "Hesap bilgileri Supabase Auth ile; profil, işlem, hedef ve diğer kayıtlar bağlı veritabanıyla işlenir.",
+      ],
+      [
+        "AI özellikleri",
+        "AI Koç kullanıldığında finansal özetiniz ve mesajınız, fiş tarandığında yüklediğiniz görüntü yapılandırılmış Groq hizmetine gönderilir.",
+      ],
+      [
+        "Örnek içerik",
+        "Tanıtım ekranlarındaki bakiyeler ve kullanım senaryoları örnektir. Kendi eklediğiniz kayıtlar ise demo metinleriyle otomatik olarak anonimleşmez.",
+      ],
     ],
     sections: [
-      ["Toplanan bilgiler", "Kayıt bilgileriniz, manuel eklediğiniz finansal kayıtlar, yüklediğiniz belgeler ve teknik oturum verileri saklanabilir."],
-      ["Paylaşım", "Verileriniz satılmaz. Hizmetin çalışması için gerekli altyapı, kimlik doğrulama ve destek sağlayıcılarıyla sınırlı olarak işlenebilir."],
-      ["Saklama", "Hesabınız aktif olduğu sürece veriler korunur. Hesap silme talebinizden sonra yasal zorunluluklar dışındaki kayıtlar temizlenir."],
+      [
+        "Hassas bilgiler",
+        "Gerçek banka bilgileri, kimlik bilgileri, gerçek fişler veya başkalarına ait kişisel veriler yüklemeyin.",
+      ],
+      [
+        "Saklama ve silme",
+        "Kayıtları uygulamanın sunduğu düzenleme ve silme araçlarıyla yönetin. Hesap ve depolama verilerinin tamamen temizlenmesi, ilgili Supabase projesini yöneten kişinin sorumluluğundadır; otomatik silme süresi taahhüt edilmez.",
+      ],
+      [
+        "Kuruluma bağlı hizmetler",
+        "E-posta ve SMS özellikleri etkinleştirilirse bildirim verileri Resend ve Twilio üzerinden işlenir. Bu sayfa demo veri akışını açıklar; bir mevzuat uyumluluk sertifikası değildir.",
+      ],
     ],
   },
   terms: {
-    label: "Kullanım Koşulları",
-    kicker: "Koşullar",
-    title: "Net kurallar, sorunsuz finans takibi.",
+    label: "Demo Kullanım Koşulları",
+    kicker: "Kullanım",
+    title: "Öğrenmek ve test etmek için.",
     summary:
-      "BudgetAssist'i kullanarak hesabınızın güvenliğinden, girdiğiniz verilerin doğruluğundan ve hizmeti yasal amaçlarla kullanmaktan sorumlu olursunuz.",
-    stat: "Adil kullanım",
-    updated: "30 Nisan 2026",
+      "BudgetAssist, yazılım geliştirme ve test süreçlerini göstermek için hazırlanmıştır. Ticari bir finans hizmeti, yatırım danışmanlığı veya ödeme sistemi değildir.",
+    stat: "Ticari olmayan demo",
+    updated: "10 Ekim 2026",
     cards: [
-      ["Hesap", "Hesap bilgilerinizin doğru ve güncel olması, şifrenizin korunması sizin sorumluluğunuzdadır."],
-      ["Abonelik", "Ücretli planlar seçilen döneme göre yenilenir; iptal sonrası mevcut dönem sonuna kadar erişim sürer."],
-      ["Kullanım", "Hizmet, kişisel veya iş finans takibi içindir; kötüye kullanım ve yetkisiz erişim girişimleri yasaktır."],
+      [
+        "Test hesabı",
+        "Kendinize ait bir test hesabı ve sentetik finansal kayıtlarla deneyin.",
+      ],
+      [
+        "Örnek planlar",
+        "Plan seçimi uygulama içindeki demo durumunu değiştirir. Gösterilen fiyatlar satış teklifi değildir; gerçek ödeme veya otomatik yenileme yapılmaz.",
+      ],
+      [
+        "Test sınırları",
+        "Yük ve güvenlik testlerini yalnızca size ait veya test etme izniniz bulunan ortamlarda çalıştırın.",
+      ],
     ],
     sections: [
-      ["Hizmet kapsamı", "BudgetAssist gelir, gider, hedef, rapor, belge ve AI destekli yorumlama araçları sunar. Finansal kararlar nihai olarak kullanıcıya aittir."],
-      ["Plan değişiklikleri", "Özellikler ve fiyatlar önceden duyurularak güncellenebilir. Kritik değişikliklerde kullanıcıya bilgilendirme yapılır."],
-      ["Fesih", "Koşullara aykırı kullanımda erişim kısıtlanabilir. Kullanıcı istediği zaman hesabını kapatma talebinde bulunabilir."],
+      [
+        "Projenin kapsamı",
+        "İşlem takibi, raporlama ve planlama akışları eğitim amacıyla sunulur. AI yanıtları hatalı olabilir; gerçek finansal kararlar için doğrulanmış bilgi olarak kullanılmamalıdır.",
+      ],
+      [
+        "Hizmet beklentisi",
+        "Kesintisiz çalışma, veri saklama, destek yanıt süresi veya 30 günlük Premium deneme taahhüdü verilmez.",
+      ],
+      [
+        "Açık kaynak lisansı",
+        "Kaynak kodu MIT lisansı ile paylaşılır. Kullanım ve dağıtım koşulları için depodaki LICENSE dosyasını inceleyin.",
+      ],
     ],
   },
   security: {
-    label: "Güvenlik",
+    label: "Demo Güvenliği",
     kicker: "Güvenlik",
-    title: "Finansal veriler için sakin ve güçlü koruma.",
+    title: "Kontrolleri ve sınırlarını bilin.",
     summary:
-      "BudgetAssist; kimlik doğrulama, erişim kontrolü, şifrelenmiş iletişim ve düzenli izleme yaklaşımlarıyla hassas verileri korumaya odaklanır.",
-    stat: "%99.9 izleme",
-    updated: "30 Nisan 2026",
+      "Projede Supabase kimlik doğrulaması ve veritabanı erişim politikaları bulunur. Bu kontrollerin çalışması, güncel şemanın ve izinlerin kullandığınız ortama uygulanmasına bağlıdır.",
+    stat: "Şema ve izin testleri",
+    updated: "10 Ekim 2026",
     cards: [
-      ["Şifreli trafik", "Tarayıcı ile servisler arasındaki iletişim modern TLS standartlarıyla korunur."],
-      ["Erişim kontrolü", "Kullanıcı verileri hesap bazlı yetkilendirme kontrolleriyle ayrılır."],
-      ["Operasyonel izleme", "Hata, performans ve güvenlik sinyalleri düzenli olarak takip edilir."],
+      [
+        "Kimlik doğrulama",
+        "Hesap ve oturum işlemleri Supabase Auth üzerinden yürütülür.",
+      ],
+      [
+        "Erişim politikaları",
+        "RLS politikaları kullanıcı kayıtlarını ayırır. Profil rolü ve yasak durumu için oluşturma/güncelleme kontrolleri ve regresyon testleri bulunur.",
+      ],
+      [
+        "Doğrulama sınırı",
+        "Bu proje için bağımsız güvenlik sertifikası, ölçülmüş güvenlik puanı veya sürekli izleme hizmeti sunulmaz.",
+      ],
     ],
     sections: [
-      ["Kimlik doğrulama", "Oturum yönetimi ve hesap erişimi Supabase kimlik doğrulama altyapısı üzerinden yürütülür."],
-      ["Belge güvenliği", "Yüklenen fiş ve belgeler hesap bağlamında saklanır; paylaşım ve erişim işlemleri yetkilendirme kontrollerinden geçer."],
-      ["Sorumlu bildirim", "Güvenlik açığı şüphelerinizi destek kanalından iletin. Öncelikli inceleme ve geri bildirim süreci uygulanır."],
+      [
+        "Kurulum sorumluluğu",
+        "Veritabanı şemasını ve güvenlik güncellemelerini uygulayın. Anahtarları sunucu tarafında saklayın; dağıtılan ortamın erişim ve depolama ayarlarını doğrulayın.",
+      ],
+      [
+        "Belge ve AI akışı",
+        "Fiş ve avatar dosyaları özel Supabase Storage bucket’larında saklanır. AI işlemlerinde gönderilen veriler yapılandırılmış Groq hizmeti tarafından işlenir.",
+      ],
+      [
+        "Güvenlik bildirimi",
+        "Bildirim yöntemi ve desteklenen kapsam için depodaki SECURITY.md dosyasını okuyun. Açık GitHub Issue’larına anahtar, kişisel veri veya istismar ayrıntısı eklemeyin.",
+      ],
     ],
   },
   contact: {
-    label: "İletişim",
-    kicker: "İletişim",
-    title: "Sorularınız için buradayız.",
+    label: "Proje ve Geri Bildirim",
+    kicker: "Açık kaynak",
+    title: "Projeyi birlikte geliştirelim.",
     summary:
-      "Ürün, hesap, faturalandırma veya güvenlik konularında ekibe ulaşabilirsiniz. Mesajınızı en doğru kanala yönlendirip hızlıca döneriz.",
-    stat: "24 saat içinde dönüş",
-    updated: "30 Nisan 2026",
+      "Bu eğitim projesinin kaynak kodunu GitHub üzerinden inceleyebilir, kişisel veri içermeyen hata bildirimlerini ve geliştirme önerilerini Issues bölümünde paylaşabilirsiniz.",
+    stat: "GitHub üzerinden geri bildirim",
+    updated: "10 Ekim 2026",
     cards: [
-      ["Destek", "support@budgetassist.app üzerinden hesap ve ürün yardımı alabilirsiniz."],
-      ["Güvenlik", "security@budgetassist.app adresi güvenlik bildirimleri için öncelikli kanaldır."],
-      ["İş ortaklığı", "partnerships@budgetassist.app ile entegrasyon ve iş birliği taleplerini paylaşabilirsiniz."],
+      [
+        "Kaynak kodu",
+        "Kurulum, testler ve bilinen sınırlar için depoyu ve README dosyasını inceleyin.",
+      ],
+      [
+        "Hata bildirimi",
+        "Hatanın adımlarını, beklenen sonucu ve kullandığınız sürümü yazın. Ekran görüntülerindeki kişisel verileri gizleyin.",
+      ],
+      [
+        "Geliştirme önerisi",
+        "Önerinizi kullanım senaryosuyla birlikte GitHub Issues üzerinden paylaşın.",
+      ],
     ],
     sections: [
-      ["Çalışma saatleri", "Hafta içi 09:00-18:00 arasında destek talepleri öncelikli olarak yanıtlanır."],
-      ["Yanıta eklenecekler", "Hesap e-postanızı, kısa sorun özetini ve varsa ekran görüntüsünü eklemek süreci hızlandırır."],
-      ["Acil konular", "Hesap erişimi veya güvenlik şüphelerinde konu başlığına Acil ibaresi ekleyin."],
+      [
+        "Destek kapsamı",
+        "Ticari destek ekibi, iş ortaklığı kanalı veya belirli bir yanıt süresi taahhüdü yoktur.",
+      ],
+      [
+        "Güvenli paylaşım",
+        "E-posta adresinizi, parolanızı, erişim anahtarınızı veya gerçek finansal kayıtlarınızı açık bildirimlere eklemeyin.",
+      ],
+      [
+        "Katkı",
+        "Değişiklik yapmak için depoyu fork edin, testlerinizi çalıştırın ve bir pull request açın.",
+      ],
     ],
   },
 }
@@ -88,96 +164,165 @@ const footerPages = ["privacy", "terms", "security", "contact"]
 
 const PAGES_EN = {
   privacy: {
-    label: "Privacy Policy",
-    kicker: "Privacy",
-    title: "Your data stays under your control.",
+    label: "Demo Data Notice",
+    kicker: "Data use",
+    title: "Explore with synthetic data.",
     summary:
-      "BudgetAssist uses your financial data only to power your account experience, protect security, and respond to support requests.",
-    stat: "KVKK / GDPR focused",
-    updated: "April 30, 2026",
+      "BudgetAssist is an educational project. Creating accounts or adding records can store real data in the connected Supabase project. Use synthetic test data only.",
+    stat: "Educational demo",
+    updated: "October 10, 2026",
     cards: [
-      ["Data scope", "Profile, transaction, category, goal, receipt, and app usage data may be associated with your account."],
-      ["Purpose of use", "Data is processed for budget summaries, reporting, AI analysis, notifications, and support workflows."],
-      ["Your rights", "You can send access, correction, deletion, and export requests to our support team."],
+      [
+        "Accounts and records",
+        "Supabase Auth processes accounts; the connected database stores profiles, transactions, goals, and other records.",
+      ],
+      [
+        "AI features",
+        "AI Coach sends your financial summary and message to the configured Groq service. Receipt scanning sends the uploaded image.",
+      ],
+      [
+        "Sample content",
+        "Marketing balances and use cases are illustrative. Data you enter is not automatically anonymized by the demo notices.",
+      ],
     ],
     sections: [
-      ["Information collected", "Registration details, financial records you add manually, uploaded documents, and technical session data may be stored."],
-      ["Sharing", "Your data is not sold. It may be processed only with infrastructure, authentication, and support providers needed to run the service."],
-      ["Retention", "Data is protected while your account remains active. After an account deletion request, records outside legal obligations are cleared."],
+      [
+        "Sensitive information",
+        "Do not upload real bank details, identity documents, actual receipts, or other people’s personal data.",
+      ],
+      [
+        "Retention and deletion",
+        "Manage records using the available editing and deletion tools. Complete cleanup of account and storage data is the responsibility of the connected Supabase project operator; no automatic deletion schedule is promised.",
+      ],
+      [
+        "Optional services",
+        "When enabled, email and SMS notification data is processed through Resend and Twilio. This notice describes demo data flows; it is not a compliance certification.",
+      ],
     ],
   },
   terms: {
-    label: "Terms of Use",
-    kicker: "Terms",
-    title: "Clear rules for smooth financial tracking.",
+    label: "Demo Terms of Use",
+    kicker: "Use",
+    title: "Built for learning and testing.",
     summary:
-      "By using BudgetAssist, you are responsible for your account security, the accuracy of the data you enter, and using the service for lawful purposes.",
-    stat: "Fair use",
-    updated: "April 30, 2026",
+      "BudgetAssist demonstrates software development and testing. It is not a commercial financial service, investment advisory service, or payment system.",
+    stat: "Non-commercial demo",
+    updated: "October 10, 2026",
     cards: [
-      ["Account", "You are responsible for keeping account details accurate and current, and for protecting your password."],
-      ["Subscription", "Paid plans renew based on the selected billing period; after cancellation, access continues until the end of the current period."],
-      ["Use", "The service is for personal or business finance tracking; misuse and unauthorized access attempts are prohibited."],
+      [
+        "Test accounts",
+        "Use your own test account and synthetic financial records.",
+      ],
+      [
+        "Sample plans",
+        "Plan selection changes demo application state. Displayed prices are not sales offers; no actual payments or automatic renewals take place.",
+      ],
+      [
+        "Testing boundaries",
+        "Run load and security tests only in environments you own or have permission to test.",
+      ],
     ],
     sections: [
-      ["Service scope", "BudgetAssist offers tools for income, expenses, goals, reports, documents, and AI-assisted interpretation. Financial decisions ultimately belong to the user."],
-      ["Plan changes", "Features and prices may be updated with prior notice. Users are informed when critical changes occur."],
-      ["Termination", "Access may be restricted for use that violates these terms. Users may request account closure at any time."],
+      [
+        "Project scope",
+        "Tracking, reporting, and planning flows are provided for education. AI responses may be incorrect and should not be treated as verified information for real financial decisions.",
+      ],
+      [
+        "Service expectations",
+        "There is no commitment to uninterrupted availability, data retention, support response times, or a 30-day Premium trial.",
+      ],
+      [
+        "Open-source license",
+        "Source code is shared under the MIT license. See the repository’s LICENSE file for usage and distribution terms.",
+      ],
     ],
   },
   security: {
-    label: "Security",
+    label: "Demo Security",
     kicker: "Security",
-    title: "Calm, strong protection for financial data.",
+    title: "Understand the controls and their limits.",
     summary:
-      "BudgetAssist focuses on protecting sensitive data through authentication, access control, encrypted communication, and regular monitoring practices.",
-    stat: "99.9% monitoring",
-    updated: "April 30, 2026",
+      "The project includes Supabase authentication and database access policies. Their effectiveness depends on applying the current schema and permissions to your environment.",
+    stat: "Schema and permission tests",
+    updated: "October 10, 2026",
     cards: [
-      ["Encrypted traffic", "Communication between the browser and services is protected with modern TLS standards."],
-      ["Access control", "User data is separated through account-based authorization controls."],
-      ["Operational monitoring", "Error, performance, and security signals are monitored regularly."],
+      ["Authentication", "Account and session operations use Supabase Auth."],
+      [
+        "Access policies",
+        "RLS policies separate user records. Profile roles and ban status have insert/update protections and regression tests.",
+      ],
+      [
+        "Verification limits",
+        "This project offers no independent security certification, measured security score, or continuous monitoring service.",
+      ],
     ],
     sections: [
-      ["Authentication", "Session management and account access are handled through Supabase authentication infrastructure."],
-      ["Document security", "Uploaded receipts and documents are stored within the account context; sharing and access operations pass through authorization controls."],
-      ["Responsible disclosure", "Send suspected vulnerabilities through the support channel. Priority review and feedback processes are applied."],
+      [
+        "Deployment responsibility",
+        "Apply the database schema and security updates. Keep secret keys server-side and verify access and storage configuration in your deployed environment.",
+      ],
+      [
+        "Documents and AI",
+        "Receipt and avatar files are stored in private Supabase Storage buckets. Data sent for AI processing is handled by the configured Groq service.",
+      ],
+      [
+        "Security reports",
+        "Read SECURITY.md in the repository for reporting guidance and scope. Do not post keys, personal data, or exploit details in public GitHub Issues.",
+      ],
     ],
   },
   contact: {
-    label: "Contact",
-    kicker: "Contact",
-    title: "We are here for your questions.",
+    label: "Project and Feedback",
+    kicker: "Open source",
+    title: "Help improve the project.",
     summary:
-      "You can reach the team about product, account, billing, or security topics. We route your message to the right channel and respond quickly.",
-    stat: "Response within 24 hours",
-    updated: "April 30, 2026",
+      "Explore this educational project on GitHub. Share bug reports and feature suggestions without personal data through Issues.",
+    stat: "Feedback through GitHub",
+    updated: "October 10, 2026",
     cards: [
-      ["Support", "Get account and product help through support@budgetassist.app."],
-      ["Security", "security@budgetassist.app is the priority channel for security reports."],
-      ["Partnerships", "Share integration and collaboration requests through partnerships@budgetassist.app."],
+      [
+        "Source code",
+        "See the repository and README for setup, tests, and known limitations.",
+      ],
+      [
+        "Bug reports",
+        "Describe reproduction steps, expected behavior, and the version you used. Redact personal information from screenshots.",
+      ],
+      [
+        "Suggestions",
+        "Share your suggestion and its use case through GitHub Issues.",
+      ],
     ],
     sections: [
-      ["Business hours", "Support requests are prioritized on weekdays between 09:00 and 18:00."],
-      ["What to include", "Adding your account email, a short issue summary, and screenshots when available helps speed up the process."],
-      ["Urgent topics", "For account access or security concerns, add Urgent to the subject line."],
+      [
+        "Support scope",
+        "There is no commercial support team, partnership channel, or guaranteed response time.",
+      ],
+      [
+        "Safe sharing",
+        "Do not include your email address, password, access keys, or real financial records in public reports.",
+      ],
+      [
+        "Contributions",
+        "Fork the repository, run your tests, and open a pull request to contribute.",
+      ],
     ],
   },
 }
 
 const UI_TEXT = {
   tr: {
-    navLabel: "Bilgi sayfalari",
+    navLabel: "Bilgi sayfaları",
     login: "Giriş Yap",
     start: "Hemen Başla",
     back: "← Ana sayfaya dön",
     updated: "Son güncelleme",
-    summarySuffix: "ozeti",
+    summarySuffix: "özeti",
     details: "Detaylar",
-    otherPages: "Diger sayfalar",
+    otherPages: "Diğer sayfalar",
     relatedTitle: "Merak ettiğiniz başlığı açın.",
     ctaTitle: "BudgetAssist'i deneyin",
-    ctaText: "Finansal kayıtlarınızı daha net takip etmek için ücretsiz hesap oluşturun.",
+    ctaText: "Sentetik test verileriyle eğitim demosunu keşfedin.",
     freeStart: "Ücretsiz Başla",
     language: "Dil",
   },
@@ -192,7 +337,7 @@ const UI_TEXT = {
     otherPages: "Other pages",
     relatedTitle: "Open the topic you are curious about.",
     ctaTitle: "Try BudgetAssist",
-    ctaText: "Create a free account to track your financial records with more clarity.",
+    ctaText: "Explore the educational demo using synthetic test data.",
     freeStart: "Start Free",
     language: "Language",
   },
@@ -200,7 +345,11 @@ const UI_TEXT = {
 
 function LanguageSwitch({ language, onChange }) {
   return (
-    <div className="public-language-switch" role="group" aria-label={UI_TEXT[language]?.language || UI_TEXT.tr.language}>
+    <div
+      className="public-language-switch"
+      role="group"
+      aria-label={UI_TEXT[language]?.language || UI_TEXT.tr.language}
+    >
       {LANGUAGE_OPTIONS.map((option) => (
         <button
           key={option.code}
@@ -217,12 +366,25 @@ function LanguageSwitch({ language, onChange }) {
   )
 }
 
-export default function PublicInfoPage({ page = "privacy", onBackLanding, onLogin, onSignup, onOpenPage, language = "tr", onLanguageChange, theme = "dark" }) {
+export default function PublicInfoPage({
+  page = "privacy",
+  onBackLanding,
+  onLogin,
+  onSignup,
+  onOpenPage,
+  language = "tr",
+  onLanguageChange,
+  theme = "dark",
+}) {
   const pages = language === "en" ? PAGES_EN : PAGES
   const ui = UI_TEXT[language] || UI_TEXT.tr
   const content = pages[page] || pages.privacy
-  const related = useMemo(() => footerPages.filter((id) => id !== page).slice(0, 3), [page])
-  const brandLogoSrc = theme === "light" ? BRAND_LOGO_LIGHT_SRC : BRAND_LOGO_DARK_SRC
+  const related = useMemo(
+    () => footerPages.filter((id) => id !== page).slice(0, 3),
+    [page],
+  )
+  const brandLogoSrc =
+    theme === "light" ? BRAND_LOGO_LIGHT_SRC : BRAND_LOGO_DARK_SRC
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" })
@@ -234,10 +396,22 @@ export default function PublicInfoPage({ page = "privacy", onBackLanding, onLogi
   }
 
   return (
-    <div className="public-page public-info-page" style={{ fontFamily: FONT_BODY }}>
+    <div
+      className="public-page public-info-page"
+      style={{ fontFamily: FONT_BODY }}
+    >
       <nav className="public-nav public-info-nav">
-        <button className="public-brand" onClick={onBackLanding} type="button" aria-label="BudgetAssist">
-          <img className="public-brand-logo" src={brandLogoSrc} alt="BudgetAssist" />
+        <button
+          className="public-brand"
+          onClick={onBackLanding}
+          type="button"
+          aria-label="BudgetAssist"
+        >
+          <img
+            className="public-brand-logo"
+            src={brandLogoSrc}
+            alt="BudgetAssist"
+          />
         </button>
         <div className="public-nav-links" aria-label={ui.navLabel}>
           {footerPages.map((id) => (
@@ -253,8 +427,18 @@ export default function PublicInfoPage({ page = "privacy", onBackLanding, onLogi
         </div>
         <div className="public-nav-actions">
           <LanguageSwitch language={language} onChange={onLanguageChange} />
-          <button onClick={onLogin} type="button" className="public-link-button">{ui.login}</button>
-          <button onClick={onSignup} type="button" style={{ ...btnPrimary, padding: "10px 20px" }}>
+          <button
+            onClick={onLogin}
+            type="button"
+            className="public-link-button"
+          >
+            {ui.login}
+          </button>
+          <button
+            onClick={onSignup}
+            type="button"
+            style={{ ...btnPrimary, padding: "10px 20px" }}
+          >
             {ui.start}
           </button>
         </div>
@@ -263,7 +447,11 @@ export default function PublicInfoPage({ page = "privacy", onBackLanding, onLogi
       <main className="public-info-main">
         <section className="public-info-hero">
           <div>
-            <button type="button" className="public-info-back" onClick={onBackLanding}>
+            <button
+              type="button"
+              className="public-info-back"
+              onClick={onBackLanding}
+            >
               {ui.back}
             </button>
             <span className="lp-section-label">{content.kicker}</span>
@@ -277,10 +465,15 @@ export default function PublicInfoPage({ page = "privacy", onBackLanding, onLogi
           </aside>
         </section>
 
-        <section className="public-info-card-grid" aria-label={`${content.label} ${ui.summarySuffix}`}>
+        <section
+          className="public-info-card-grid"
+          aria-label={`${content.label} ${ui.summarySuffix}`}
+        >
           {content.cards.map(([title, text], index) => (
             <article className="glass-card public-info-card" key={title}>
-              <span style={{ color: index === 1 ? S.cyan : S.green }}>{String(index + 1).padStart(2, "0")}</span>
+              <span style={{ color: index === 1 ? S.cyan : S.green }}>
+                {String(index + 1).padStart(2, "0")}
+              </span>
               <h2>{title}</h2>
               <p>{text}</p>
             </article>
@@ -302,6 +495,43 @@ export default function PublicInfoPage({ page = "privacy", onBackLanding, onLogi
           </div>
         </section>
 
+        {(page === "contact" || page === "security") && (
+          <section
+            className="public-info-related"
+            aria-label={
+              language === "en" ? "Project links" : "Proje bağlantıları"
+            }
+          >
+            <div>
+              <h2>
+                {language === "en"
+                  ? "Explore the repository"
+                  : "Depoyu inceleyin"}
+              </h2>
+            </div>
+            <div>
+              <a
+                href={PROJECT_REPOSITORY_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                GitHub
+              </a>
+              <a
+                href={
+                  page === "security"
+                    ? PROJECT_SECURITY_URL
+                    : PROJECT_ISSUES_URL
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {page === "security" ? "SECURITY.md" : "GitHub Issues"}
+              </a>
+            </div>
+          </section>
+        )}
+
         <section className="public-info-related">
           <div>
             <span className="lp-section-label">{ui.otherPages}</span>
@@ -309,7 +539,11 @@ export default function PublicInfoPage({ page = "privacy", onBackLanding, onLogi
           </div>
           <div>
             {related.map((id) => (
-              <a href={`#${id}`} key={id} onClick={(event) => openPage(event, id)}>
+              <a
+                href={`#${id}`}
+                key={id}
+                onClick={(event) => openPage(event, id)}
+              >
                 {pages[id].label}
               </a>
             ))}
@@ -320,10 +554,18 @@ export default function PublicInfoPage({ page = "privacy", onBackLanding, onLogi
           <h2>{ui.ctaTitle}</h2>
           <p>{ui.ctaText}</p>
           <div>
-            <button onClick={onSignup} type="button" style={{ ...btnPrimary, padding: "14px 24px" }}>
+            <button
+              onClick={onSignup}
+              type="button"
+              style={{ ...btnPrimary, padding: "14px 24px" }}
+            >
               {ui.freeStart}
             </button>
-            <button onClick={onLogin} type="button" style={{ ...btnGhost, padding: "14px 24px" }}>
+            <button
+              onClick={onLogin}
+              type="button"
+              style={{ ...btnGhost, padding: "14px 24px" }}
+            >
               {ui.login}
             </button>
           </div>
@@ -333,11 +575,19 @@ export default function PublicInfoPage({ page = "privacy", onBackLanding, onLogi
       <footer className="public-footer">
         <div>
           <strong>BudgetAssist</strong>
-          <span>© 2026 BudgetAssist. Private Wealth Management Systems.</span>
+          <span>
+            {language === "en"
+              ? "© 2026 BudgetAssist · Educational demo project"
+              : "© 2026 BudgetAssist · Eğitim amaçlı demo proje"}
+          </span>
         </div>
         <div>
           {footerPages.map((id) => (
-            <a href={`#${id}`} key={id} onClick={(event) => openPage(event, id)}>
+            <a
+              href={`#${id}`}
+              key={id}
+              onClick={(event) => openPage(event, id)}
+            >
               {pages[id].label}
             </a>
           ))}
